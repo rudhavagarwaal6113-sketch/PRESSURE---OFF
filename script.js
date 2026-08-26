@@ -6,8 +6,8 @@
    SUPABASE
 ===================================================== */
 
-const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
-const SUPABASE_KEY = "https://zssnupcdrgbgjtdtelgl.supabase.co/rest/v1/";
+const SUPABASE_URL = "https://zssnupcdrgbgjtdtelgl.supabase.co/rest/v1/";
+const SUPABASE_KEY = "sb_publishable_1pD5veoyvfR1uSOWRuPjew_j-r3rmzp";
 
 const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,

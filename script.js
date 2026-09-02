@@ -1,27 +1,34 @@
 /* =====================================================
    PRESSURE // OFF
-   COMPLETE FRONT-END APPLICATION
+   SUPABASE FRONT-END APPLICATION
 ===================================================== */
+
+
 /* =====================================================
    SUPABASE
 ===================================================== */
 
-const SUPABASE_URL = "https://zssnupcdrgbgjtdtelgl.supabase.co/rest/v1/";
-const SUPABASE_KEY = "sb_publishable_1pD5veoyvfR1uSOWRuPjew_j-r3rmzp";
+const SUPABASE_URL =
+    "https://zssnupcdrgbgjtdtelgl.supabase.co";
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
-const USERS_KEY = "pressure_off_users";
-const SESSION_KEY = "pressure_off_session";
-const REMINDER_KEY = "pressure_off_reminders";
+const SUPABASE_KEY =
+    "sb_publishable_1pD5veoyvfR1uSOWRuPjew_j-r3rmzp";
 
-let users = JSON.parse(
-    localStorage.getItem(USERS_KEY) || "{}"
-);
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================================
+   APP STATE
+===================================================== */
 
 let currentUser = null;
+let currentProfile = null;
+let currentTasks = [];
+
 let authMode = "login";
 let editingTaskId = null;
 
@@ -30,64 +37,131 @@ let editingTaskId = null;
    DOM
 ===================================================== */
 
-const authScreen = document.getElementById("authScreen");
-const app = document.getElementById("app");
+const authScreen =
+    document.getElementById("authScreen");
 
-const authForm = document.getElementById("authForm");
-const loginTab = document.getElementById("loginTab");
-const signupTab = document.getElementById("signupTab");
+const app =
+    document.getElementById("app");
 
-const nameField = document.getElementById("nameField");
-const authName = document.getElementById("authName");
-const authUsername = document.getElementById("authUsername");
-const authPassword = document.getElementById("authPassword");
+const authForm =
+    document.getElementById("authForm");
 
-const authTitle = document.getElementById("authTitle");
-const authSubtitle = document.getElementById("authSubtitle");
-const authButton = document.getElementById("authButton");
-const authError = document.getElementById("authError");
+const loginTab =
+    document.getElementById("loginTab");
 
-const username = document.getElementById("username");
-const avatar = document.getElementById("avatar");
-const logoutButton = document.getElementById("logoutButton");
+const signupTab =
+    document.getElementById("signupTab");
 
-const addTaskTop = document.getElementById("addTaskTop");
-const addTaskButton = document.getElementById("addTaskButton");
+const nameField =
+    document.getElementById("nameField");
 
-const taskModal = document.getElementById("taskModal");
-const closeModal = document.getElementById("closeModal");
-const cancelModal = document.getElementById("cancelModal");
+const authName =
+    document.getElementById("authName");
 
-const taskForm = document.getElementById("taskForm");
-const modalTitle = document.getElementById("modalTitle");
+const authUsername =
+    document.getElementById("authUsername");
 
-const taskName = document.getElementById("taskName");
-const taskCategory = document.getElementById("taskCategory");
-const taskEffort = document.getElementById("taskEffort");
-const taskDate = document.getElementById("taskDate");
+const authPassword =
+    document.getElementById("authPassword");
 
-const saveTask = document.getElementById("saveTask");
-const deleteTask = document.getElementById("deleteTask");
+const authTitle =
+    document.getElementById("authTitle");
 
-const weekGrid = document.getElementById("weekGrid");
+const authSubtitle =
+    document.getElementById("authSubtitle");
 
-const radarBars = document.getElementById("radarBars");
-const radarEmpty = document.getElementById("radarEmpty");
+const authButton =
+    document.getElementById("authButton");
 
-const taskList = document.getElementById("taskList");
+const authError =
+    document.getElementById("authError");
 
-const suggestions = document.getElementById("suggestions");
+const username =
+    document.getElementById("username");
 
-const score = document.getElementById("score");
-const scoreLabel = document.getElementById("scoreLabel");
-const scoreRing = document.getElementById("scoreRing");
-const totalHours = document.getElementById("totalHours");
+const avatar =
+    document.getElementById("avatar");
 
-const alertBox = document.getElementById("alert");
-const alertTitle = document.getElementById("alertTitle");
-const alertText = document.getElementById("alertText");
+const logoutButton =
+    document.getElementById("logoutButton");
 
-const reminderList = document.getElementById("reminderList");
+const addTaskTop =
+    document.getElementById("addTaskTop");
+
+const addTaskButton =
+    document.getElementById("addTaskButton");
+
+const taskModal =
+    document.getElementById("taskModal");
+
+const closeModal =
+    document.getElementById("closeModal");
+
+const cancelModal =
+    document.getElementById("cancelModal");
+
+const taskForm =
+    document.getElementById("taskForm");
+
+const modalTitle =
+    document.getElementById("modalTitle");
+
+const taskName =
+    document.getElementById("taskName");
+
+const taskCategory =
+    document.getElementById("taskCategory");
+
+const taskEffort =
+    document.getElementById("taskEffort");
+
+const taskDate =
+    document.getElementById("taskDate");
+
+const saveTask =
+    document.getElementById("saveTask");
+
+const deleteTask =
+    document.getElementById("deleteTask");
+
+const weekGrid =
+    document.getElementById("weekGrid");
+
+const radarBars =
+    document.getElementById("radarBars");
+
+const radarEmpty =
+    document.getElementById("radarEmpty");
+
+const taskList =
+    document.getElementById("taskList");
+
+const suggestions =
+    document.getElementById("suggestions");
+
+const score =
+    document.getElementById("score");
+
+const scoreLabel =
+    document.getElementById("scoreLabel");
+
+const scoreRing =
+    document.getElementById("scoreRing");
+
+const totalHours =
+    document.getElementById("totalHours");
+
+const alertBox =
+    document.getElementById("alert");
+
+const alertTitle =
+    document.getElementById("alertTitle");
+
+const alertText =
+    document.getElementById("alertText");
+
+const reminderList =
+    document.getElementById("reminderList");
 
 const notificationButton =
     document.getElementById("notificationButton");
@@ -95,18 +169,24 @@ const notificationButton =
 const notificationButton2 =
     document.getElementById("notificationButton2");
 
-const aiForm = document.getElementById("aiForm");
-const aiInput = document.getElementById("aiInput");
-const aiMessages = document.getElementById("aiMessages");
+const aiForm =
+    document.getElementById("aiForm");
+
+const aiInput =
+    document.getElementById("aiInput");
+
+const aiMessages =
+    document.getElementById("aiMessages");
 
 
 /* =====================================================
-   AUTH
+   AUTH MODE
 ===================================================== */
 
 function setAuthMode(mode) {
 
     authMode = mode;
+
     authError.textContent = "";
 
     if (mode === "login") {
@@ -115,14 +195,17 @@ function setAuthMode(mode) {
         signupTab.classList.remove("active");
 
         nameField.classList.add("hidden");
+
         authName.required = false;
 
-        authTitle.textContent = "Welcome back";
+        authTitle.textContent =
+            "Welcome back";
 
         authSubtitle.textContent =
             "See the pressure before it piles up.";
 
-        authButton.textContent = "Log in";
+        authButton.textContent =
+            "Log in";
 
     } else {
 
@@ -130,6 +213,7 @@ function setAuthMode(mode) {
         loginTab.classList.remove("active");
 
         nameField.classList.remove("hidden");
+
         authName.required = true;
 
         authTitle.textContent =
@@ -143,10 +227,12 @@ function setAuthMode(mode) {
     }
 }
 
+
 loginTab.addEventListener(
     "click",
     () => setAuthMode("login")
 );
+
 
 signupTab.addEventListener(
     "click",
@@ -155,23 +241,55 @@ signupTab.addEventListener(
 
 
 /* =====================================================
+   USERNAME VALIDATION
+===================================================== */
+
+function isValidUsername(value) {
+
+    return /^[a-z0-9._-]{3,30}$/.test(
+        value
+    );
+}
+
+
+/*
+   Supabase Auth requires an email address.
+
+   The UI still uses usernames, so new accounts
+   receive an internal email identifier.
+
+   The username itself is stored in profiles.
+*/
+
+function usernameToEmail(user) {
+
+    return `${user}@pressure-off.internal`;
+}
+
+
+/* =====================================================
    AUTH FORM
 ===================================================== */
 
 authForm.addEventListener(
     "submit",
-    function (event) {
+    async function (event) {
 
         event.preventDefault();
 
+        authError.textContent = "";
+
         const user =
-            authUsername.value.trim().toLowerCase();
+            authUsername.value
+                .trim()
+                .toLowerCase();
 
         const password =
             authPassword.value;
 
         const name =
             authName.value.trim();
+
 
         if (!user || !password) {
 
@@ -182,144 +300,396 @@ authForm.addEventListener(
         }
 
 
-        /* CREATE ACCOUNT */
+        if (!isValidUsername(user)) {
 
-        if (authMode === "signup") {
+            authError.textContent =
+                "Username must be 3–30 characters and use only letters, numbers, ., _ or -.";
 
-            if (!name) {
+            return;
+        }
 
-                authError.textContent =
-                    "Please enter your name.";
 
-                return;
-            }
+        if (password.length < 6) {
 
-            if (users[user]) {
+            authError.textContent =
+                "Password must be at least 6 characters.";
 
-                authError.textContent =
-                    "That username is already taken.";
+            return;
+        }
 
-                return;
-            }
 
-            users[user] = {
+        authButton.disabled = true;
 
-                name,
-                password,
+
+        try {
+
+            /* =================================================
+               CREATE ACCOUNT
+            ================================================= */
+
+            if (authMode === "signup") {
+
+                if (!name) {
+
+                    authError.textContent =
+                        "Please enter your name.";
+
+                    return;
+                }
+
 
                 /*
-                 * IMPORTANT:
-                 * New account = ZERO tasks.
-                 */
-                tasks: []
+                   Check whether username already exists.
+                */
 
-            };
+                const {
+                    data: existingProfile,
+                    error: profileCheckError
+                } =
+                    await supabaseClient
+                        .from("profiles")
+                        .select("id")
+                        .eq("username", user)
+                        .maybeSingle();
 
-            saveUsers();
 
-            loginUser(user);
+                if (profileCheckError) {
 
-            return;
-        }
+                    console.error(
+                        profileCheckError
+                    );
+
+                    authError.textContent =
+                        "Could not check username. Please try again.";
+
+                    return;
+                }
 
 
-        /* LOGIN */
+                if (existingProfile) {
 
-        if (!users[user]) {
+                    authError.textContent =
+                        "That username is already taken.";
+
+                    return;
+                }
+
+
+                const email =
+                    usernameToEmail(user);
+
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient.auth.signUp({
+
+                        email,
+
+                        password,
+
+                        options: {
+
+                            data: {
+
+                                name,
+                                username: user
+
+                            }
+
+                        }
+
+                    });
+
+
+                if (error) {
+
+                    console.error(error);
+
+                    authError.textContent =
+                        error.message;
+
+                    return;
+                }
+
+
+                if (!data.user) {
+
+                    authError.textContent =
+                        "Account creation failed.";
+
+                    return;
+                }
+
+
+                /*
+                   The database trigger created the profile.
+
+                   If a session exists, continue directly
+                   into the application.
+                */
+
+                if (data.session) {
+
+                    currentUser =
+                        data.user;
+
+                    await loadProfile();
+
+                    await loadTasks();
+
+                    authForm.reset();
+
+                    showApp();
+
+                } else {
+
+                    authError.textContent =
+                        "Account created. Please check your email before logging in.";
+                }
+
+
+                return;
+            }
+
+
+            /* =================================================
+               LOGIN
+            ================================================= */
+
+            const {
+                data: emailData,
+                error: emailError
+            } =
+                await supabaseClient.rpc(
+                    "get_login_email",
+                    {
+                        login_username: user
+                    }
+                );
+
+
+            if (emailError) {
+
+                console.error(emailError);
+
+                authError.textContent =
+                    "Unable to find that username.";
+
+                return;
+            }
+
+
+            if (!emailData) {
+
+                authError.textContent =
+                    "Username not found.";
+
+                return;
+            }
+
+
+            const {
+                data: loginData,
+                error: loginError
+            } =
+                await supabaseClient.auth.signInWithPassword({
+
+                    email: emailData,
+
+                    password
+
+                });
+
+
+            if (loginError) {
+
+                console.error(loginError);
+
+                authError.textContent =
+                    "Incorrect password.";
+
+                return;
+            }
+
+
+            currentUser =
+                loginData.user;
+
+
+            await loadProfile();
+
+            await loadTasks();
+
+            authForm.reset();
+
+            showApp();
+
+        } catch (error) {
+
+            console.error(error);
 
             authError.textContent =
-                "Username not found.";
+                "Something went wrong. Please try again.";
 
-            return;
+        } finally {
+
+            authButton.disabled = false;
+
         }
-
-        if (users[user].password !== password) {
-
-            authError.textContent =
-                "Incorrect password.";
-
-            return;
-        }
-
-        if (!Array.isArray(users[user].tasks)) {
-
-            users[user].tasks = [];
-
-            saveUsers();
-        }
-
-        loginUser(user);
     }
 );
 
 
 /* =====================================================
-   SESSION
+   LOAD PROFILE
 ===================================================== */
 
-function loginUser(user) {
+async function loadProfile() {
 
-    currentUser = user;
+    if (!currentUser) return;
 
-    localStorage.setItem(
-        SESSION_KEY,
-        user
-    );
 
-    authForm.reset();
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("id", currentUser.id)
+            .maybeSingle();
 
-    showApp();
+
+    if (error) {
+
+        console.error(
+            "Profile loading error:",
+            error
+        );
+
+        throw error;
+    }
+
+
+    if (!data) {
+
+        /*
+           This should normally be handled by
+           the database trigger.
+        */
+
+        currentProfile = {
+
+            id: currentUser.id,
+
+            name:
+                currentUser.user_metadata?.name ||
+                "User",
+
+            username:
+                currentUser.user_metadata?.username ||
+                "user",
+
+            role: "user"
+
+        };
+
+        return;
+    }
+
+
+    currentProfile = data;
+}
+
+
+/* =====================================================
+   LOAD TASKS
+===================================================== */
+
+async function loadTasks() {
+
+    if (!currentUser) {
+
+        currentTasks = [];
+
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("tasks")
+            .select("*")
+            .eq("user_id", currentUser.id)
+            .order("date", {
+                ascending: true
+            });
+
+
+    if (error) {
+
+        console.error(
+            "Task loading error:",
+            error
+        );
+
+        throw error;
+    }
+
+
+    currentTasks =
+        Array.isArray(data)
+            ? data
+            : [];
+}
+
+
+/* =====================================================
+   SESSION / LOGOUT
+===================================================== */
+
+async function logout() {
+
+    await supabaseClient.auth.signOut();
+
+    currentUser = null;
+
+    currentProfile = null;
+
+    currentTasks = [];
+
+    app.classList.add("hidden");
+
+    authScreen.classList.remove("hidden");
+
+    setAuthMode("login");
 }
 
 
 logoutButton.addEventListener(
     "click",
-    function () {
-
-        localStorage.removeItem(
-            SESSION_KEY
-        );
-
-        currentUser = null;
-
-        app.classList.add("hidden");
-        authScreen.classList.remove("hidden");
-
-        setAuthMode("login");
-    }
+    logout
 );
 
 
 /* =====================================================
-   STORAGE
+   STORAGE COMPATIBILITY
 ===================================================== */
-
-function saveUsers() {
-
-    localStorage.setItem(
-        USERS_KEY,
-        JSON.stringify(users)
-    );
-}
-
 
 function getUser() {
 
-    return users[currentUser];
+    return currentProfile;
 }
 
 
 function getTasks() {
 
-    const user = getUser();
-
-    if (!user) return [];
-
-    if (!Array.isArray(user.tasks)) {
-        user.tasks = [];
-    }
-
-    return user.tasks;
+    return currentTasks;
 }
 
 
@@ -329,7 +699,8 @@ function getTasks() {
 
 function getMonday() {
 
-    const date = new Date();
+    const date =
+        new Date();
 
     date.setHours(
         0,
@@ -338,7 +709,8 @@ function getMonday() {
         0
     );
 
-    const day = date.getDay();
+    const day =
+        date.getDay();
 
     const difference =
         day === 0
@@ -355,7 +727,8 @@ function getMonday() {
 
 function getWeekDate(offset) {
 
-    const date = getMonday();
+    const date =
+        getMonday();
 
     date.setDate(
         date.getDate() + offset
@@ -367,7 +740,8 @@ function getWeekDate(offset) {
 
 function formatDateKey(date) {
 
-    const year = date.getFullYear();
+    const year =
+        date.getFullYear();
 
     const month =
         String(
@@ -402,9 +776,15 @@ function readableDate(dateString) {
 
 function daysUntil(dateString) {
 
-    const today = new Date();
+    const today =
+        new Date();
 
-    today.setHours(0, 0, 0, 0);
+    today.setHours(
+        0,
+        0,
+        0,
+        0
+    );
 
     const target =
         new Date(
@@ -426,15 +806,29 @@ function daysUntil(dateString) {
 function showApp() {
 
     authScreen.classList.add("hidden");
+
     app.classList.remove("hidden");
 
-    const user = getUser();
 
-    username.textContent =
-        user.name;
+    const user =
+        getUser();
 
-    avatar.textContent =
-        user.name.charAt(0).toUpperCase();
+
+    if (user) {
+
+        username.textContent =
+            user.name || user.username || "User";
+
+        avatar.textContent =
+            (
+                user.name ||
+                user.username ||
+                "U"
+            )
+                .charAt(0)
+                .toUpperCase();
+    }
+
 
     renderDashboard();
 }
@@ -447,6 +841,7 @@ function showApp() {
 function getWeekData() {
 
     const names = [
+
         "Monday",
         "Tuesday",
         "Wednesday",
@@ -454,9 +849,13 @@ function getWeekData() {
         "Friday",
         "Saturday",
         "Sunday"
+
     ];
 
-    const tasks = getTasks();
+
+    const tasks =
+        getTasks();
+
 
     return names.map(
         (name, index) => {
@@ -464,11 +863,13 @@ function getWeekData() {
             const date =
                 getWeekDate(index);
 
+
             const dayTasks =
                 tasks.filter(
                     task =>
                         task.date === date
                 );
+
 
             const hours =
                 dayTasks.reduce(
@@ -478,8 +879,10 @@ function getWeekData() {
                     0
                 );
 
+
             const taskCount =
                 dayTasks.length;
+
 
             const clustering =
                 Math.max(
@@ -487,10 +890,14 @@ function getWeekData() {
                     taskCount - 1
                 ) * 1.5;
 
+
             const pressure =
                 hours + clustering;
 
-            let status = "manageable";
+
+            let status =
+                "manageable";
+
 
             if (
                 pressure >= 6 ||
@@ -500,14 +907,17 @@ function getWeekData() {
                 )
             ) {
 
-                status = "overloaded";
+                status =
+                    "overloaded";
 
             } else if (
                 pressure >= 3
             ) {
 
-                status = "busy";
+                status =
+                    "busy";
             }
+
 
             return {
 
@@ -520,6 +930,7 @@ function getWeekData() {
                 status
 
             };
+
         }
     );
 }
@@ -553,9 +964,12 @@ function renderDashboard() {
 
 function renderWeek() {
 
-    const week = getWeekData();
+    const week =
+        getWeekData();
+
 
     weekGrid.innerHTML = "";
+
 
     week.forEach(day => {
 
@@ -564,20 +978,26 @@ function renderWeek() {
                 `${day.date}T00:00:00`
             );
 
+
         const element =
             document.createElement("div");
+
 
         element.className =
             `day ${day.status}`;
 
+
         let taskHTML = "";
+
 
         if (day.tasks.length === 0) {
 
             taskHTML = `
+
                 <div class="empty-day">
                     Room to breathe
                 </div>
+
             `;
 
         } else {
@@ -587,7 +1007,7 @@ function renderWeek() {
 
                     <button
                         class="mini-task"
-                        data-id="${task.id}"
+                        data-id="${escapeHTML(task.id)}"
                         type="button"
                     >
 
@@ -600,7 +1020,7 @@ function renderWeek() {
                             </strong>
 
                             <small>
-                                ${task.effort}h
+                                ${escapeHTML(task.effort)}h
                             </small>
 
                         </span>
@@ -609,6 +1029,7 @@ function renderWeek() {
 
                 `).join("");
         }
+
 
         element.innerHTML = `
 
@@ -641,6 +1062,7 @@ function renderWeek() {
             </div>
         `;
 
+
         weekGrid.appendChild(element);
     });
 
@@ -656,6 +1078,7 @@ function renderWeek() {
                         button.dataset.id
                     )
             );
+
         });
 }
 
@@ -666,26 +1089,37 @@ function renderWeek() {
 
 function renderRadar() {
 
-    const week = getWeekData();
+    const week =
+        getWeekData();
+
 
     radarBars.innerHTML = "";
 
+
     if (getTasks().length === 0) {
 
-        radarEmpty.classList.remove("hidden");
+        radarEmpty.classList.remove(
+            "hidden"
+        );
 
         return;
     }
 
-    radarEmpty.classList.add("hidden");
+
+    radarEmpty.classList.add(
+        "hidden"
+    );
+
 
     week.forEach(day => {
 
         const column =
             document.createElement("div");
 
+
         column.className =
             "radar-column";
+
 
         const height =
             Math.max(
@@ -695,6 +1129,7 @@ function renderRadar() {
                     day.hours * 15
                 )
             );
+
 
         column.innerHTML = `
 
@@ -710,7 +1145,9 @@ function renderRadar() {
             <div class="radar-day">
                 ${day.name.charAt(0)}
             </div>
+
         `;
+
 
         radarBars.appendChild(column);
     });
@@ -723,7 +1160,9 @@ function renderRadar() {
 
 function renderScore() {
 
-    const week = getWeekData();
+    const week =
+        getWeekData();
+
 
     const hours =
         week.reduce(
@@ -732,14 +1171,17 @@ function renderScore() {
             0
         );
 
+
     const taskCount =
         getTasks().length;
+
 
     const overloaded =
         week.filter(
             day =>
                 day.status === "overloaded"
         ).length;
+
 
     let value =
         Math.round(
@@ -751,6 +1193,7 @@ function renderScore() {
             ) * .25
         );
 
+
     value =
         Math.max(
             1,
@@ -760,33 +1203,55 @@ function renderScore() {
             )
         );
 
-    let label = "Calm week";
-    let color = "#5B8CFF";
+
+    let label =
+        "Calm week";
+
+    let color =
+        "#5B8CFF";
+
 
     if (value >= 4) {
 
-        label = "Building pressure";
-        color = "#FFBD61";
+        label =
+            "Building pressure";
+
+        color =
+            "#FFBD61";
     }
+
 
     if (value >= 7) {
 
-        label = "Heavy week";
-        color = "#FF6969";
+        label =
+            "Heavy week";
+
+        color =
+            "#FF6969";
     }
+
 
     if (value >= 9) {
 
-        label = "High pressure";
-        color = "#FF4F4F";
+        label =
+            "High pressure";
+
+        color =
+            "#FF4F4F";
     }
 
-    score.textContent = value;
 
-    scoreLabel.textContent = label;
+    score.textContent =
+        value;
+
+
+    scoreLabel.textContent =
+        label;
+
 
     totalHours.textContent =
         `${hours}h planned`;
+
 
     scoreRing.style.background =
         `
@@ -811,28 +1276,38 @@ function renderAlert() {
                     day.status === "overloaded"
             );
 
+
     if (overloaded.length === 0) {
 
-        alertBox.classList.add("hidden");
+        alertBox.classList.add(
+            "hidden"
+        );
 
         return;
     }
+
 
     overloaded.sort(
         (a,b) =>
             b.hours - a.hours
     );
 
+
     const busiest =
         overloaded[0];
+
 
     alertTitle.textContent =
         `⚠ ${busiest.name} looks overloaded.`;
 
+
     alertText.textContent =
         `${busiest.taskCount} tasks are competing for attention. Consider starting a high-effort task earlier.`;
 
-    alertBox.classList.remove("hidden");
+
+    alertBox.classList.remove(
+        "hidden"
+    );
 }
 
 
@@ -845,8 +1320,11 @@ function renderTasks() {
     const tasks =
         [...getTasks()].sort(
             (a,b) =>
-                a.date.localeCompare(b.date)
+                a.date.localeCompare(
+                    b.date
+                )
         );
+
 
     if (tasks.length === 0) {
 
@@ -864,24 +1342,28 @@ function renderTasks() {
                 your workload.
 
             </div>
+
         `;
 
         return;
     }
+
 
     taskList.innerHTML =
         tasks.map(task => `
 
             <button
                 class="task-row"
-                data-id="${task.id}"
+                data-id="${escapeHTML(task.id)}"
                 type="button"
             >
 
                 <div
-                    class="task-icon ${task.category}"
+                    class="task-icon ${escapeHTML(task.category)}"
                 >
-                    ${task.category.charAt(0)}
+                    ${escapeHTML(
+                        task.category.charAt(0)
+                    )}
                 </div>
 
                 <div class="task-info">
@@ -891,7 +1373,7 @@ function renderTasks() {
                     </strong>
 
                     <small>
-                        ${task.category}
+                        ${escapeHTML(task.category)}
                         ·
                         ${readableDate(task.date)}
                     </small>
@@ -899,11 +1381,13 @@ function renderTasks() {
                 </div>
 
                 <span class="effort">
-                    ${task.effort}h
+                    ${escapeHTML(task.effort)}h
                 </span>
 
             </button>
+
         `).join("");
+
 
     document
         .querySelectorAll(".task-row")
@@ -916,6 +1400,7 @@ function renderTasks() {
                         button.dataset.id
                     )
             );
+
         });
 }
 
@@ -926,49 +1411,72 @@ function renderTasks() {
 
 function renderSuggestions() {
 
-    const tasks = getTasks();
+    const tasks =
+        getTasks();
+
 
     if (tasks.length === 0) {
 
         suggestions.innerHTML = `
 
             <article class="suggestion">
-                <div class="suggestion-number">01</div>
+
+                <div class="suggestion-number">
+                    01
+                </div>
+
                 <p>
                     Add your first task to receive
                     a workload recommendation.
                 </p>
+
             </article>
 
             <article class="suggestion">
-                <div class="suggestion-number">02</div>
+
+                <div class="suggestion-number">
+                    02
+                </div>
+
                 <p>
                     We'll identify days where
                     responsibilities overlap.
                 </p>
+
             </article>
 
             <article class="suggestion">
-                <div class="suggestion-number">03</div>
+
+                <div class="suggestion-number">
+                    03
+                </div>
+
                 <p>
                     Your suggestions update
                     whenever your workload changes.
                 </p>
+
             </article>
+
         `;
 
         return;
     }
 
-    const week = getWeekData();
+
+    const week =
+        getWeekData();
+
 
     const recommendations = [];
+
 
     const overloaded =
         week.find(
             day =>
                 day.status === "overloaded"
         );
+
 
     if (overloaded) {
 
@@ -977,6 +1485,7 @@ function renderSuggestions() {
         );
     }
 
+
     const project =
         tasks.find(
             task =>
@@ -984,12 +1493,14 @@ function renderSuggestions() {
                 Number(task.effort) >= 4
         );
 
+
     if (project) {
 
         recommendations.push(
             `Start "${project.name}" earlier so its ${project.effort} hours aren't left until the deadline.`
         );
     }
+
 
     const soon =
         tasks.find(
@@ -999,12 +1510,14 @@ function renderSuggestions() {
                 Number(task.effort) >= 2
         );
 
+
     if (soon) {
 
         recommendations.push(
             `"${soon.name}" is approaching and needs about ${soon.effort} hours.`
         );
     }
+
 
     if (recommendations.length === 0) {
 
@@ -1020,6 +1533,7 @@ function renderSuggestions() {
             "Leave some breathing room around your busiest day."
         );
     }
+
 
     suggestions.innerHTML =
         recommendations
@@ -1038,6 +1552,7 @@ function renderSuggestions() {
                         </p>
 
                     </article>
+
                 `
             )
             .join("");
@@ -1050,17 +1565,22 @@ function renderSuggestions() {
 
 function renderReminders() {
 
-    const tasks = getTasks();
+    const tasks =
+        getTasks();
+
 
     const reminders = [];
+
 
     tasks.forEach(task => {
 
         const days =
             daysUntil(task.date);
 
+
         const effort =
             Number(task.effort);
+
 
         if (
             days >= 0 &&
@@ -1072,11 +1592,13 @@ function renderReminders() {
                 icon: "⏰",
 
                 title:
-                    `${task.name} is due ${days === 0
-                        ? "today"
-                        : days === 1
-                            ? "tomorrow"
-                            : `in ${days} days`}`,
+                    `${task.name} is due ${
+                        days === 0
+                            ? "today"
+                            : days === 1
+                                ? "tomorrow"
+                                : `in ${days} days`
+                    }`,
 
                 text:
                     `${effort}h estimated effort.`
@@ -1100,7 +1622,6 @@ function renderReminders() {
                     `${effort}h estimated effort with ${days} days remaining.`
 
             });
-
         }
     });
 
@@ -1115,6 +1636,7 @@ function renderReminders() {
                 Your week has some breathing room.
 
             </div>
+
         `;
 
         return;
@@ -1135,16 +1657,21 @@ function renderReminders() {
                     <div>
 
                         <strong>
-                            ${escapeHTML(reminder.title)}
+                            ${escapeHTML(
+                                reminder.title
+                            )}
                         </strong>
 
                         <p>
-                            ${escapeHTML(reminder.text)}
+                            ${escapeHTML(
+                                reminder.text
+                            )}
                         </p>
 
                     </div>
 
                 </div>
+
             `)
             .join("");
 }
@@ -1165,22 +1692,20 @@ async function enableNotifications() {
         return;
     }
 
+
     const permission =
         await Notification.requestPermission();
 
-    if (permission === "granted") {
 
-        localStorage.setItem(
-            REMINDER_KEY,
-            "enabled"
-        );
+    if (permission === "granted") {
 
         showNotification(
             "PRESSURE // OFF",
             "Smart reminders are now enabled."
         );
 
-        notificationButton.textContent = "✓";
+        notificationButton.textContent =
+            "✓";
 
         notificationButton2.textContent =
             "Enabled";
@@ -1211,6 +1736,7 @@ notificationButton.addEventListener(
     enableNotifications
 );
 
+
 notificationButton2.addEventListener(
     "click",
     enableNotifications
@@ -1221,25 +1747,14 @@ notificationButton2.addEventListener(
    AI WORKLOAD ASSISTANT
 ===================================================== */
 
-/*
-    This is a local workload reasoning assistant.
-
-    It deliberately does NOT pretend to be an external
-    AI model.
-
-    A real AI API can later be connected through:
-
-        POST /api/ai
-
-    without exposing an API key in the browser.
-*/
-
-
 function getWorkloadContext() {
 
-    const tasks = getTasks();
+    const tasks =
+        getTasks();
 
-    const week = getWeekData();
+    const week =
+        getWeekData();
+
 
     return {
         tasks,
@@ -1253,8 +1768,10 @@ function generateAssistantResponse(question) {
     const lower =
         question.toLowerCase();
 
+
     const tasks =
         getTasks();
+
 
     const week =
         getWeekData();
@@ -1283,6 +1800,7 @@ function generateAssistantResponse(question) {
                 new Date()
             );
 
+
         const todayTasks =
             tasks
                 .filter(
@@ -1300,6 +1818,7 @@ function generateAssistantResponse(question) {
 
             const task =
                 todayTasks[0];
+
 
             return `
                 I'd start with
@@ -1484,8 +2003,10 @@ function addAIMessage(text,type) {
     const message =
         document.createElement("div");
 
+
     message.className =
         `ai-message ${type}`;
+
 
     if (type === "assistant") {
 
@@ -1498,18 +2019,25 @@ function addAIMessage(text,type) {
             <p>
                 ${text}
             </p>
+
         `;
 
     } else {
 
         message.innerHTML = `
+
             <p>
                 ${escapeHTML(text)}
             </p>
+
         `;
     }
 
-    aiMessages.appendChild(message);
+
+    aiMessages.appendChild(
+        message
+    );
+
 
     aiMessages.scrollTop =
         aiMessages.scrollHeight;
@@ -1520,15 +2048,18 @@ function askAssistant(question) {
 
     if (!question.trim()) return;
 
+
     addAIMessage(
         question,
         "user"
     );
 
+
     const response =
         generateAssistantResponse(
             question
         );
+
 
     setTimeout(
         () => {
@@ -1550,14 +2081,20 @@ aiForm.addEventListener(
 
         event.preventDefault();
 
+
         const question =
             aiInput.value.trim();
 
+
         if (!question) return;
+
 
         aiInput.value = "";
 
-        askAssistant(question);
+
+        askAssistant(
+            question
+        );
     }
 );
 
@@ -1576,6 +2113,7 @@ document
 
             }
         );
+
     });
 
 
@@ -1587,29 +2125,43 @@ function openAddTask() {
 
     editingTaskId = null;
 
+
     modalTitle.textContent =
         "Add a task";
+
 
     saveTask.textContent =
         "Add Task";
 
-    deleteTask.classList.add("hidden");
+
+    deleteTask.classList.add(
+        "hidden"
+    );
+
 
     taskForm.reset();
+
 
     taskCategory.value =
         "Homework";
 
+
     taskEffort.value =
         "1";
+
 
     taskDate.value =
         getWeekDate(0);
 
-    taskModal.classList.remove("hidden");
+
+    taskModal.classList.remove(
+        "hidden"
+    );
+
 
     setTimeout(
-        () => taskName.focus(),
+        () =>
+            taskName.focus(),
         50
     );
 }
@@ -1619,6 +2171,7 @@ addTaskTop.addEventListener(
     "click",
     openAddTask
 );
+
 
 addTaskButton.addEventListener(
     "click",
@@ -1634,31 +2187,42 @@ function openEditTask(id) {
                 item.id === id
         );
 
+
     if (!task) return;
 
-    editingTaskId = id;
+
+    editingTaskId =
+        id;
+
 
     modalTitle.textContent =
         "Edit task";
 
+
     saveTask.textContent =
         "Save changes";
+
 
     deleteTask.classList.remove(
         "hidden"
     );
 
+
     taskName.value =
         task.name;
+
 
     taskCategory.value =
         task.category;
 
+
     taskEffort.value =
         task.effort;
 
+
     taskDate.value =
         task.date;
+
 
     taskModal.classList.remove(
         "hidden"
@@ -1680,6 +2244,7 @@ closeModal.addEventListener(
     "click",
     closeTaskModal
 );
+
 
 cancelModal.addEventListener(
     "click",
@@ -1707,21 +2272,28 @@ taskModal.addEventListener(
 
 taskForm.addEventListener(
     "submit",
-    event => {
+    async event => {
 
         event.preventDefault();
+
 
         const name =
             taskName.value.trim();
 
+
         const category =
             taskCategory.value;
 
+
         const effort =
-            Number(taskEffort.value);
+            Number(
+                taskEffort.value
+            );
+
 
         const date =
             taskDate.value;
+
 
         if (
             !name ||
@@ -1733,56 +2305,146 @@ taskForm.addEventListener(
             return;
         }
 
-        const tasks =
-            getTasks();
 
+        if (!currentUser) {
 
-        if (editingTaskId) {
+            alert(
+                "Please log in again."
+            );
 
-            const index =
-                tasks.findIndex(
-                    task =>
-                        task.id ===
-                        editingTaskId
-                );
-
-            if (index !== -1) {
-
-                tasks[index] = {
-
-                    ...tasks[index],
-
-                    name,
-                    category,
-                    effort,
-                    date
-                };
-            }
-
-        } else {
-
-            tasks.push({
-
-                id:
-                    `${Date.now()}-${Math.random()
-                        .toString(36)
-                        .substring(2)}`,
-
-                name,
-                category,
-                effort,
-                date
-            });
+            return;
         }
 
 
-        getUser().tasks = tasks;
+        saveTask.disabled = true;
 
-        saveUsers();
 
-        closeTaskModal();
+        try {
 
-        renderDashboard();
+            /* =================================================
+               UPDATE EXISTING TASK
+            ================================================= */
+
+            if (editingTaskId) {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from("tasks")
+                        .update({
+
+                            name,
+                            category,
+                            effort,
+                            date
+
+                        })
+                        .eq(
+                            "id",
+                            editingTaskId
+                        )
+                        .eq(
+                            "user_id",
+                            currentUser.id
+                        )
+                        .select()
+                        .single();
+
+
+                if (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "Could not update the task."
+                    );
+
+                    return;
+                }
+
+
+                const index =
+                    currentTasks.findIndex(
+                        task =>
+                            task.id ===
+                            editingTaskId
+                    );
+
+
+                if (index !== -1) {
+
+                    currentTasks[index] =
+                        data;
+                }
+
+
+            } else {
+
+                /* =================================================
+                   CREATE NEW TASK
+                ================================================= */
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from("tasks")
+                        .insert({
+
+                            user_id:
+                                currentUser.id,
+
+                            name,
+
+                            category,
+
+                            effort,
+
+                            date
+
+                        })
+                        .select()
+                        .single();
+
+
+                if (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "Could not add the task."
+                    );
+
+                    return;
+                }
+
+
+                currentTasks.push(
+                    data
+                );
+            }
+
+
+            closeTaskModal();
+
+            renderDashboard();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Something went wrong while saving the task."
+            );
+
+        } finally {
+
+            saveTask.disabled = false;
+
+        }
     }
 );
 
@@ -1793,29 +2455,84 @@ taskForm.addEventListener(
 
 deleteTask.addEventListener(
     "click",
-    () => {
+    async () => {
 
         if (!editingTaskId) return;
+
 
         const confirmed =
             confirm(
                 "Delete this task?"
             );
 
+
         if (!confirmed) return;
 
-        getUser().tasks =
-            getTasks().filter(
-                task =>
-                    task.id !==
-                    editingTaskId
+
+        if (!currentUser) {
+
+            return;
+        }
+
+
+        deleteTask.disabled = true;
+
+
+        try {
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("tasks")
+                    .delete()
+                    .eq(
+                        "id",
+                        editingTaskId
+                    )
+                    .eq(
+                        "user_id",
+                        currentUser.id
+                    );
+
+
+            if (error) {
+
+                console.error(error);
+
+                alert(
+                    "Could not delete the task."
+                );
+
+                return;
+            }
+
+
+            currentTasks =
+                currentTasks.filter(
+                    task =>
+                        task.id !==
+                        editingTaskId
+                );
+
+
+            closeTaskModal();
+
+            renderDashboard();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Something went wrong while deleting the task."
             );
 
-        saveUsers();
+        } finally {
 
-        closeTaskModal();
+            deleteTask.disabled = false;
 
-        renderDashboard();
+        }
     }
 );
 
@@ -1836,11 +2553,26 @@ function capitalize(value) {
 function escapeHTML(value) {
 
     return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 }
 
 
@@ -1848,41 +2580,77 @@ function escapeHTML(value) {
    INITIALIZE
 ===================================================== */
 
-function initialize() {
+async function initialize() {
 
-    const session =
-        localStorage.getItem(
-            SESSION_KEY
+    try {
+
+        /*
+           Supabase restores the login session
+           automatically.
+        */
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (error) {
+
+            console.error(
+                "Session error:",
+                error
+            );
+        }
+
+
+        if (data?.session?.user) {
+
+            currentUser =
+                data.session.user;
+
+
+            await loadProfile();
+
+            await loadTasks();
+
+            showApp();
+
+        } else {
+
+            authScreen.classList.remove(
+                "hidden"
+            );
+
+            app.classList.add(
+                "hidden"
+            );
+
+            setAuthMode("login");
+        }
+
+
+        if (
+            "Notification" in window &&
+            Notification.permission ===
+                "granted"
+        ) {
+
+            notificationButton.textContent =
+                "✓";
+
+            notificationButton2.textContent =
+                "Enabled";
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Initialization error:",
+            error
         );
 
-    Object.keys(users).forEach(
-        user => {
-
-            if (
-                !Array.isArray(
-                    users[user].tasks
-                )
-            ) {
-
-                users[user].tasks = [];
-            }
-        }
-    );
-
-    saveUsers();
-
-
-    if (
-        session &&
-        users[session]
-    ) {
-
-        currentUser =
-            session;
-
-        showApp();
-
-    } else {
 
         authScreen.classList.remove(
             "hidden"
@@ -1892,20 +2660,42 @@ function initialize() {
             "hidden"
         );
     }
-
-
-    if (
-        Notification.permission ===
-        "granted"
-    ) {
-
-        notificationButton.textContent =
-            "✓";
-
-        notificationButton2.textContent =
-            "Enabled";
-    }
 }
 
+
+/* =====================================================
+   AUTH STATE LISTENER
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+    async (event, session) => {
+
+        if (event === "SIGNED_OUT") {
+
+            currentUser = null;
+
+            currentProfile = null;
+
+            currentTasks = [];
+
+            return;
+        }
+
+
+        if (
+            event === "SIGNED_IN" &&
+            session?.user
+        ) {
+
+            currentUser =
+                session.user;
+        }
+    }
+);
+
+
+/* =====================================================
+   START
+===================================================== */
 
 initialize();

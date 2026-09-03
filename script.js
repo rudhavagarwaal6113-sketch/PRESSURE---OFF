@@ -2383,48 +2383,30 @@ taskForm.addEventListener(
             } else {
 
                 /* =================================================
-                   CREATE NEW TASK
+                   CREATE NEW TASK (CHANGED STRUCTURE)
                 ================================================= */
 
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .from("tasks")
-                        .insert({
-
-                            user_id:
-                                currentUser.id,
-
-                            name,
-
-                            category,
-
-                            effort,
-
-                            date
-
-                        })
-                        .select()
-                        .single();
-
+                const { data, error } = await supabaseClient
+                    .from("tasks")
+                    .insert([
+                        {
+                            user_id: currentUser.id,
+                            name: name,
+                            description: category, // using category as description because the form lacks a dedicated description field
+                            date: date
+                        }
+                    ])
+                    .select();
 
                 if (error) {
-
-                    console.error(error);
-
-                    alert(
-                        "Could not add the task."
-                    );
-
+                    console.error("TASK INSERT ERROR:", error);
+                    alert("Task error: " + error.message);
                     return;
                 }
 
+                console.log("TASK CREATED:", data);
 
-                currentTasks.push(
-                    data
-                );
+                currentTasks.push(data[0]);
             }
 
 

@@ -930,6 +930,9 @@ p {
     background: rgba(3,6,15,.75);
     backdrop-filter: blur(10px);
 }
+.modal.hidden {
+    display: none;
+}
 
 .modal-card {
     width: min(500px, 100%);

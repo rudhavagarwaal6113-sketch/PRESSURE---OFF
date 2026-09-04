@@ -1057,38 +1057,30 @@ function renderReminders() {
 /* =========================================================
    OPEN ADD TASK
 ========================================================= */
-
 function openAddTask() {
 
     editingTaskId = null;
 
-
     if (taskForm)
         taskForm.reset();
 
-
     if (taskCategory)
-        taskCategory.value =
-            "Homework";
-
+        taskCategory.value = "Homework";
 
     if (taskEffort)
-        taskEffort.value =
-            "1";
-
+        taskEffort.value = "1";
 
     if (taskDate)
-        taskDate.value =
-            getWeekDate(0);
-
+        taskDate.value = getWeekDate(0);
 
     const modal =
-        document.getElementById(
-            "taskModal"
-        );
+        document.getElementById("taskModal");
 
-    if (modal)
-        modal.style.display = "flex";
+    if (modal) {
+
+        modal.classList.remove("hidden");
+
+    }
 
 }
 
@@ -1149,18 +1141,17 @@ function openEditTask(id) {
 function closeTaskModal() {
 
     const modal =
-        document.getElementById(
-            "taskModal"
-        );
+        document.getElementById("taskModal");
 
-    if (modal)
-        modal.style.display = "none";
+    if (modal) {
 
+        modal.classList.add("hidden");
+
+    }
 
     editingTaskId = null;
 
 }
-
 
 /* =========================================================
    SAVE TASK
@@ -1233,16 +1224,12 @@ if (taskForm) {
                         await supabaseClient
                             .from("tasks")
                             .update({
-
-                                name,
-
-                                category,
-
-                                effort,
-
-                                date
-
-                            })
+    name,
+    category,
+    effort,
+    date,
+    due_date: date
+})
                             .eq(
                                 "id",
                                 editingTaskId
@@ -1304,27 +1291,17 @@ if (taskForm) {
                         await supabaseClient
                             .from("tasks")
                             .insert([
+    {
+        user_id: currentUser.id,
+        name: name,
+        category: category,
+        effort: effort,
+        date: date,
+        due_date: date
+    }
+])
 
-                                {
-
-                                    user_id:
-                                        currentUser.id,
-
-                                    name:
-                                        name,
-
-                                    category:
-                                        category,
-
-                                    effort:
-                                        effort,
-
-                                    date:
-                                        date
-
-                                }
-
-                            ])
+                            
                             .select()
                             .single();
 
@@ -1515,7 +1492,129 @@ async function checkSession() {
 
 }
 
+/* =========================================================
+   TASK MODAL BUTTONS
+========================================================= */
 
+const addTaskTop =
+    document.getElementById("addTaskTop");
+
+const addTaskButton =
+    document.getElementById("addTaskButton");
+
+const closeModalButton =
+    document.getElementById("closeModal");
+
+const cancelModalButton =
+    document.getElementById("cancelModal");
+
+const deleteTaskButton =
+    document.getElementById("deleteTask");
+
+const taskModal =
+    document.getElementById("taskModal");
+
+
+if (addTaskTop) {
+
+    addTaskTop.addEventListener(
+        "click",
+        () => {
+
+            openAddTask();
+
+        }
+    );
+
+}
+
+
+if (addTaskButton) {
+
+    addTaskButton.addEventListener(
+        "click",
+        () => {
+
+            openAddTask();
+
+        }
+    );
+
+}
+
+
+if (closeModalButton) {
+
+    closeModalButton.addEventListener(
+        "click",
+        () => {
+
+            closeTaskModal();
+
+        }
+    );
+
+}
+
+
+if (cancelModalButton) {
+
+    cancelModalButton.addEventListener(
+        "click",
+        () => {
+
+            closeTaskModal();
+
+        }
+    );
+
+}
+
+
+if (deleteTaskButton) {
+
+    deleteTaskButton.addEventListener(
+        "click",
+        async () => {
+
+            if (!editingTaskId)
+                return;
+
+            await deleteTask(
+                editingTaskId
+            );
+
+            closeTaskModal();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+========================================================= */
+
+if (taskModal) {
+
+    taskModal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                taskModal
+            ) {
+
+                closeTaskModal();
+
+            }
+
+        }
+    );
+
+}
 /* =========================================================
    INITIALIZE
 ========================================================= */

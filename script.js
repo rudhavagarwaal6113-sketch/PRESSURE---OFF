@@ -2336,7 +2336,120 @@ function escapeHtml(value) {
 /* =========================================================
    SESSION CHECK
 ========================================================= */
+/* =========================================================
+   SMART REMINDERS
+========================================================= */
 
+const notificationButton =
+    document.getElementById("notificationButton");
+
+const notificationButton2 =
+    document.getElementById("notificationButton2");
+
+
+async function enableReminders() {
+
+    if (!("Notification" in window)) {
+
+        alert(
+            "This browser does not support notifications."
+        );
+
+        return;
+
+    }
+
+
+    const permission =
+        await Notification.requestPermission();
+
+
+    if (permission === "granted") {
+
+        localStorage.setItem(
+            "pressureRemindersEnabled",
+            "true"
+        );
+
+
+        alert(
+            "Smart reminders enabled!"
+        );
+
+
+        checkUpcomingNotifications();
+
+    } else {
+
+        alert(
+            "Notifications were not allowed."
+        );
+
+    }
+
+}
+
+
+function checkUpcomingNotifications() {
+
+    const enabled =
+        localStorage.getItem(
+            "pressureRemindersEnabled"
+        );
+
+
+    if (enabled !== "true")
+        return;
+
+
+    if (Notification.permission !== "granted")
+        return;
+
+
+    currentTasks.forEach(task => {
+
+        const dueDate =
+            task.due_date || task.date;
+
+        const days =
+            daysUntil(dueDate);
+
+
+        if (days === 0) {
+
+            new Notification(
+                "PRESSURE // OFF",
+                {
+                    body:
+                        `${task.name} is due today!`
+                }
+            );
+
+        }
+
+    });
+
+}
+
+
+if (notificationButton) {
+
+    notificationButton.addEventListener(
+        "click",
+        enableReminders
+    );
+
+}
+
+
+if (notificationButton2) {
+
+    notificationButton2.addEventListener(
+        "click",
+        enableReminders
+    );
+
+}
 async function checkSession() {
 
     try {

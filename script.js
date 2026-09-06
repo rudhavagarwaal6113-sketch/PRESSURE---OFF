@@ -123,41 +123,59 @@ function setAuthMode(mode) {
 
     authMode = mode;
 
-    showAuthMessage("");
-
-    if (mode === "login") {
-
-        loginTab.classList.add("active");
-        signupTab.classList.remove("active");
-
-        nameField.classList.add("hidden");
+    if (authMode === "login") {
 
         authTitle.textContent =
             "Welcome back";
 
-        authSubtitle.textContent =
+        document.getElementById(
+            "authSubtitle"
+        ).textContent =
             "See the pressure before it piles up.";
 
         authButton.textContent =
             "Log in";
 
+        nameField.classList.add(
+            "hidden"
+        );
+
+        loginTab.classList.add(
+            "active"
+        );
+
+        signupTab.classList.remove(
+            "active"
+        );
+
     } else {
-
-        signupTab.classList.add("active");
-        loginTab.classList.remove("active");
-
-        nameField.classList.remove("hidden");
 
         authTitle.textContent =
             "Create your account";
 
-        authSubtitle.textContent =
+        document.getElementById(
+            "authSubtitle"
+        ).textContent =
             "Start understanding your workload.";
 
         authButton.textContent =
             "Create account";
 
+        nameField.classList.remove(
+            "hidden"
+        );
+
+        signupTab.classList.add(
+            "active"
+        );
+
+        loginTab.classList.remove(
+            "active"
+        );
+
     }
+
+    authError.textContent = "";
 
 }
 

@@ -1,3 +1,10 @@
+```javascript
+/* =========================================================
+   PRESSURE // OFF
+   COMPLETE SCRIPT
+========================================================= */
+
+
 /* =========================================================
    SUPABASE SETUP
 ========================================================= */
@@ -31,29 +38,53 @@ let editingTaskId = null;
    DOM ELEMENTS
 ========================================================= */
 
-const authScreen = document.getElementById("authScreen");
-const app = document.getElementById("app");
+const authScreen =
+    document.getElementById("authScreen");
 
-const authForm = document.getElementById("authForm");
+const app =
+    document.getElementById("app");
 
-const loginTab = document.getElementById("loginTab");
-const signupTab = document.getElementById("signupTab");
+const authForm =
+    document.getElementById("authForm");
 
-const authName = document.getElementById("authName");
-const nameField = document.getElementById("nameField");
+const authUsername =
+    document.getElementById("authUsername");
 
-const authUsername = document.getElementById("authUsername");
-const authPassword = document.getElementById("authPassword");
+const authPassword =
+    document.getElementById("authPassword");
 
-const authButton = document.getElementById("authButton");
+const authName =
+    document.getElementById("authName");
 
-const authTitle = document.getElementById("authTitle");
-const authSubtitle = document.getElementById("authSubtitle");
+const nameField =
+    document.getElementById("nameField");
 
-const authError = document.getElementById("authError");
+const authButton =
+    document.getElementById("authButton");
+
+const authError =
+    document.getElementById("authError");
+
+const authTitle =
+    document.getElementById("authTitle");
+
+const authSubtitle =
+    document.getElementById("authSubtitle");
+
+const loginTab =
+    document.getElementById("loginTab");
+
+const signupTab =
+    document.getElementById("signupTab");
 
 const logoutButton =
     document.getElementById("logoutButton");
+
+const usernameDisplay =
+    document.getElementById("username");
+
+const avatar =
+    document.getElementById("avatar");
 
 const taskForm =
     document.getElementById("taskForm");
@@ -70,23 +101,41 @@ const taskEffort =
 const taskDate =
     document.getElementById("taskDate");
 
-const taskModal =
-    document.getElementById("taskModal");
-
-const modalTitle =
-    document.getElementById("modalTitle");
-
 const saveTask =
     document.getElementById("saveTask");
 
-const deleteTaskButton =
-    document.getElementById("deleteTask");
+const taskModal =
+    document.getElementById("taskModal");
 
 const closeModalButton =
     document.getElementById("closeModal");
 
 const cancelModalButton =
     document.getElementById("cancelModal");
+
+const deleteTaskButton =
+    document.getElementById("deleteTask");
+
+const addTaskTop =
+    document.getElementById("addTaskTop");
+
+const addTaskButton =
+    document.getElementById("addTaskButton");
+
+const notificationButton =
+    document.getElementById("notificationButton");
+
+const notificationButton2 =
+    document.getElementById("notificationButton2");
+
+const aiForm =
+    document.getElementById("aiForm");
+
+const aiInput =
+    document.getElementById("aiInput");
+
+const aiMessages =
+    document.getElementById("aiMessages");
 
 
 /* =========================================================
@@ -96,21 +145,6 @@ const cancelModalButton =
 function usernameToEmail(username) {
 
     return `${username}@pressure-off.internal`;
-
-}
-
-
-/* =========================================================
-   AUTH MESSAGE
-========================================================= */
-
-function showAuthMessage(message = "") {
-
-    if (authError) {
-
-        authError.textContent = message;
-
-    }
 
 }
 
@@ -128,50 +162,34 @@ function setAuthMode(mode) {
         authTitle.textContent =
             "Welcome back";
 
-        document.getElementById(
-            "authSubtitle"
-        ).textContent =
+        authSubtitle.textContent =
             "See the pressure before it piles up.";
 
         authButton.textContent =
             "Log in";
 
-        nameField.classList.add(
-            "hidden"
-        );
+        nameField.classList.add("hidden");
 
-        loginTab.classList.add(
-            "active"
-        );
+        loginTab.classList.add("active");
 
-        signupTab.classList.remove(
-            "active"
-        );
+        signupTab.classList.remove("active");
 
     } else {
 
         authTitle.textContent =
             "Create your account";
 
-        document.getElementById(
-            "authSubtitle"
-        ).textContent =
+        authSubtitle.textContent =
             "Start understanding your workload.";
 
         authButton.textContent =
             "Create account";
 
-        nameField.classList.remove(
-            "hidden"
-        );
+        nameField.classList.remove("hidden");
 
-        signupTab.classList.add(
-            "active"
-        );
+        loginTab.classList.remove("active");
 
-        loginTab.classList.remove(
-            "active"
-        );
+        signupTab.classList.add("active");
 
     }
 
@@ -180,36 +198,355 @@ function setAuthMode(mode) {
 }
 
 
+/* =========================================================
+   AUTH TABS
+========================================================= */
+
 loginTab.addEventListener(
     "click",
-    () => setAuthMode("login")
+    () => {
+
+        setAuthMode("login");
+
+    }
 );
 
 
 signupTab.addEventListener(
     "click",
-    () => setAuthMode("signup")
+    () => {
+
+        setAuthMode("signup");
+
+    }
 );
 
 
 /* =========================================================
-   SHOW APP / AUTH
+   AUTH MESSAGE
 ========================================================= */
 
-function showApp() {
+function showAuthMessage(message) {
 
-    authScreen.classList.add("hidden");
-    app.classList.remove("hidden");
-
-}
-
-
-function showAuth() {
-
-    app.classList.add("hidden");
-    authScreen.classList.remove("hidden");
+    authError.textContent =
+        message || "";
 
 }
+
+
+/* =========================================================
+   SIGNUP / LOGIN
+========================================================= */
+
+authForm.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+        const username =
+            authUsername.value
+                .trim()
+                .toLowerCase();
+
+        const password =
+            authPassword.value;
+
+        const name =
+            authName.value.trim();
+
+
+        if (!username || !password) {
+
+            showAuthMessage(
+                "Please enter a username and password."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            authMode === "signup" &&
+            !name
+        ) {
+
+            showAuthMessage(
+                "Please enter your name."
+            );
+
+            return;
+
+        }
+
+
+        authButton.disabled = true;
+
+        showAuthMessage(
+            authMode === "login"
+                ? "Logging in..."
+                : "Creating your account..."
+        );
+
+
+        /* =================================================
+           SIGN UP
+        ================================================= */
+
+        if (authMode === "signup") {
+
+            try {
+
+                const email =
+                    usernameToEmail(username);
+
+
+                /* CHECK USERNAME */
+
+                const {
+                    data: existingProfile,
+                    error: profileCheckError
+                } =
+                    await supabaseClient
+                        .from("profiles")
+                        .select("id")
+                        .eq(
+                            "username",
+                            username
+                        )
+                        .maybeSingle();
+
+
+                if (profileCheckError) {
+
+                    console.error(
+                        "PROFILE CHECK ERROR:",
+                        profileCheckError
+                    );
+
+                    showAuthMessage(
+                        "Could not check username."
+                    );
+
+                    return;
+
+                }
+
+
+                if (existingProfile) {
+
+                    showAuthMessage(
+                        "Username already exists."
+                    );
+
+                    return;
+
+                }
+
+
+                /* CREATE AUTH USER */
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient.auth.signUp({
+
+                        email: email,
+
+                        password: password,
+
+                        options: {
+
+                            data: {
+
+                                username: username,
+
+                                name: name
+
+                            }
+
+                        }
+
+                    });
+
+
+                if (error) {
+
+                    console.error(
+                        "SIGNUP ERROR:",
+                        error
+                    );
+
+                    showAuthMessage(
+                        error.message
+                    );
+
+                    return;
+
+                }
+
+
+                if (!data.user) {
+
+                    showAuthMessage(
+                        "Could not create account."
+                    );
+
+                    return;
+
+                }
+
+
+                currentUser =
+                    data.user;
+
+
+                /* LOAD PROFILE */
+
+                await loadProfile();
+
+
+                /* LOAD TASKS */
+
+                await loadTasks();
+
+
+                showApp();
+
+                renderDashboard();
+
+
+            } catch (error) {
+
+                console.error(
+                    "SIGNUP CRASH:",
+                    error
+                );
+
+                showAuthMessage(
+                    "Something went wrong while creating your account."
+                );
+
+            } finally {
+
+                authButton.disabled = false;
+
+            }
+
+            return;
+
+        }
+
+
+        /* =================================================
+           LOGIN
+        ================================================= */
+
+        try {
+
+            const {
+                data: loginEmail,
+                error: rpcError
+            } =
+                await supabaseClient.rpc(
+                    "get_login_email",
+                    {
+                        login_username: username
+                    }
+                );
+
+
+            if (rpcError) {
+
+                console.error(
+                    "LOGIN RPC ERROR:",
+                    rpcError
+                );
+
+                showAuthMessage(
+                    "Login failed: " +
+                    rpcError.message
+                );
+
+                return;
+
+            }
+
+
+            if (!loginEmail) {
+
+                showAuthMessage(
+                    "Username not found."
+                );
+
+                return;
+
+            }
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient.auth.signInWithPassword({
+
+                    email: loginEmail,
+
+                    password: password
+
+                });
+
+
+            if (error) {
+
+                console.error(
+                    "LOGIN ERROR:",
+                    error
+                );
+
+                showAuthMessage(
+                    error.message
+                );
+
+                return;
+
+            }
+
+
+            currentUser =
+                data.user;
+
+
+            await loadProfile();
+
+            await loadTasks();
+
+            showApp();
+
+            renderDashboard();
+
+
+        } catch (error) {
+
+            console.error(
+                "LOGIN CRASH:",
+                error
+            );
+
+            showAuthMessage(
+                "Something went wrong while logging in."
+            );
+
+        } finally {
+
+            authButton.disabled = false;
+
+        }
+
+    }
+);
 
 
 /* =========================================================
@@ -220,6 +557,7 @@ async function loadProfile() {
 
     if (!currentUser)
         return;
+
 
     const {
         data,
@@ -238,52 +576,79 @@ async function loadProfile() {
     if (error) {
 
         console.error(
-            "PROFILE ERROR:",
+            "PROFILE LOAD ERROR:",
             error
         );
+
+        currentProfile = null;
+
+        updateProfileUI();
 
         return;
 
     }
 
 
-    currentProfile = data;
+    currentProfile =
+        data || null;
+
 
     updateProfileUI();
 
 }
 
 
+/* =========================================================
+   PROFILE UI
+========================================================= */
+
 function updateProfileUI() {
 
-    const usernameElement =
-        document.getElementById("username");
-
-    const avatarElement =
-        document.getElementById("avatar");
+    if (!currentUser)
+        return;
 
 
-    let name =
-        currentProfile?.username ||
+    const metadata =
+        currentUser.user_metadata || {};
+
+
+    const profileName =
         currentProfile?.name ||
-        currentUser?.email?.split("@")[0] ||
+        metadata.name ||
+        currentProfile?.username ||
+        metadata.username ||
+        currentUser.email?.split("@")[0] ||
         "Student";
 
 
-    if (usernameElement) {
+    const profileUsername =
+        currentProfile?.username ||
+        metadata.username ||
+        "student";
 
-        usernameElement.textContent = name;
+
+    if (usernameDisplay) {
+
+        usernameDisplay.textContent =
+            profileName;
 
     }
 
 
-    if (avatarElement) {
+    if (avatar) {
 
-        avatarElement.textContent =
-            name.charAt(0)
+        avatar.textContent =
+            profileName
+                .charAt(0)
                 .toUpperCase();
 
     }
+
+
+    /* Update title information */
+
+    document.title =
+        `PRESSURE // OFF — ${profileName}`;
 
 }
 
@@ -310,7 +675,7 @@ async function loadTasks() {
                 currentUser.id
             )
             .order(
-                "due_date",
+                "date",
                 {
                     ascending: true
                 }
@@ -338,286 +703,49 @@ async function loadTasks() {
 
 
 /* =========================================================
-   AUTH
+   SHOW APP
 ========================================================= */
 
-authForm.addEventListener(
-    "submit",
-    async event => {
+function showApp() {
 
-        event.preventDefault();
+    authScreen.classList.add(
+        "hidden"
+    );
 
-        const username =
-            authUsername.value
-                .trim()
-                .toLowerCase();
+    app.classList.remove(
+        "hidden"
+    );
 
-        const password =
-            authPassword.value;
+    authScreen.style.display =
+        "none";
 
+    app.style.display =
+        "block";
 
-        if (!username || !password) {
+}
 
-            showAuthMessage(
-                "Please enter your username and password."
-            );
 
-            return;
+/* =========================================================
+   SHOW AUTH
+========================================================= */
 
-        }
+function showAuth() {
 
+    app.classList.add(
+        "hidden"
+    );
 
-        authButton.disabled = true;
+    authScreen.classList.remove(
+        "hidden"
+    );
 
+    app.style.display =
+        "none";
 
-        /* =========================
-           SIGN UP
-        ========================= */
+    authScreen.style.display =
+        "grid";
 
-        if (authMode === "signup") {
-
-            const name =
-                authName.value.trim();
-
-            if (!name) {
-
-                showAuthMessage(
-                    "Please enter your name."
-                );
-
-                authButton.disabled = false;
-
-                return;
-
-            }
-
-
-            try {
-
-                const email =
-                    usernameToEmail(username);
-
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .auth
-                        .signUp({
-
-                            email,
-                            password,
-
-                            options: {
-
-                                data: {
-
-                                    username,
-                                    name
-
-                                }
-
-                            }
-
-                        });
-
-
-                if (error) {
-
-                    showAuthMessage(
-                        error.message
-                    );
-
-                    return;
-
-                }
-
-
-                if (!data.user) {
-
-                    showAuthMessage(
-                        "Account could not be created."
-                    );
-
-                    return;
-
-                }
-
-
-                currentUser =
-                    data.user;
-
-
-                await loadProfile();
-
-                /*
-                   If your database trigger
-                   creates the profile,
-                   loadProfile will get it.
-
-                   If not, create it here.
-                */
-
-                if (!currentProfile) {
-
-                    const {
-                        error: profileError
-                    } =
-                        await supabaseClient
-                            .from("profiles")
-                            .insert({
-
-                                id:
-                                    currentUser.id,
-
-                                username,
-
-                                name
-
-                            });
-
-
-                    if (profileError) {
-
-                        console.error(
-                            profileError
-                        );
-
-                    }
-
-                }
-
-
-                await loadProfile();
-
-                await loadTasks();
-
-                showApp();
-
-                renderDashboard();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                showAuthMessage(
-                    "Something went wrong while creating the account."
-                );
-
-            } finally {
-
-                authButton.disabled = false;
-
-            }
-
-
-            return;
-
-        }
-
-
-        /* =========================
-           LOGIN
-        ========================= */
-
-        try {
-
-            const {
-                data: loginEmail,
-                error: rpcError
-            } =
-                await supabaseClient.rpc(
-                    "get_login_email",
-                    {
-                        login_username:
-                            username
-                    }
-                );
-
-
-            if (rpcError) {
-
-                console.error(rpcError);
-
-                showAuthMessage(
-                    "Login failed. Please try again."
-                );
-
-                return;
-
-            }
-
-
-            if (!loginEmail) {
-
-                showAuthMessage(
-                    "Username not found."
-                );
-
-                return;
-
-            }
-
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .auth
-                    .signInWithPassword({
-
-                        email:
-                            loginEmail,
-
-                        password
-
-                    });
-
-
-            if (error) {
-
-                showAuthMessage(
-                    error.message
-                );
-
-                return;
-
-            }
-
-
-            currentUser =
-                data.user;
-
-
-            await loadProfile();
-
-            await loadTasks();
-
-
-            showApp();
-
-            renderDashboard();
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            showAuthMessage(
-                "Something went wrong while logging in."
-            );
-
-        } finally {
-
-            authButton.disabled = false;
-
-        }
-
-    }
-);
+}
 
 
 /* =========================================================
@@ -628,21 +756,61 @@ logoutButton.addEventListener(
     "click",
     async () => {
 
-        await supabaseClient
-            .auth
-            .signOut();
+        logoutButton.disabled = true;
+
+        try {
+
+            const {
+                error
+            } =
+                await supabaseClient.auth.signOut();
 
 
-        currentUser = null;
+            if (error) {
 
-        currentProfile = null;
+                console.error(
+                    "LOGOUT ERROR:",
+                    error
+                );
 
-        currentTasks = [];
+                alert(
+                    "Could not log out: " +
+                    error.message
+                );
+
+                return;
+
+            }
 
 
-        authPassword.value = "";
+            currentUser = null;
 
-        showAuth();
+            currentProfile = null;
+
+            currentTasks = [];
+
+            closeTaskModal();
+
+            showAuth();
+
+            authForm.reset();
+
+            setAuthMode("login");
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Something went wrong while logging out."
+            );
+
+        } finally {
+
+            logoutButton.disabled = false;
+
+        }
 
     }
 );
@@ -652,11 +820,32 @@ logoutButton.addEventListener(
    DATE HELPERS
 ========================================================= */
 
-function formatDateInput(date) {
+function getLocalDate(offset = 0) {
+
+    const date =
+        new Date();
+
+    date.setHours(
+        12,
+        0,
+        0,
+        0
+    );
+
+    date.setDate(
+        date.getDate() + offset
+    );
 
     return date
         .toISOString()
         .split("T")[0];
+
+}
+
+
+function getWeekDate(offset) {
+
+    return getLocalDate(offset);
 
 }
 
@@ -668,20 +857,56 @@ function readableDate(dateString) {
 
     const date =
         new Date(
-            `${dateString}T00:00:00`
+            dateString +
+            "T00:00:00"
         );
-
 
     return date.toLocaleDateString(
         undefined,
         {
-
-            weekday: "short",
-
             day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
 
+}
+
+
+function readableShortDate(dateString) {
+
+    if (!dateString)
+        return "";
+
+    const date =
+        new Date(
+            dateString +
+            "T00:00:00"
+        );
+
+    return date.toLocaleDateString(
+        undefined,
+        {
+            day: "numeric",
             month: "short"
+        }
+    );
 
+}
+
+
+function getDayName(dateString) {
+
+    const date =
+        new Date(
+            dateString +
+            "T00:00:00"
+        );
+
+    return date.toLocaleDateString(
+        undefined,
+        {
+            weekday: "long"
         }
     );
 
@@ -689,6 +914,10 @@ function readableDate(dateString) {
 
 
 function daysUntil(dateString) {
+
+    if (!dateString)
+        return 999;
+
 
     const today =
         new Date();
@@ -703,443 +932,199 @@ function daysUntil(dateString) {
 
     const target =
         new Date(
-            `${dateString}T00:00:00`
+            dateString +
+            "T00:00:00"
         );
+
+    target.setHours(
+        0,
+        0,
+        0,
+        0
+    );
 
 
     return Math.round(
         (
-            target - today
+            target.getTime() -
+            today.getTime()
         ) /
-        86400000
+        (
+            1000 *
+            60 *
+            60 *
+            24
+        )
     );
 
 }
 
 
 /* =========================================================
-   GET DATE FROM TASK
+   ESCAPE HTML
 ========================================================= */
 
-function getTaskDate(task) {
+function escapeHtml(value) {
 
-    return task.due_date ||
-           task.date;
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        value ?? "";
+
+    return div.innerHTML;
 
 }
 
 
 /* =========================================================
-   OPEN ADD TASK
+   WEEK DATA
 ========================================================= */
 
-function openAddTask() {
+function getWeekData() {
 
-    editingTaskId = null;
+    const week = [];
 
-    taskForm.reset();
 
+    for (
+        let i = 0;
+        i < 7;
+        i++
+    ) {
 
-    modalTitle.textContent =
-        "Add a task";
+        const date =
+            getWeekDate(i);
 
-    saveTask.textContent =
-        "Add Task";
 
-
-    deleteTaskButton
-        .classList
-        .add("hidden");
-
-
-    taskCategory.value =
-        "Homework";
-
-    taskEffort.value =
-        "1";
-
-
-    taskDate.value =
-        formatDateInput(
-            new Date()
-        );
-
-
-    taskModal
-        .classList
-        .remove("hidden");
-
-}
-
-
-/* =========================================================
-   OPEN EDIT TASK
-========================================================= */
-
-function openEditTask(id) {
-
-    const task =
-        currentTasks.find(
-            task =>
-                task.id === id
-        );
-
-
-    if (!task)
-        return;
-
-
-    editingTaskId = id;
-
-
-    modalTitle.textContent =
-        "Edit task";
-
-    saveTask.textContent =
-        "Save changes";
-
-
-    deleteTaskButton
-        .classList
-        .remove("hidden");
-
-
-    taskName.value =
-        task.name || "";
-
-    taskCategory.value =
-        task.category || "Other";
-
-    taskEffort.value =
-        task.effort || 1;
-
-    taskDate.value =
-        getTaskDate(task);
-
-
-    taskModal
-        .classList
-        .remove("hidden");
-
-}
-
-
-/* =========================================================
-   CLOSE MODAL
-========================================================= */
-
-function closeTaskModal() {
-
-    taskModal
-        .classList
-        .add("hidden");
-
-
-    editingTaskId = null;
-
-}
-
-
-/* =========================================================
-   SAVE TASK
-========================================================= */
-
-taskForm.addEventListener(
-    "submit",
-    async event => {
-
-        event.preventDefault();
-
-
-        const name =
-            taskName.value.trim();
-
-        const category =
-            taskCategory.value;
-
-        const effort =
-            Number(
-                taskEffort.value
-            );
-
-        const due_date =
-            taskDate.value;
-
-
-        if (
-            !name ||
-            !due_date ||
-            !effort
-        ) {
-
-            alert(
-                "Please complete all task fields."
-            );
-
-            return;
-
-        }
-
-
-        saveTask.disabled = true;
-
-
-        try {
-
-            const taskData = {
-
-                name,
-
-                category,
-
-                effort,
-
-                due_date
-
-            };
-
-
-            /* =========================
-               EDIT
-            ========================= */
-
-            if (editingTaskId) {
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .from("tasks")
-                        .update(taskData)
-                        .eq(
-                            "id",
-                            editingTaskId
-                        )
-                        .eq(
-                            "user_id",
-                            currentUser.id
-                        )
-                        .select()
-                        .single();
-
-
-                if (error)
-                    throw error;
-
-
-                const index =
-                    currentTasks.findIndex(
-                        task =>
-                            task.id ===
-                            editingTaskId
-                    );
-
-
-                if (index !== -1) {
-
-                    currentTasks[index] =
-                        data;
-
-                }
-
-
-            }
-
-
-            /* =========================
-               CREATE
-            ========================= */
-
-            else {
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .from("tasks")
-                        .insert({
-
-                            user_id:
-                                currentUser.id,
-
-                            name,
-
-                            category,
-
-                            effort,
-
-                            due_date
-
-                        })
-                        .select()
-                        .single();
-
-
-                if (error)
-                    throw error;
-
-
-                currentTasks.push(
-                    data
-                );
-
-            }
-
-
-            closeTaskModal();
-
-            renderDashboard();
-
-
-        } catch (error) {
-
-            console.error(
-                "TASK SAVE ERROR:",
-                error
-            );
-
-            alert(
-                "Task error: " +
-                error.message
-            );
-
-        } finally {
-
-            saveTask.disabled = false;
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   DELETE TASK
-========================================================= */
-
-async function deleteTask(id) {
-
-    if (!currentUser)
-        return;
-
-
-    const confirmed =
-        confirm(
-            "Delete this task permanently?"
-        );
-
-
-    if (!confirmed)
-        return;
-
-
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("tasks")
-            .delete()
-            .eq(
-                "id",
-                id
-            )
-            .eq(
-                "user_id",
-                currentUser.id
+        const tasks =
+            currentTasks.filter(
+                task =>
+                    task.date === date
             );
 
 
-    if (error) {
+        const hours =
+            tasks.reduce(
+                (
+                    total,
+                    task
+                ) =>
+                    total +
+                    (
+                        Number(task.effort) ||
+                        0
+                    ),
+                0
+            );
 
-        alert(
-            "Could not delete task: " +
-            error.message
-        );
 
-        return;
+        week.push({
+
+            date,
+
+            tasks,
+
+            hours
+
+        });
 
     }
 
 
-    currentTasks =
-        currentTasks.filter(
-            task =>
-                task.id !== id
-        );
-
-
-    closeTaskModal();
-
-    renderDashboard();
+    return week;
 
 }
 
 
 /* =========================================================
-   MODAL BUTTONS
+   TASK PRESSURE
 ========================================================= */
 
-document
-    .getElementById("addTaskTop")
-    .addEventListener(
-        "click",
-        openAddTask
-    );
+function getTaskPressure(task) {
+
+    const effort =
+        Number(task.effort) || 0;
+
+    const days =
+        daysUntil(task.date);
 
 
-document
-    .getElementById("addTaskButton")
-    .addEventListener(
-        "click",
-        openAddTask
-    );
+    let score = 0;
 
 
-closeModalButton.addEventListener(
-    "click",
-    closeTaskModal
-);
+    /* Effort */
+
+    score +=
+        Math.min(
+            effort * 8,
+            40
+        );
 
 
-cancelModalButton.addEventListener(
-    "click",
-    closeTaskModal
-);
+    /* Deadline proximity */
 
+    if (days <= 0) {
 
-deleteTaskButton.addEventListener(
-    "click",
-    () => {
+        score += 45;
 
-        if (editingTaskId) {
+    } else if (days === 1) {
 
-            deleteTask(
-                editingTaskId
-            );
+        score += 38;
 
-        }
+    } else if (days === 2) {
 
-    }
-);
+        score += 30;
 
+    } else if (days <= 4) {
 
-taskModal.addEventListener(
-    "click",
-    event => {
+        score += 20;
 
-        if (
-            event.target ===
-            taskModal
-        ) {
+    } else {
 
-            closeTaskModal();
-
-        }
+        score += 5;
 
     }
-);
+
+
+    return score;
+
+}
+
+
+/* =========================================================
+   DAILY STATUS
+========================================================= */
+
+function getDayStatus(hours) {
+
+    if (hours >= 5) {
+
+        return {
+            className: "overloaded",
+            label: "Overloaded"
+        };
+
+    }
+
+
+    if (hours >= 3) {
+
+        return {
+            className: "busy",
+            label: "Busy"
+        };
+
+    }
+
+
+    return {
+        className: "manageable",
+        label: "Manageable"
+    };
+
+}
 
 
 /* =========================================================
@@ -1148,7 +1133,7 @@ taskModal.addEventListener(
 
 function renderDashboard() {
 
-    renderPressureScore();
+    renderScore();
 
     renderRadar();
 
@@ -1169,79 +1154,165 @@ function renderDashboard() {
    PRESSURE SCORE
 ========================================================= */
 
-function renderPressureScore() {
+function calculateWeeklyScore() {
 
-    const scoreElement =
-        document.getElementById("score");
-
-    const totalHoursElement =
-        document.getElementById("totalHours");
-
-    const scoreLabel =
-        document.getElementById("scoreLabel");
-
-    const scoreRing =
-        document.getElementById("scoreRing");
+    if (!currentTasks.length)
+        return 1;
 
 
-    const totalHours =
+    const totalEffort =
         currentTasks.reduce(
-            (total, task) =>
+            (
+                total,
+                task
+            ) =>
                 total +
-                Number(
-                    task.effort || 0
+                (
+                    Number(task.effort) ||
+                    0
                 ),
             0
         );
 
 
-    let score =
-        Math.min(
-            10,
-            Math.max(
-                1,
-                Math.ceil(
-                    totalHours / 2
-                )
+    const urgentTasks =
+        currentTasks.filter(
+            task =>
+                daysUntil(task.date) <= 2
+        ).length;
+
+
+    const overloadedDays =
+        getWeekData()
+            .filter(
+                day =>
+                    day.hours >= 5
             )
+            .length;
+
+
+    let score =
+        1 +
+        (
+            totalEffort * 0.65
+        ) +
+        (
+            urgentTasks * 0.8
+        ) +
+        (
+            overloadedDays * 1.2
         );
 
 
-    scoreElement.textContent =
-        score;
-
-    totalHoursElement.textContent =
-        `${totalHours}h planned`;
+    score =
+        Math.round(score);
 
 
-    let label =
-        "Calm week";
+    return Math.max(
+        1,
+        Math.min(
+            10,
+            score
+        )
+    );
+
+}
 
 
-    if (score >= 8) {
+function renderScore() {
 
-        label =
-            "High pressure";
+    const scoreElement =
+        document.getElementById(
+            "score"
+        );
 
-    } else if (score >= 5) {
+    const scoreRing =
+        document.getElementById(
+            "scoreRing"
+        );
 
-        label =
-            "Busy week";
+    const scoreLabel =
+        document.getElementById(
+            "scoreLabel"
+        );
+
+    const totalHours =
+        document.getElementById(
+            "totalHours"
+        );
+
+
+    const score =
+        calculateWeeklyScore();
+
+
+    const total =
+        currentTasks.reduce(
+            (
+                sum,
+                task
+            ) =>
+                sum +
+                (
+                    Number(task.effort) ||
+                    0
+                ),
+            0
+        );
+
+
+    if (scoreElement) {
+
+        scoreElement.textContent =
+            score;
 
     }
 
 
-    scoreLabel.textContent =
-        label;
+    if (totalHours) {
+
+        totalHours.textContent =
+            `${total.toFixed(1).replace(".0", "")}h planned`;
+
+    }
 
 
-    scoreRing.style.background =
-        `conic-gradient(
-            var(--blue)
-            ${score * 10}%,
-            rgba(91,140,255,.08)
-            ${score * 10}%
-        )`;
+    if (scoreLabel) {
+
+        if (score <= 3) {
+
+            scoreLabel.textContent =
+                "Calm week";
+
+        } else if (score <= 5) {
+
+            scoreLabel.textContent =
+                "Manageable";
+
+        } else if (score <= 7) {
+
+            scoreLabel.textContent =
+                "Getting busy";
+
+        } else {
+
+            scoreLabel.textContent =
+                "High pressure";
+
+        }
+
+    }
+
+
+    if (scoreRing) {
+
+        scoreRing.style.background =
+            `conic-gradient(
+                var(--blue) ${score * 10}%,
+                rgba(91,140,255,.08) ${score * 10}%
+            )`;
+
+    }
 
 }
 
@@ -1263,114 +1334,128 @@ function renderRadar() {
         );
 
 
+    if (!container)
+        return;
+
+
+    const week =
+        getWeekData();
+
+
     container.innerHTML = "";
 
 
-    if (!currentTasks.length) {
+    if (empty) {
 
         empty.style.display =
-            "block";
-
-        return;
+            currentTasks.length
+                ? "none"
+                : "block";
 
     }
 
 
-    empty.style.display =
-        "none";
+    if (!currentTasks.length)
+        return;
 
 
-    const days =
-        ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-
-
-    const hours =
-        Array(7).fill(0);
-
-
-    currentTasks.forEach(
-        task => {
-
-            const date =
-                new Date(
-                    `${getTaskDate(task)}T00:00:00`
-                );
-
-
-            hours[
-                date.getDay()
-            ] += Number(
-                task.effort || 0
-            );
-
-        }
-    );
-
-
-    const max =
+    const maxHours =
         Math.max(
-            ...hours,
+            ...week.map(
+                day =>
+                    day.hours
+            ),
             1
         );
 
 
-    days.forEach(
-        (day, index) => {
+    week.forEach(
+        day => {
 
             const column =
                 document.createElement(
                     "div"
                 );
 
-
             column.className =
                 "radar-column";
 
 
-            let status =
-                "";
+            const status =
+                getDayStatus(
+                    day.hours
+                );
 
 
-            if (hours[index] >= 6) {
+            const bar =
+                document.createElement(
+                    "div"
+                );
 
-                status =
-                    "overloaded";
-
-            } else if (
-                hours[index] >= 3
-            ) {
-
-                status =
-                    "busy";
-
-            }
+            bar.className =
+                `radar-bar ${status.className}`;
 
 
             const height =
                 Math.max(
                     5,
                     (
-                        hours[index] /
-                        max
-                    ) * 150
+                        day.hours /
+                        maxHours
+                    ) *
+                    100
                 );
 
 
-            column.innerHTML =
-                `
-                <span class="radar-value">
-                    ${hours[index]}h
-                </span>
+            bar.style.height =
+                `${height}%`;
 
-                <div
-                    class="radar-bar ${status}"
-                    style="height:${height}px"
-                ></div>
 
-                <span class="radar-day">
-                    ${day}
-                </span>
-                `;
+            const value =
+                document.createElement(
+                    "span"
+                );
+
+            value.className =
+                "radar-value";
+
+            value.textContent =
+                `${day.hours.toFixed(1).replace(".0", "")}h`;
+
+
+            const dayLabel =
+                document.createElement(
+                    "span"
+                );
+
+            dayLabel.className =
+                "radar-day";
+
+            dayLabel.textContent =
+                new Date(
+                    day.date +
+                    "T00:00:00"
+                )
+                    .toLocaleDateString(
+                        undefined,
+                        {
+                            weekday: "short"
+                        }
+                    )
+                    .slice(0, 3);
+
+
+            column.appendChild(
+                value
+            );
+
+            column.appendChild(
+                bar
+            );
+
+            column.appendChild(
+                dayLabel
+            );
 
 
             container.appendChild(
@@ -1389,65 +1474,40 @@ function renderRadar() {
 
 function renderAlert() {
 
-    const alert =
+    const alertCard =
         document.getElementById(
             "alert"
         );
 
+    const alertTitle =
+        document.getElementById(
+            "alertTitle"
+        );
 
-    const totals = {};
-
-
-    currentTasks.forEach(
-        task => {
-
-            const date =
-                getTaskDate(task);
-
-            totals[date] =
-                (
-                    totals[date] || 0
-                ) +
-                Number(
-                    task.effort || 0
-                );
-
-        }
-    );
-
-
-    let busiestDate = null;
-
-    let busiestHours = 0;
-
-
-    Object.entries(totals)
-        .forEach(
-            ([date, hours]) => {
-
-                if (
-                    hours >
-                    busiestHours
-                ) {
-
-                    busiestDate =
-                        date;
-
-                    busiestHours =
-                        hours;
-
-                }
-
-            }
+    const alertText =
+        document.getElementById(
+            "alertText"
         );
 
 
-    if (
-        busiestHours < 4 ||
-        !busiestDate
-    ) {
+    if (!alertCard)
+        return;
 
-        alert.classList.add(
+
+    const week =
+        getWeekData();
+
+
+    const overloaded =
+        week.filter(
+            day =>
+                day.hours >= 5
+        );
+
+
+    if (!overloaded.length) {
+
+        alertCard.classList.add(
             "hidden"
         );
 
@@ -1456,43 +1516,48 @@ function renderAlert() {
     }
 
 
-    const date =
-        new Date(
-            `${busiestDate}T00:00:00`
+    const worstDay =
+        overloaded.sort(
+            (
+                a,
+                b
+            ) =>
+                b.hours -
+                a.hours
+        )[0];
+
+
+    const dayName =
+        getDayName(
+            worstDay.date
         );
 
 
-    const day =
-        date.toLocaleDateString(
-            undefined,
-            {
-                weekday:
-                    "long"
-            }
-        );
-
-
-    document
-        .getElementById("alertTitle")
-        .textContent =
-            `${day} looks overloaded.`;
-
-
-    document
-        .getElementById("alertText")
-        .textContent =
-            `${busiestHours} hours are planned. Consider starting one task earlier.`;
-
-
-    alert.classList.remove(
+    alertCard.classList.remove(
         "hidden"
     );
+
+
+    if (alertTitle) {
+
+        alertTitle.textContent =
+            `${dayName} looks overloaded.`;
+
+    }
+
+
+    if (alertText) {
+
+        alertText.textContent =
+            `${worstDay.hours.toFixed(1).replace(".0", "")} hours are planned. Consider starting one of these tasks earlier.`;
+
+    }
 
 }
 
 
 /* =========================================================
-   WEEK VIEW
+   WEEKLY VIEW
 ========================================================= */
 
 function renderWeek() {
@@ -1503,170 +1568,162 @@ function renderWeek() {
         );
 
 
+    if (!container)
+        return;
+
+
+    const week =
+        getWeekData();
+
+
     container.innerHTML = "";
 
 
-    const today =
-        new Date();
+    week.forEach(
+        day => {
 
-    today.setHours(
-        0,
-        0,
-        0,
-        0
-    );
+            const status =
+                getDayStatus(
+                    day.hours
+                );
 
 
-    for (
-        let i = 0;
-        i < 7;
-        i++
-    ) {
-
-        const date =
-            new Date(today);
-
-        date.setDate(
-            today.getDate() + i
-        );
+            const element =
+                document.createElement(
+                    "div"
+                );
 
 
-        const dateString =
-            formatDateInput(date);
+            element.className =
+                `day ${status.className}`;
 
 
-        const tasks =
-            currentTasks.filter(
-                task =>
-                    getTaskDate(task) ===
-                    dateString
-            );
+            const date =
+                new Date(
+                    day.date +
+                    "T00:00:00"
+                );
 
 
-        const hours =
-            tasks.reduce(
-                (total, task) =>
-                    total +
-                    Number(
-                        task.effort || 0
-                    ),
-                0
-            );
+            const dayName =
+                date.toLocaleDateString(
+                    undefined,
+                    {
+                        weekday: "short"
+                    }
+                );
 
 
-        let status =
-            "manageable";
-
-        let statusText =
-            "Manageable";
+            const dayNumber =
+                date.getDate();
 
 
-        if (hours >= 6) {
+            element.innerHTML = `
 
-            status =
-                "overloaded";
+                <div class="day-header">
 
-            statusText =
-                "Overloaded";
+                    <span class="day-name">
+                        ${dayName}
+                    </span>
 
-        } else if (hours >= 3) {
+                    <span class="day-number">
+                        ${dayNumber}
+                    </span>
 
-            status =
-                "busy";
+                </div>
 
-            statusText =
-                "Busy";
+                <div class="day-status">
 
-        }
+                    <span class="status-dot"></span>
 
+                    ${status.label}
 
-        const day =
-            document.createElement(
-                "div"
-            );
+                </div>
 
+                <div class="day-tasks">
 
-        day.className =
-            `day ${status}`;
+                    ${
+                        day.tasks.length
+                        ?
+                        day.tasks.map(
+                            task => `
+                                <button
+                                    class="mini-task"
+                                    type="button"
+                                    data-task-id="${task.id}"
+                                >
 
+                                    <span class="mini-dot"></span>
 
-        day.innerHTML =
-            `
-            <div class="day-header">
+                                    <span>
 
-                <span class="day-name">
-                    ${date.toLocaleDateString(
-                        undefined,
-                        {
-                            weekday:
-                                "short"
-                        }
-                    )}
-                </span>
+                                        <strong>
+                                            ${escapeHtml(task.name)}
+                                        </strong>
 
-                <span class="day-number">
-                    ${date.getDate()}
-                </span>
+                                        <small>
+                                            ${Number(task.effort) || 0}h
+                                        </small>
 
-            </div>
+                                    </span>
 
-            <div class="day-status">
-
-                <span class="status-dot"></span>
-
-                ${statusText}
-
-            </div>
-
-            <div class="day-tasks">
-
-                ${
-                    tasks.length
-                    ?
-                    tasks.map(
-                        task =>
+                                </button>
                             `
-                            <button
-                                class="mini-task"
-                                onclick="openEditTask(${task.id})"
-                            >
+                        ).join("")
+                        :
+                        `
+                            <span class="empty-day">
+                                No tasks
+                            </span>
+                        `
+                    }
 
-                                <span class="mini-dot"></span>
+                </div>
 
-                                <div>
+                <div class="day-hours">
 
-                                    <strong>
-                                        ${escapeHtml(task.name)}
-                                    </strong>
+                    ${
+                        day.hours > 0
+                        ? `${day.hours.toFixed(1).replace(".0", "")}h planned`
+                        : "Free"
 
-                                    <small>
-                                        ${task.effort}h
-                                    </small>
+                    }
 
-                                </div>
+                </div>
 
-                            </button>
-                            `
-                    ).join("")
-                    :
-                    `<p class="empty-day">
-                        No tasks
-                    </p>`
-                }
-
-            </div>
-
-            <p class="day-hours">
-                ${hours}h planned
-            </p>
             `;
 
 
-        container.appendChild(
-            day
-        );
+            element
+                .querySelectorAll(
+                    ".mini-task"
+                )
+                .forEach(
+                    button => {
 
-    }
+                        button.addEventListener(
+                            "click",
+                            () => {
+
+                                openEditTask(
+                                    Number(
+                                        button.dataset.taskId
+                                    )
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+
+
+            container.appendChild(
+                element
+            );
+
+        }
+    );
 
 }
 
@@ -1674,6 +1731,31 @@ function renderWeek() {
 /* =========================================================
    TASK LIST
 ========================================================= */
+
+function getCategoryIcon(category) {
+
+    const icons = {
+
+        Test: "T",
+
+        Homework: "H",
+
+        Project: "P",
+
+        Assignment: "A",
+
+        Tuition: "U",
+
+        Other: "•"
+
+    };
+
+
+    return icons[category] ||
+        "•";
+
+}
+
 
 function renderTasks() {
 
@@ -1683,87 +1765,134 @@ function renderTasks() {
         );
 
 
+    if (!container)
+        return;
+
+
     container.innerHTML = "";
 
 
-    const sorted =
-        [...currentTasks]
-        .sort(
-            (a, b) =>
-                new Date(
-                    getTaskDate(a)
-                ) -
-                new Date(
-                    getTaskDate(b)
-                )
-        );
+    if (!currentTasks.length) {
 
+        container.innerHTML = `
 
-    if (!sorted.length) {
+            <div class="empty-tasks">
 
-        container.innerHTML =
-            `
-            <p class="empty-tasks">
-                No tasks yet.<br>
-                Add your first task to start
-                understanding your workload.
-            </p>
-            `;
+                No tasks yet.
+
+                <br>
+
+                Add your first task to start seeing your workload.
+
+            </div>
+
+        `;
 
         return;
 
     }
 
 
-    sorted.forEach(
+    const sortedTasks =
+        [...currentTasks].sort(
+            (
+                a,
+                b
+            ) =>
+                new Date(a.date) -
+                new Date(b.date)
+        );
+
+
+    sortedTasks.forEach(
         task => {
 
             const row =
                 document.createElement(
-                    "div"
+                    "button"
                 );
 
+
+            row.type =
+                "button";
 
             row.className =
                 "task-row";
 
 
-            row.innerHTML =
-                `
-                <div class="task-icon ${task.category}">
-                    ${task.category
-                        .charAt(0)}
-                </div>
+            const days =
+                daysUntil(
+                    task.date
+                );
 
-                <div class="task-info">
+
+            let deadlineText;
+
+
+            if (days < 0) {
+
+                deadlineText =
+                    "Overdue";
+
+            } else if (days === 0) {
+
+                deadlineText =
+                    "Due today";
+
+            } else if (days === 1) {
+
+                deadlineText =
+                    "Due tomorrow";
+
+            } else {
+
+                deadlineText =
+                    `Due ${readableShortDate(task.date)}`;
+
+            }
+
+
+            row.innerHTML = `
+
+                <span class="task-icon ${escapeHtml(task.category || "Other")}">
+
+                    ${getCategoryIcon(task.category)}
+
+                </span>
+
+                <span class="task-info">
 
                     <strong>
                         ${escapeHtml(task.name)}
                     </strong>
 
                     <small>
-                        ${escapeHtml(
-                            task.category
-                        )}
-                        •
-                        ${readableDate(
-                            getTaskDate(task)
-                        )}
+                        ${escapeHtml(task.category || "Other")}
+                        ·
+                        ${deadlineText}
                     </small>
 
-                </div>
-
-                <span class="effort">
-                    ${task.effort}h
                 </span>
 
-                <button
-                    class="task-edit"
-                    onclick="openEditTask(${task.id})"
-                >
-                    Edit
-                </button>
-                `;
+                <span class="effort">
+
+                    ${Number(task.effort) || 0}h
+
+                </span>
+
+            `;
+
+
+            row.addEventListener(
+                "click",
+                () => {
+
+                    openEditTask(
+                        task.id
+                    );
+
+                }
+            );
 
 
             container.appendChild(
@@ -1788,589 +1917,902 @@ function renderSuggestions() {
         );
 
 
+    if (!container)
+        return;
+
+
     container.innerHTML = "";
 
 
     if (!currentTasks.length) {
 
-        container.innerHTML =
-            `
-            <div class="suggestion">
-                <span class="suggestion-number">
-                    01
-                </span>
-
-                <p>
-                    Add a few upcoming tasks and
-                    PRESSURE // OFF will start
-                    identifying pressure points.
-                </p>
-            </div>
-            `;
-
-        return;
-
-    }
-
-
-    const sorted =
-        [...currentTasks]
-        .sort(
-            (a, b) =>
-                daysUntil(
-                    getTaskDate(a)
-                ) -
-                daysUntil(
-                    getTaskDate(b)
-                )
-        );
-
-
-    const suggestions = [];
-
-
-    const upcoming =
-        sorted.find(
-            task =>
-                daysUntil(
-                    getTaskDate(task)
-                ) >= 0
-        );
-
-
-    if (upcoming) {
-
-        suggestions.push(
-            `Start "${upcoming.name}" early because it is one of your nearest deadlines.`
-        );
-
-    }
-
-
-    const heavy =
-        [...currentTasks]
-        .sort(
-            (a, b) =>
-                b.effort -
-                a.effort
-        )[0];
-
-
-    if (
-        heavy &&
-        heavy.effort >= 3
-    ) {
-
-        suggestions.push(
-            `"${heavy.name}" needs ${heavy.effort} hours. Break it into smaller sessions instead of leaving it for one day.`
-        );
-
-    }
-
-
-    suggestions.push(
-        "Keep at least one lighter study period before your busiest day so your workload does not pile up."
-    );
-
-
-    suggestions
-        .slice(0, 3)
-        .forEach(
-            (text, index) => {
-
-                const item =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                item.className =
-                    "suggestion";
-
-
-                item.innerHTML =
-                    `
-                    <span class="suggestion-number">
-                        0${index + 1}
-                    </span>
-
-                    <p>
-                        ${text}
-                    </p>
-                    `;
-
-
-                container.appendChild(
-                    item
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   REMINDERS
-========================================================= */
-
-function renderReminders() {
-
-    const container =
-        document.getElementById("reminderList");
-
-    if (!container)
-        return;
-
-    container.innerHTML = "";
-
-    const reminders =
-        currentTasks
-            .filter(task => {
-
-                const days =
-                    daysUntil(
-                        task.due_date || task.date
-                    );
-
-                return days >= 0 &&
-                       days <= 3;
-
-            })
-            .sort((a, b) => {
-
-                return daysUntil(
-                    a.due_date || a.date
-                ) -
-                daysUntil(
-                    b.due_date || b.date
-                );
-
-            });
-
-
-    if (!reminders.length) {
-
         container.innerHTML = `
-            <p class="no-reminders">
-                No urgent deadlines right now.
-                Add tasks with due dates to get reminders.
-            </p>
-        `;
 
-        return;
+            <div class="suggestion">
 
-    }
-
-
-    reminders.forEach(task => {
-
-        const dueDate =
-            task.due_date || task.date;
-
-        const days =
-            daysUntil(dueDate);
-
-        let timing = "";
-
-        if (days === 0) {
-
-            timing =
-                "Due today";
-
-        } else if (days === 1) {
-
-            timing =
-                "Due tomorrow";
-
-        } else {
-
-            timing =
-                `Due in ${days} days`;
-
-        }
-
-
-        const element =
-            document.createElement("div");
-
-        element.className =
-            "reminder";
-
-
-        element.innerHTML = `
-
-            <div class="reminder-icon">
-                🔔
-            </div>
-
-            <div>
-
-                <strong>
-                    ${escapeHtml(task.name)}
-                </strong>
-
-                <p>
-                    ${timing} •
-                    ${readableDate(dueDate)}
-                    • ${task.effort}h effort
-                </p>
-
-            </div>
-
-        `;
-
-
-        container.appendChild(element);
-
-    });
-
-}
-
-
-    reminders.forEach(
-        task => {
-
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-
-            item.className =
-                "reminder";
-
-
-            item.innerHTML =
-                `
-                <span class="reminder-icon">
-                    🔔
+                <span class="suggestion-number">
+                    1
                 </span>
 
                 <div>
 
                     <strong>
-                        ${escapeHtml(task.name)}
+                        Add your first task
                     </strong>
 
                     <p>
-                        Due
-                        ${readableDate(
-                            getTaskDate(task)
-                        )}
+                        Once you add tasks, I'll identify deadlines, busy days and useful ways to spread your work.
                     </p>
 
                 </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const suggestions = [];
+
+
+    /* Highest pressure task */
+
+    const highestPressureTask =
+        [...currentTasks]
+            .sort(
+                (
+                    a,
+                    b
+                ) =>
+                    getTaskPressure(b) -
+                    getTaskPressure(a)
+            )[0];
+
+
+    if (highestPressureTask) {
+
+        const days =
+            daysUntil(
+                highestPressureTask.date
+            );
+
+
+        if (days <= 1) {
+
+            suggestions.push(
+                `Prioritise "${highestPressureTask.name}" — its deadline is very close.`
+            );
+
+        } else {
+
+            suggestions.push(
+                `Start "${highestPressureTask.name}" early. It has one of the highest pressure scores in your workload.`
+            );
+
+        }
+
+    }
+
+
+    /* Busiest day */
+
+    const week =
+        getWeekData();
+
+
+    const busiestDay =
+        [...week]
+            .sort(
+                (
+                    a,
+                    b
+                ) =>
+                    b.hours -
+                    a.hours
+            )[0];
+
+
+    if (
+        busiestDay &&
+        busiestDay.hours >= 3
+    ) {
+
+        suggestions.push(
+            `${getDayName(busiestDay.date)} has ${busiestDay.hours.toFixed(1).replace(".0", "")} hours planned. Move preparation earlier if possible.`
+        );
+
+    }
+
+
+    /* Large effort task */
+
+    const largeTask =
+        [...currentTasks]
+            .sort(
+                (
+                    a,
+                    b
+                ) =>
+                    (
+                        Number(b.effort) || 0
+                    ) -
+                    (
+                        Number(a.effort) || 0
+                    )
+            )[0];
+
+
+    if (
+        largeTask &&
+        Number(largeTask.effort) >= 2
+    ) {
+
+        suggestions.push(
+            `Break "${largeTask.name}" into smaller sessions instead of doing it all at once.`
+        );
+
+    }
+
+
+    /* General */
+
+    suggestions.push(
+        "Try to finish one high-priority task before starting several smaller ones."
+    );
+
+
+    suggestions
+        .slice(0, 4)
+        .forEach(
+            (
+                text,
+                index
+            ) => {
+
+                const element =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                element.className =
+                    "suggestion";
+
+
+                element.innerHTML = `
+
+                    <span class="suggestion-number">
+                        ${index + 1}
+                    </span>
+
+                    <div>
+
+                        <p>
+                            ${escapeHtml(text)}
+                        </p>
+
+                    </div>
+
                 `;
 
 
-            container.appendChild(
-                item
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   AI ASSISTANT
-========================================================= */
-
-function addAIMessage(
-    text,
-    type = "assistant"
-) {
-
-    const container =
-        document.getElementById(
-            "aiMessages"
-        );
-
-
-    const message =
-        document.createElement(
-            "div"
-        );
-
-
-    message.className =
-        `ai-message ${type}`;
-
-
-    message.innerHTML =
-        type === "assistant"
-        ?
-        `
-        <span class="message-icon">
-            ✦
-        </span>
-
-        <p>${escapeHtml(text)}</p>
-        `
-        :
-        `
-        <p>${escapeHtml(text)}</p>
-        `;
-
-
-    container.appendChild(
-        message
-    );
-
-
-    container.scrollTop =
-        container.scrollHeight;
-
-}
-
-
-function getAssistantResponse(question) {
-
-    const q =
-        question.toLowerCase();
-
-
-    if (!currentTasks.length) {
-
-        return "You do not have any tasks yet. Add your upcoming work first, and I can identify busy days, deadlines and possible pressure points.";
-
-    }
-
-
-    if (
-        q.includes("today")
-    ) {
-
-        const today =
-            formatDateInput(
-                new Date()
-            );
-
-
-        const todayTasks =
-            currentTasks.filter(
-                task =>
-                    getTaskDate(task) ===
-                    today
-            );
-
-
-        if (!todayTasks.length) {
-
-            return "You have no tasks scheduled for today. A good move would be to start one of your nearest upcoming deadlines early.";
-
-        }
-
-
-        return `Today you have ${todayTasks.length} task(s). Start with the highest-effort task first, then move to smaller tasks.`;
-
-    }
-
-
-    if (
-        q.includes("hardest") ||
-        q.includes("hard")
-    ) {
-
-        const totals = {};
-
-
-        currentTasks.forEach(
-            task => {
-
-                const date =
-                    getTaskDate(task);
-
-                totals[date] =
-                    (
-                        totals[date] || 0
-                    ) +
-                    Number(
-                        task.effort
-                    );
+                container.appendChild(
+                    element
+                );
 
             }
         );
 
-
-        const hardest =
-            Object.entries(totals)
-            .sort(
-                (a, b) =>
-                    b[1] - a[1]
-            )[0];
-
-
-        const date =
-            new Date(
-                `${hardest[0]}T00:00:00`
-            );
-
-
-        return `${date.toLocaleDateString(undefined,{weekday:"long"})} is currently your hardest day with ${hardest[1]} planned hours. Try moving preparation for at least one task earlier.`;
-
-    }
-
-
-    if (
-        q.includes("reduce") ||
-        q.includes("pressure")
-    ) {
-
-        return "To reduce pressure, start your nearest deadline early, split large tasks into smaller sessions, and avoid scheduling every difficult task on the same day.";
-
-    }
-
-
-    const nearest =
-        [...currentTasks]
-        .sort(
-            (a, b) =>
-                daysUntil(
-                    getTaskDate(a)
-                ) -
-                daysUntil(
-                    getTaskDate(b)
-                )
-        )[0];
-
-
-    return `Based on your current workload, "${nearest.name}" is one of the first tasks worth checking because of its deadline and position in your schedule.`;
-
 }
 
 
-document
-    .getElementById("aiForm")
-    .addEventListener(
-        "submit",
-        event => {
-
-            event.preventDefault();
-
-
-            const input =
-                document.getElementById(
-                    "aiInput"
-                );
-
-
-            const question =
-                input.value.trim();
-
-
-            if (!question)
-                return;
-
-
-            addAIMessage(
-                question,
-                "user"
-            );
-
-
-            input.value = "";
-
-
-            setTimeout(
-                () => {
-
-                    addAIMessage(
-                        getAssistantResponse(
-                            question
-                        )
-                    );
-
-                },
-                300
-            );
-
-        }
-    );
-
-
-document
-    .querySelectorAll(
-        ".quick-prompts button"
-    )
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const question =
-                        button.dataset.prompt;
-
-
-                    addAIMessage(
-                        question,
-                        "user"
-                    );
-
-
-                    setTimeout(
-                        () => {
-
-                            addAIMessage(
-                                getAssistantResponse(
-                                    question
-                                )
-                            );
-
-                        },
-                        250
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHtml(value) {
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-    div.textContent =
-        value ?? "";
-
-    return div.innerHTML;
-
-}
-
-
-/* =========================================================
-   SESSION CHECK
-========================================================= */
 /* =========================================================
    SMART REMINDERS
 ========================================================= */
 
-const notificationButton =
-    document.getElementById("notificationButton");
+function renderReminders() {
 
-const notificationButton2 =
-    document.getElementById("notificationButton2");
+    const container =
+        document.getElementById(
+            "reminderList"
+        );
 
 
-async function enableReminders() {
+    if (!container)
+        return;
 
-    if (!("Notification" in window)) {
+
+    container.innerHTML = "";
+
+
+    if (!currentTasks.length) {
+
+        container.innerHTML = `
+
+            <div class="no-reminders">
+
+                No reminders yet.
+
+                <br>
+
+                Add tasks with upcoming deadlines.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const reminders =
+        [...currentTasks]
+            .filter(
+                task =>
+                    daysUntil(task.date) >= 0 &&
+                    daysUntil(task.date) <= 3
+            )
+            .sort(
+                (
+                    a,
+                    b
+                ) =>
+                    new Date(a.date) -
+                    new Date(b.date)
+            );
+
+
+    if (!reminders.length) {
+
+        container.innerHTML = `
+
+            <div class="no-reminders">
+
+                You're clear for the next few days.
+
+                <br>
+
+                No urgent deadlines detected.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    reminders
+        .slice(0, 5)
+        .forEach(
+            task => {
+
+                const element =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                element.className =
+                    "reminder";
+
+
+                const days =
+                    daysUntil(
+                        task.date
+                    );
+
+
+                let title;
+
+                let description;
+
+
+                if (days === 0) {
+
+                    title =
+                        task.name;
+
+                    description =
+                        "Due today — consider working on it now.";
+
+                } else if (days === 1) {
+
+                    title =
+                        task.name;
+
+                    description =
+                        "Due tomorrow — don't leave it until the last minute.";
+
+                } else {
+
+                    title =
+                        task.name;
+
+                    description =
+                        `Due in ${days} days. A small session today could reduce pressure later.`;
+
+                }
+
+
+                element.innerHTML = `
+
+                    <span class="reminder-icon">
+                        🔔
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            ${escapeHtml(title)}
+                        </strong>
+
+                        <p>
+                            ${escapeHtml(description)}
+                        </p>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    element
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   OPEN ADD TASK
+========================================================= */
+
+function openAddTask() {
+
+    editingTaskId = null;
+
+
+    taskForm.reset();
+
+
+    taskCategory.value =
+        "Homework";
+
+
+    taskEffort.value =
+        "1";
+
+
+    taskDate.value =
+        getWeekDate(0);
+
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Add a task";
+
+
+    saveTask.textContent =
+        "Add Task";
+
+
+    deleteTaskButton.classList.add(
+        "hidden"
+    );
+
+
+    taskModal.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* =========================================================
+   OPEN EDIT TASK
+========================================================= */
+
+function openEditTask(id) {
+
+    const task =
+        currentTasks.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
+
+
+    if (!task)
+        return;
+
+
+    editingTaskId =
+        Number(id);
+
+
+    taskName.value =
+        task.name || "";
+
+
+    taskCategory.value =
+        task.category ||
+        "Homework";
+
+
+    taskEffort.value =
+        task.effort ||
+        1;
+
+
+    taskDate.value =
+        task.date ||
+        "";
+
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Edit task";
+
+
+    saveTask.textContent =
+        "Save changes";
+
+
+    deleteTaskButton.classList.remove(
+        "hidden"
+    );
+
+
+    taskModal.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE TASK MODAL
+========================================================= */
+
+function closeTaskModal() {
+
+    taskModal.classList.add(
+        "hidden"
+    );
+
+
+    editingTaskId =
+        null;
+
+}
+
+
+/* =========================================================
+   MODAL BUTTONS
+========================================================= */
+
+addTaskTop.addEventListener(
+    "click",
+    openAddTask
+);
+
+
+addTaskButton.addEventListener(
+    "click",
+    openAddTask
+);
+
+
+closeModalButton.addEventListener(
+    "click",
+    closeTaskModal
+);
+
+
+cancelModalButton.addEventListener(
+    "click",
+    closeTaskModal
+);
+
+
+taskModal.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target ===
+            taskModal
+        ) {
+
+            closeTaskModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SAVE TASK
+========================================================= */
+
+taskForm.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+
+        const name =
+            taskName.value.trim();
+
+        const category =
+            taskCategory.value;
+
+        const effort =
+            Number(
+                taskEffort.value
+            );
+
+        const date =
+            taskDate.value;
+
+
+        if (!name) {
+
+            alert(
+                "Please enter a task name."
+            );
+
+            return;
+
+        }
+
+
+        if (!date) {
+
+            alert(
+                "Please select a due date."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            !effort ||
+            effort <= 0
+        ) {
+
+            alert(
+                "Please enter a valid effort."
+            );
+
+            return;
+
+        }
+
+
+        if (!currentUser) {
+
+            alert(
+                "Please log in again."
+            );
+
+            return;
+
+        }
+
+
+        saveTask.disabled =
+            true;
+
+
+        try {
+
+            /* =================================================
+               UPDATE
+            ================================================= */
+
+            if (editingTaskId) {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from("tasks")
+                        .update({
+
+                            name,
+
+                            category,
+
+                            effort,
+
+                            date,
+
+                            due_date: date
+
+                        })
+                        .eq(
+                            "id",
+                            editingTaskId
+                        )
+                        .eq(
+                            "user_id",
+                            currentUser.id
+                        )
+                        .select()
+                        .single();
+
+
+                if (error) {
+
+                    console.error(
+                        "TASK UPDATE ERROR:",
+                        error
+                    );
+
+                    alert(
+                        "Could not update task: " +
+                        error.message
+                    );
+
+                    return;
+
+                }
+
+
+                const index =
+                    currentTasks.findIndex(
+                        task =>
+                            Number(task.id) ===
+                            Number(editingTaskId)
+                    );
+
+
+                if (index !== -1) {
+
+                    currentTasks[index] =
+                        data;
+
+                }
+
+            }
+
+
+            /* =================================================
+               CREATE
+            ================================================= */
+
+            else {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from("tasks")
+                        .insert([
+
+                            {
+
+                                user_id:
+                                    currentUser.id,
+
+                                name:
+                                    name,
+
+                                category:
+                                    category,
+
+                                effort:
+                                    effort,
+
+                                date:
+                                    date,
+
+                                due_date:
+                                    date
+
+                            }
+
+                        ])
+                        .select()
+                        .single();
+
+
+                if (error) {
+
+                    console.error(
+                        "TASK INSERT ERROR:",
+                        error
+                    );
+
+                    alert(
+                        "Could not create task: " +
+                        error.message
+                    );
+
+                    return;
+
+                }
+
+
+                currentTasks.push(
+                    data
+                );
+
+            }
+
+
+            closeTaskModal();
+
+            renderDashboard();
+
+
+        } catch (error) {
+
+            console.error(
+                "SAVE TASK ERROR:",
+                error
+            );
+
+            alert(
+                "Something went wrong while saving the task."
+            );
+
+        } finally {
+
+            saveTask.disabled =
+                false;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   DELETE TASK
+========================================================= */
+
+async function deleteTask(id) {
+
+    if (!currentUser)
+        return;
+
+
+    const task =
+        currentTasks.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
+
+
+    if (!task)
+        return;
+
+
+    const confirmed =
+        confirm(
+            `Delete "${task.name}"?`
+        );
+
+
+    if (!confirmed)
+        return;
+
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("tasks")
+                .delete()
+                .eq(
+                    "id",
+                    id
+                )
+                .eq(
+                    "user_id",
+                    currentUser.id
+                );
+
+
+        if (error) {
+
+            console.error(
+                "DELETE ERROR:",
+                error
+            );
+
+            alert(
+                "Could not delete task: " +
+                error.message
+            );
+
+            return;
+
+        }
+
+
+        currentTasks =
+            currentTasks.filter(
+                item =>
+                    Number(item.id) !==
+                    Number(id)
+            );
+
+
+        closeTaskModal();
+
+        renderDashboard();
+
+
+    } catch (error) {
+
+        console.error(
+            "DELETE CRASH:",
+            error
+        );
 
         alert(
-            "This browser does not support notifications."
+            "Something went wrong while deleting the task."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+========================================================= */
+
+deleteTaskButton.addEventListener(
+    "click",
+    async () => {
+
+        if (!editingTaskId)
+            return;
+
+
+        await deleteTask(
+            editingTaskId
+        );
+
+    }
+);
+
+
+/* =========================================================
+   SMART REMINDER NOTIFICATIONS
+========================================================= */
+
+async function enableNotifications() {
+
+    if (
+        !("Notification" in window)
+    ) {
+
+        alert(
+            "Your browser does not support notifications."
         );
 
         return;
@@ -2382,25 +2824,25 @@ async function enableReminders() {
         await Notification.requestPermission();
 
 
-    if (permission === "granted") {
+    if (
+        permission ===
+        "granted"
+    ) {
 
         localStorage.setItem(
-            "pressureRemindersEnabled",
-            "true"
+            "pressureNotifications",
+            "enabled"
         );
 
 
-        alert(
-            "Smart reminders enabled!"
-        );
+        updateNotificationButtons();
 
-
-        checkUpcomingNotifications();
+        sendReminderNotification();
 
     } else {
 
         alert(
-            "Notifications were not allowed."
+            "Notifications were not enabled. You can allow them from your browser settings."
         );
 
     }
@@ -2408,44 +2850,88 @@ async function enableReminders() {
 }
 
 
-function checkUpcomingNotifications() {
+function updateNotificationButtons() {
 
     const enabled =
         localStorage.getItem(
-            "pressureRemindersEnabled"
+            "pressureNotifications"
+        ) ===
+        "enabled";
+
+
+    if (notificationButton) {
+
+        notificationButton.title =
+            enabled
+                ? "Reminders enabled"
+                : "Enable reminders";
+
+    }
+
+
+    if (notificationButton2) {
+
+        notificationButton2.textContent =
+            enabled
+                ? "Enabled"
+                : "Enable";
+
+    }
+
+}
+
+
+function sendReminderNotification() {
+
+    if (
+        !("Notification" in window) ||
+        Notification.permission !==
+            "granted"
+    )
+        return;
+
+
+    const urgentTasks =
+        currentTasks.filter(
+            task =>
+                daysUntil(task.date) >= 0 &&
+                daysUntil(task.date) <= 1
         );
 
 
-    if (enabled !== "true")
+    if (!urgentTasks.length)
         return;
 
 
-    if (Notification.permission !== "granted")
-        return;
+    const task =
+        urgentTasks[0];
 
 
-    currentTasks.forEach(task => {
-
-        const dueDate =
-            task.due_date || task.date;
-
-        const days =
-            daysUntil(dueDate);
+    let body;
 
 
-        if (days === 0) {
+    if (
+        daysUntil(task.date) ===
+        0
+    ) {
 
-            new Notification(
-                "PRESSURE // OFF",
-                {
-                    body:
-                        `${task.name} is due today!`
-                }
-            );
+        body =
+            `"${task.name}" is due today.`;
 
+    } else {
+
+        body =
+            `"${task.name}" is due tomorrow.`;
+
+    }
+
+
+    new Notification(
+        "PRESSURE // OFF",
+        {
+            body
         }
-
-    });
+    );
 
 }
 
@@ -2454,7 +2940,7 @@ if (notificationButton) {
 
     notificationButton.addEventListener(
         "click",
-        enableReminders
+        enableNotifications
     );
 
 }
@@ -2464,307 +2950,272 @@ if (notificationButton2) {
 
     notificationButton2.addEventListener(
         "click",
-        enableReminders
+        enableNotifications
     );
 
 }
-async function checkSession() {
-
-    try {
-
-        const {
-            data:
-            {
-                session
-            }
-        } =
-            await supabaseClient
-                .auth
-                .getSession();
 
 
-        if (!session) {
+updateNotificationButtons();
 
-            showAuth();
-
-            return;
-
-        }
-
-
-        currentUser =
-            session.user;
-
-
-        await loadProfile();
-
-        await loadTasks();
-
-
-        showApp();
-
-        renderDashboard();
-
-
-    } catch (error) {
-
-        console.error(
-            error
-        );
-
-        showAuth();
-
-    }
-
-}
 
 /* =========================================================
-   WORKLOAD ASSISTANT
+   AI ASSISTANT
 ========================================================= */
 
-function getTaskDate(task) {
+function addAIMessage(
+    message,
+    type = "assistant"
+) {
 
-    return task.due_date || task.date;
-
-}
-
-
-function getTaskPriority(task) {
-
-    const date =
-        getTaskDate(task);
-
-    const days =
-        daysUntil(date);
-
-    const effort =
-        Number(task.effort) || 1;
+    if (!aiMessages)
+        return;
 
 
-    let urgencyScore = 0;
+    const element =
+        document.createElement(
+            "div"
+        );
 
 
-    if (days < 0) {
+    element.className =
+        `ai-message ${type}`;
 
-        urgencyScore = 100;
 
-    } else if (days === 0) {
+    if (
+        type ===
+        "assistant"
+    ) {
 
-        urgencyScore = 90;
+        element.innerHTML = `
 
-    } else if (days === 1) {
+            <span class="message-icon">
+                ✦
+            </span>
 
-        urgencyScore = 80;
+            <p>
+                ${escapeHtml(message)}
+            </p>
 
-    } else if (days === 2) {
-
-        urgencyScore = 70;
-
-    } else if (days <= 4) {
-
-        urgencyScore = 50;
+        `;
 
     } else {
 
-        urgencyScore = 20;
+        element.innerHTML = `
+
+            <p>
+                ${escapeHtml(message)}
+            </p>
+
+        `;
 
     }
 
 
-    return urgencyScore +
-           effort * 5;
+    aiMessages.appendChild(
+        element
+    );
+
+
+    aiMessages.scrollTop =
+        aiMessages.scrollHeight;
 
 }
 
 
-function getHighestPriorityTask() {
+/* =========================================================
+   AI WORKLOAD ANALYSIS
+========================================================= */
 
-    if (!currentTasks.length)
-        return null;
+function analyseWorkload() {
 
+    const totalHours =
+        currentTasks.reduce(
+            (
+                total,
+                task
+            ) =>
+                total +
+                (
+                    Number(task.effort) ||
+                    0
+                ),
+            0
+        );
 
-    const upcomingTasks =
-        currentTasks.filter(task => {
-
-            const days =
-                daysUntil(
-                    getTaskDate(task)
-                );
-
-            return days >= 0;
-
-        });
-
-
-    if (!upcomingTasks.length)
-        return null;
-
-
-    return [...upcomingTasks]
-        .sort((a, b) => {
-
-            return getTaskPriority(b) -
-                   getTaskPriority(a);
-
-        })[0];
-
-}
-
-
-function getHardestDay() {
 
     const week =
         getWeekData();
 
 
-    let hardestDay =
-        null;
-
-    let highestEffort =
-        0;
-
-
-    week.forEach(day => {
-
-        const total =
-            day.tasks.reduce(
-                (sum, task) =>
-                    sum +
-                    (Number(task.effort) || 0),
-                0
-            );
+    const busiestDay =
+        [...week]
+            .sort(
+                (
+                    a,
+                    b
+                ) =>
+                    b.hours -
+                    a.hours
+            )[0];
 
 
-        if (total > highestEffort) {
-
-            highestEffort =
-                total;
-
-            hardestDay = {
-
-                ...day,
-
-                effort: total
-
-            };
-
-        }
-
-    });
+    const nextTask =
+        [...currentTasks]
+            .filter(
+                task =>
+                    daysUntil(task.date) >= 0
+            )
+            .sort(
+                (
+                    a,
+                    b
+                ) =>
+                    getTaskPressure(b) -
+                    getTaskPressure(a)
+            )[0];
 
 
-    return hardestDay;
+    const overdue =
+        currentTasks.filter(
+            task =>
+                daysUntil(task.date) < 0
+        );
+
+
+    const urgent =
+        currentTasks.filter(
+            task =>
+                daysUntil(task.date) >= 0 &&
+                daysUntil(task.date) <= 2
+        );
+
+
+    return {
+
+        totalHours,
+
+        busiestDay,
+
+        nextTask,
+
+        overdue,
+
+        urgent,
+
+        week
+
+    };
 
 }
 
 
-function getOverloadedDays() {
+/* =========================================================
+   AI RESPONSE ENGINE
+========================================================= */
 
-    return getWeekData()
-        .filter(day => {
+function generateAIResponse(
+    question
+) {
 
-            const effort =
-                day.tasks.reduce(
-                    (sum, task) =>
-                        sum +
-                        (Number(task.effort) || 0),
-                    0
-                );
-
-
-            return effort >= 5 ||
-                   day.tasks.length >= 4;
-
-        });
-
-}
-
-
-function getAssistantResponse(question) {
-
-    const message =
+    const q =
         question
             .toLowerCase()
             .trim();
 
 
+    const analysis =
+        analyseWorkload();
+
+
     if (!currentTasks.length) {
 
         return `
-            You don't have any tasks yet, so your
-            workload is completely clear right now.
+You don't have any tasks yet.
 
-            Add your upcoming homework, tests,
-            assignments or projects and I'll help you
-            prioritise them.
-        `;
+Add your homework, tests, projects or assignments and I'll analyse your deadlines, effort and busy days for you.
+        `.trim();
 
     }
 
 
     /* =====================================================
-       WHAT SHOULD I DO TODAY
+       TODAY
     ===================================================== */
 
     if (
-        message.includes("today") ||
-        message.includes("work on")
+        q.includes("today") ||
+        q.includes("now") ||
+        q.includes("start")
+    ) {
+
+        if (analysis.nextTask) {
+
+            const task =
+                analysis.nextTask;
+
+            const days =
+                daysUntil(
+                    task.date
+                );
+
+
+            if (days === 0) {
+
+                return `
+Start with "${task.name}".
+
+It's due today and needs about ${task.effort} hour(s). I'd make this your first priority.
+                `.trim();
+
+            }
+
+
+            return `
+I'd start with "${task.name}".
+
+It's due ${readableDate(task.date)} and needs about ${task.effort} hour(s). Starting it now should reduce pressure later.
+            `.trim();
+
+        }
+
+    }
+
+
+    /* =====================================================
+       PRIORITY
+    ===================================================== */
+
+    if (
+        q.includes("priority") ||
+        q.includes("priorit") ||
+        q.includes("important") ||
+        q.includes("first")
     ) {
 
         const task =
-            getHighestPriorityTask();
+            analysis.nextTask;
 
 
-        if (!task) {
+        if (task) {
 
             return `
-                You don't have any upcoming tasks.
+Your highest-priority task is "${task.name}".
 
-                This is a good time to prepare early,
-                review difficult subjects or organise
-                your upcoming week.
-            `;
+Due: ${readableDate(task.date)}
+Effort: ${task.effort} hour(s)
+Time remaining: ${
+                daysUntil(task.date) < 0
+                    ? "overdue"
+                    : daysUntil(task.date) === 0
+                        ? "today"
+                        : `${daysUntil(task.date)} day(s)`
+            }
 
-        }
-
-
-        const days =
-            daysUntil(
-                getTaskDate(task)
-            );
-
-
-        let urgency = "";
-
-
-        if (days === 0) {
-
-            urgency =
-                "It is due today, so it should be your main priority.";
-
-        } else if (days === 1) {
-
-            urgency =
-                "It is due tomorrow, so you should start it now.";
-
-        } else {
-
-            urgency =
-                `It is due in ${days} days, but its effort level makes it worth starting early.`;
+I'd tackle this before lower-pressure tasks.
+            `.trim();
 
         }
-
-
-        return `
-            Start with "${task.name}".
-
-            ${urgency}
-
-            Estimated effort: ${task.effort} hour(s).
-
-            My recommendation: spend your first focused
-            study session on this before moving to smaller tasks.
-        `;
 
     }
 
@@ -2774,107 +3225,77 @@ function getAssistantResponse(question) {
     ===================================================== */
 
     if (
-        message.includes("hardest") ||
-        message.includes("hard") ||
-        message.includes("busy")
+        q.includes("hardest") ||
+        q.includes("busiest") ||
+        q.includes("difficult day") ||
+        q.includes("worst day")
     ) {
 
         const day =
-            getHardestDay();
+            analysis.busiestDay;
 
 
-        if (!day || day.effort === 0) {
+        if (day) {
+
+            const taskNames =
+                day.tasks
+                    .map(
+                        task =>
+                            task.name
+                    )
+                    .join(", ");
+
 
             return `
-                No day looks overloaded right now.
-                Your workload is reasonably spread out.
-            `;
+Your busiest day is ${getDayName(day.date)} (${readableDate(day.date)}).
+
+You have ${day.hours.toFixed(1).replace(".0", "")} hour(s) planned that day.
+
+Tasks: ${taskNames || "None"}
+
+I'd move preparation for at least one of those tasks to an earlier day.
+            `.trim();
 
         }
-
-
-        const date =
-            new Date(
-                day.date +
-                "T00:00:00"
-            );
-
-
-        const dayName =
-            date.toLocaleDateString(
-                undefined,
-                {
-                    weekday: "long"
-                }
-            );
-
-
-        return `
-            ${dayName} looks like your hardest day.
-
-            You currently have ${day.tasks.length}
-            task${day.tasks.length === 1 ? "" : "s"}
-            requiring approximately ${day.effort}
-            hour${day.effort === 1 ? "" : "s"}.
-
-            Try moving preparation for at least one
-            large task to an earlier day.
-        `;
 
     }
 
 
     /* =====================================================
-       REDUCE PRESSURE
+       PRESSURE
     ===================================================== */
 
     if (
-        message.includes("reduce") ||
-        message.includes("pressure") ||
-        message.includes("stress")
+        q.includes("pressure") ||
+        q.includes("stress") ||
+        q.includes("overwhelm") ||
+        q.includes("overloaded")
     ) {
 
-        const overloaded =
-            getOverloadedDays();
+        if (
+            analysis.busiestDay &&
+            analysis.busiestDay.hours >= 5
+        ) {
 
+            return `
+Your main pressure point is ${getDayName(analysis.busiestDay.date),}.
 
-        const priority =
-            getHighestPriorityTask();
+You have ${analysis.busiestDay.hours.toFixed(1).replace(".0", "")} hours concentrated there.
 
-
-        let advice =
-            `Your best strategy is to start large tasks before they become urgent.`;
-
-
-        if (priority) {
-
-            advice += `
-
-            The first task I would start early is
-            "${priority.name}".`;
+The simplest fix is to start one of those tasks earlier instead of trying to remove everything from that day.
+            `.replace(
+                "is ${getDayName(analysis.busiestDay.date),}",
+                `is ${getDayName(analysis.busiestDay.date)}`
+            ).trim();
 
         }
 
 
-        if (overloaded.length) {
+        return `
+Your workload doesn't currently show a major overload.
 
-            advice += `
-
-            You also have ${overloaded.length}
-            overloaded day${overloaded.length === 1 ? "" : "s"}.
-            Move preparation work away from those days
-            whenever possible.`;
-
-        }
-
-
-        advice += `
-
-        Don't try to complete everything in one session.
-        Break large tasks into smaller sessions of
-        30–60 minutes.`;
-
-        return advice;
+The best way to keep it that way is to start high-effort tasks before their deadlines and avoid stacking several tasks on the same day.
+        `.trim();
 
     }
 
@@ -2884,430 +3305,112 @@ function getAssistantResponse(question) {
     ===================================================== */
 
     if (
-        message.includes("deadline") ||
-        message.includes("due")
+        q.includes("deadline") ||
+        q.includes("due") ||
+        q.includes("coming up")
     ) {
 
-        const tasks =
-            [...currentTasks]
-                .filter(task =>
-                    daysUntil(
-                        getTaskDate(task)
-                    ) >= 0
-                )
-                .sort((a, b) =>
-                    daysUntil(
-                        getTaskDate(a)
-                    ) -
-                    daysUntil(
-                        getTaskDate(b)
-                    )
-                )
-                .slice(0, 3);
+        if (analysis.nextTask) {
 
+            const task =
+                analysis.nextTask;
 
-        if (!tasks.length) {
 
             return `
-                You don't currently have any upcoming deadlines.
-            `;
+Your most important upcoming deadline is "${task.name}".
+
+It's due ${readableDate(task.date)} and requires about ${task.effort} hour(s).
+
+I'd work on this before tasks with later deadlines.
+            `.trim();
 
         }
-
-
-        let response =
-            "Your next deadlines are:";
-
-
-        tasks.forEach(
-            (task, index) => {
-
-                response += `
-
-                ${index + 1}. ${task.name}
-                — due ${readableDate(getTaskDate(task))}
-                — ${task.effort}h effort`;
-
-            }
-        );
-
-
-        return response;
 
     }
 
 
     /* =====================================================
-       DEFAULT SMART RESPONSE
+       HOW MANY HOURS
     ===================================================== */
 
-    const priority =
-        getHighestPriorityTask();
-
-    const hardest =
-        getHardestDay();
-
-
-    let response =
-        `Here's what I see in your workload:`;
-
-
-    if (priority) {
-
-        response += `
-
-        • Your current highest priority is
-        "${priority.name}".`;
-
-    }
-
-
-    if (hardest && hardest.effort > 0) {
-
-        const date =
-            new Date(
-                hardest.date +
-                "T00:00:00"
-            );
-
-
-        const dayName =
-            date.toLocaleDateString(
-                undefined,
-                {
-                    weekday: "long"
-                }
-            );
-
-
-        response += `
-
-        • ${dayName} is currently your busiest day.`;
-
-    }
-
-
-    response += `
-
-    Ask me something like:
-    "What should I work on today?"
-    "Which day is hardest?"
-    or "How can I reduce my pressure?"`;
-
-
-    return response;
-
-}
-/* =========================================================
-   AI ASSISTANT
-========================================================= */
-
-const aiForm =
-    document.getElementById("aiForm");
-
-const aiInput =
-    document.getElementById("aiInput");
-
-const aiMessages =
-    document.getElementById("aiMessages");
-
-
-function addAIMessage(message, type = "assistant") {
-
-    if (!aiMessages)
-        return;
-
-    const messageElement =
-        document.createElement("div");
-
-    messageElement.className =
-        `ai-message ${type}`;
-
-    if (type === "assistant") {
-
-        messageElement.innerHTML = `
-            <span class="message-icon">
-                ✦
-            </span>
-
-            <p>
-                ${escapeHtml(message)}
-            </p>
-        `;
-
-    } else {
-
-        messageElement.innerHTML = `
-            <p>
-                ${escapeHtml(message)}
-            </p>
-        `;
-
-    }
-
-    aiMessages.appendChild(
-        messageElement
-    );
-
-    aiMessages.scrollTop =
-        aiMessages.scrollHeight;
-
-}
-
-
-/* =========================================================
-   ANALYSE WORKLOAD
-========================================================= */
-
-function getWorkloadAnalysis() {
-
-    if (!currentTasks.length) {
-
-        return {
-            totalEffort: 0,
-            busiestDay: null,
-            busiestTasks: [],
-            upcomingTask: null
-        };
-
-    }
-
-    const dayEffort = {};
-
-
-    currentTasks.forEach(
-        task => {
-
-            const date = task.date;
-
-            if (!dayEffort[date]) {
-
-                dayEffort[date] = 0;
-
-            }
-
-            dayEffort[date] +=
-                Number(task.effort) || 0;
-
-        }
-    );
-
-
-    const busiestDate =
-        Object.keys(dayEffort)
-            .sort(
-                (a, b) =>
-                    dayEffort[b] -
-                    dayEffort[a]
-            )[0];
-
-
-    const busiestTasks =
-        currentTasks.filter(
-            task =>
-                task.date === busiestDate
-        );
-
-
-    const upcomingTask =
-        [...currentTasks]
-            .filter(
-                task =>
-                    daysUntil(task.date) >= 0
-            )
-            .sort(
-                (a, b) =>
-                    new Date(a.date) -
-                    new Date(b.date)
-            )[0];
-
-
-    const totalEffort =
-        currentTasks.reduce(
-            (total, task) =>
-                total +
-                (Number(task.effort) || 0),
-            0
-        );
-
-
-    return {
-
-        totalEffort,
-
-        busiestDay:
-            busiestDate,
-
-        busiestTasks,
-
-        upcomingTask
-
-    };
-
-}
-
-
-/* =========================================================
-   GENERATE AI RESPONSE
-========================================================= */
-
-function generateAIResponse(question) {
-
-    const query =
-        question.toLowerCase();
-
-    const analysis =
-        getWorkloadAnalysis();
-
-
-    /* NO TASKS */
-
-    if (!currentTasks.length) {
+    if (
+        q.includes("how many hours") ||
+        q.includes("hours") ||
+        q.includes("workload")
+    ) {
 
         return `
-You don't have any tasks yet.
+You currently have ${analysis.totalHours.toFixed(1).replace(".0", "")} hour(s) of planned work across ${currentTasks.length} task(s).
 
-Add your upcoming homework, tests, projects or assignments and I'll analyse your workload and help you decide what to do first.
+Your busiest day is ${analysis.busiestDay ? getDayName(analysis.busiestDay.date) : "not clear yet"}.
+
+You have ${analysis.urgent.length} urgent task(s) due within the next two days.
         `.trim();
 
     }
 
 
-    /* WHAT SHOULD I WORK ON */
+    /* =====================================================
+       PLAN MY WEEK
+    ===================================================== */
 
     if (
-        query.includes("what should") ||
-        query.includes("work on") ||
-        query.includes("today")
+        q.includes("plan my week") ||
+        q.includes("schedule my week") ||
+        q.includes("organize my week") ||
+        q.includes("organise my week")
     ) {
 
-        if (analysis.upcomingTask) {
-
-            const task =
-                analysis.upcomingTask;
-
-            return `
-I would start with "${task.name}".
-
-It is due ${readableDate(task.date)} and needs about ${task.effort} hour(s) of effort.
-
-My recommendation: do at least a small part of it today instead of waiting until the deadline.
-            `.trim();
-
-        }
-
-    }
-
-
-    /* HARDEST DAY */
-
-    if (
-        query.includes("hardest") ||
-        query.includes("busiest") ||
-        query.includes("which day")
-    ) {
-
-        if (analysis.busiestDay) {
-
-            const date =
-                readableDate(
-                    analysis.busiestDay
-                );
-
-            const tasks =
-                analysis.busiestTasks
-                    .map(
-                        task =>
-                            task.name
-                    )
-                    .join(", ");
-
-
-            return `
-Your busiest day is ${date}.
-
-Tasks planned for that day: ${tasks}.
-
-I recommend moving some preparation earlier so you don't have to do everything close to the deadline.
-            `.trim();
-
-        }
-
-    }
-
-
-    /* REDUCE PRESSURE */
-
-    if (
-        query.includes("reduce") ||
-        query.includes("pressure") ||
-        query.includes("stress")
-    ) {
-
-        if (
-            analysis.busiestDay &&
-            analysis.busiestTasks.length > 1
-        ) {
-
-            return `
-The best way to reduce your pressure is to start preparing for ${analysis.busiestTasks[0].name} before ${readableDate(analysis.busiestDay)}.
-
-You currently have ${analysis.busiestTasks.length} tasks concentrated around your busiest day.
-
-Try splitting the biggest task into smaller sessions across earlier days.
-            `.trim();
-
-        }
+        const ordered =
+            [...currentTasks]
+                .sort(
+                    (
+                        a,
+                        b
+                    ) =>
+                        getTaskPressure(b) -
+                        getTaskPressure(a)
+                )
+                .slice(0, 4);
 
 
         return `
-Your workload is currently manageable.
+Here's how I'd approach your week:
 
-To keep it that way, avoid leaving large tasks until their due date and start the highest-effort task first.
+1. Start with "${ordered[0]?.name || "your highest-priority task"}".
+2. Work on high-effort tasks before their deadlines.
+3. Avoid leaving more than one large task for the same day.
+4. Use lighter days for preparation and smaller assignments.
+
+You have ${analysis.totalHours.toFixed(1).replace(".0", "")} hour(s) of work planned overall.
         `.trim();
 
     }
 
 
-    /* DEADLINES */
-
-    if (
-        query.includes("deadline") ||
-        query.includes("due")
-    ) {
-
-        if (analysis.upcomingTask) {
-
-            return `
-Your next upcoming deadline is "${analysis.upcomingTask.name}" on ${readableDate(analysis.upcomingTask.date)}.
-
-It needs approximately ${analysis.upcomingTask.effort} hour(s) of work.
-
-I would prioritise this before tasks with later deadlines.
-            `.trim();
-
-        }
-
-    }
-
-
-    /* DEFAULT SMART RESPONSE */
-
-    const taskCount =
-        currentTasks.length;
-
+    /* =====================================================
+       GENERAL RESPONSE
+    ===================================================== */
 
     return `
-You currently have ${taskCount} task${taskCount === 1 ? "" : "s"} planned, requiring approximately ${analysis.totalEffort} hour(s) of effort in total.
+I've analysed your current workload.
 
-Your busiest day is ${analysis.busiestDay ? readableDate(analysis.busiestDay) : "currently unclear"}.
+• ${currentTasks.length} task(s)
+• ${analysis.totalHours.toFixed(1).replace(".0", "")} hour(s) planned
+• ${analysis.urgent.length} urgent task(s)
+• Busiest day: ${
+        analysis.busiestDay
+            ? getDayName(analysis.busiestDay.date)
+            : "none"
+    }
 
-Try asking me things like:
+Try asking:
 
-• What should I work on today?
-• Which day is hardest?
-• What deadline should I prioritise?
-• How can I reduce my workload pressure?
+"What should I work on today?"
+"Which day is hardest?"
+"Which deadline should I prioritise?"
+"How can I reduce my pressure?"
+"Plan my week"
     `.trim();
 
 }
@@ -3317,54 +3420,50 @@ Try asking me things like:
    AI FORM
 ========================================================= */
 
-if (aiForm) {
+aiForm.addEventListener(
+    "submit",
+    event => {
 
-    aiForm.addEventListener(
-        "submit",
-        event => {
-
-            event.preventDefault();
+        event.preventDefault();
 
 
-            const question =
-                aiInput.value.trim();
+        const question =
+            aiInput.value.trim();
 
 
-            if (!question)
-                return;
+        if (!question)
+            return;
 
 
-            addAIMessage(
-                question,
-                "user"
-            );
+        addAIMessage(
+            question,
+            "user"
+        );
 
 
-            aiInput.value = "";
+        aiInput.value = "";
 
 
-            setTimeout(
-                () => {
+        setTimeout(
+            () => {
 
-                    const response =
-                        generateAIResponse(
-                            question
-                        );
-
-
-                    addAIMessage(
-                        response,
-                        "assistant"
+                const response =
+                    generateAIResponse(
+                        question
                     );
 
-                },
-                400
-            );
 
-        }
-    );
+                addAIMessage(
+                    response,
+                    "assistant"
+                );
 
-}
+            },
+            300
+        );
+
+    }
+);
 
 
 /* =========================================================
@@ -3419,10 +3518,124 @@ document
 
         }
     );
+
+
+/* =========================================================
+   SESSION CHECK
+========================================================= */
+
+async function checkSession() {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (error) {
+
+            console.error(
+                "SESSION ERROR:",
+                error
+            );
+
+            showAuth();
+
+            return;
+
+        }
+
+
+        if (data.session) {
+
+            currentUser =
+                data.session.user;
+
+
+            await loadProfile();
+
+            await loadTasks();
+
+
+            showApp();
+
+            renderDashboard();
+
+
+        } else {
+
+            showAuth();
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "SESSION CRASH:",
+            error
+        );
+
+        showAuth();
+
+    }
+
+}
+
+
+/* =========================================================
+   AUTH STATE LISTENER
+========================================================= */
+
+supabaseClient.auth.onAuthStateChange(
+    async (
+        event,
+        session
+    ) => {
+
+        if (
+            event ===
+            "SIGNED_OUT"
+        ) {
+
+            currentUser = null;
+
+            currentProfile = null;
+
+            currentTasks = [];
+
+            showAuth();
+
+            return;
+
+        }
+
+
+        if (
+            event ===
+                "SIGNED_IN" &&
+            session
+        ) {
+
+            currentUser =
+                session.user;
+
+        }
+
+    }
+);
+
+
 /* =========================================================
    INITIALIZE
 ========================================================= */
 
-setAuthMode("login");
+setAuthMode(
+    "login"
+);
 
 checkSession();
+```

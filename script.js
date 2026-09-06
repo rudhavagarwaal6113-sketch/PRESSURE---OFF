@@ -1899,46 +1899,115 @@ function renderSuggestions() {
 function renderReminders() {
 
     const container =
-        document.getElementById(
-            "reminderList"
-        );
+        document.getElementById("reminderList");
 
+    if (!container)
+        return;
 
     container.innerHTML = "";
 
-
     const reminders =
-        currentTasks.filter(
-            task => {
+        currentTasks
+            .filter(task => {
 
                 const days =
                     daysUntil(
-                        getTaskDate(task)
+                        task.due_date || task.date
                     );
 
+                return days >= 0 &&
+                       days <= 3;
 
-                return (
-                    days >= 0 &&
-                    days <= 3
+            })
+            .sort((a, b) => {
+
+                return daysUntil(
+                    a.due_date || a.date
+                ) -
+                daysUntil(
+                    b.due_date || b.date
                 );
 
-            }
-        );
+            });
 
 
     if (!reminders.length) {
 
-        container.innerHTML =
-            `
+        container.innerHTML = `
             <p class="no-reminders">
-                No important deadlines in
-                the next three days.
+                No urgent deadlines right now.
+                Add tasks with due dates to get reminders.
             </p>
-            `;
+        `;
 
         return;
 
     }
+
+
+    reminders.forEach(task => {
+
+        const dueDate =
+            task.due_date || task.date;
+
+        const days =
+            daysUntil(dueDate);
+
+        let timing = "";
+
+        if (days === 0) {
+
+            timing =
+                "Due today";
+
+        } else if (days === 1) {
+
+            timing =
+                "Due tomorrow";
+
+        } else {
+
+            timing =
+                `Due in ${days} days`;
+
+        }
+
+
+        const element =
+            document.createElement("div");
+
+        element.className =
+            "reminder";
+
+
+        element.innerHTML = `
+
+            <div class="reminder-icon">
+                🔔
+            </div>
+
+            <div>
+
+                <strong>
+                    ${escapeHtml(task.name)}
+                </strong>
+
+                <p>
+                    ${timing} •
+                    ${readableDate(dueDate)}
+                    • ${task.effort}h effort
+                </p>
+
+            </div>
+
+        `;
+
+
+        container.appendChild(element);
+
+    });
+
+}
 
 
     reminders.forEach(

@@ -31,35 +31,29 @@ let editingTaskId = null;
    DOM ELEMENTS
 ========================================================= */
 
-const authScreen =
-    document.getElementById("authScreen");
+const authScreen = document.getElementById("authScreen");
+const app = document.getElementById("app");
 
-const app =
-    document.getElementById("app");
+const authForm = document.getElementById("authForm");
 
-const authForm =
-    document.getElementById("authForm");
+const loginTab = document.getElementById("loginTab");
+const signupTab = document.getElementById("signupTab");
 
-const authUsername =
-    document.getElementById("authUsername");
+const authName = document.getElementById("authName");
+const nameField = document.getElementById("nameField");
 
-const authPassword =
-    document.getElementById("authPassword");
+const authUsername = document.getElementById("authUsername");
+const authPassword = document.getElementById("authPassword");
 
-const authSubmit =
-    document.getElementById("authSubmit");
+const authButton = document.getElementById("authButton");
 
-const authSwitch =
-    document.getElementById("authSwitch");
+const authTitle = document.getElementById("authTitle");
+const authSubtitle = document.getElementById("authSubtitle");
 
-const authTitle =
-    document.getElementById("authTitle");
+const authError = document.getElementById("authError");
 
-const authMessage =
-    document.getElementById("authMessage");
-
-const logoutBtn =
-    document.getElementById("logoutBtn");
+const logoutButton =
+    document.getElementById("logoutButton");
 
 const taskForm =
     document.getElementById("taskForm");
@@ -76,17 +70,47 @@ const taskEffort =
 const taskDate =
     document.getElementById("taskDate");
 
+const taskModal =
+    document.getElementById("taskModal");
+
+const modalTitle =
+    document.getElementById("modalTitle");
+
 const saveTask =
     document.getElementById("saveTask");
+
+const deleteTaskButton =
+    document.getElementById("deleteTask");
+
+const closeModalButton =
+    document.getElementById("closeModal");
+
+const cancelModalButton =
+    document.getElementById("cancelModal");
 
 
 /* =========================================================
    USERNAME → INTERNAL EMAIL
 ========================================================= */
 
-function usernameToEmail(user) {
+function usernameToEmail(username) {
 
-    return `${user}@pressure-off.internal`;
+    return `${username}@pressure-off.internal`;
+
+}
+
+
+/* =========================================================
+   AUTH MESSAGE
+========================================================= */
+
+function showAuthMessage(message = "") {
+
+    if (authError) {
+
+        authError.textContent = message;
+
+    }
 
 }
 
@@ -99,352 +123,73 @@ function setAuthMode(mode) {
 
     authMode = mode;
 
-    if (authMode === "login") {
+    showAuthMessage("");
 
-        if (authTitle)
-            authTitle.textContent = "Welcome Back";
+    if (mode === "login") {
 
-        if (authSubmit)
-            authSubmit.textContent = "Login";
+        loginTab.classList.add("active");
+        signupTab.classList.remove("active");
 
-        if (authSwitch)
-            authSwitch.textContent =
-                "Don't have an account? Sign up";
+        nameField.classList.add("hidden");
+
+        authTitle.textContent =
+            "Welcome back";
+
+        authSubtitle.textContent =
+            "See the pressure before it piles up.";
+
+        authButton.textContent =
+            "Log in";
 
     } else {
 
-        if (authTitle)
-            authTitle.textContent = "Create Account";
+        signupTab.classList.add("active");
+        loginTab.classList.remove("active");
 
-        if (authSubmit)
-            authSubmit.textContent = "Create Account";
+        nameField.classList.remove("hidden");
 
-        if (authSwitch)
-            authSwitch.textContent =
-                "Already have an account? Login";
+        authTitle.textContent =
+            "Create your account";
 
-    }
+        authSubtitle.textContent =
+            "Start understanding your workload.";
 
-}
-
-
-/* =========================================================
-   AUTH SWITCH
-========================================================= */
-
-if (authSwitch) {
-
-    authSwitch.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            setAuthMode(
-                authMode === "login"
-                    ? "signup"
-                    : "login"
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   AUTH MESSAGE
-========================================================= */
-
-function showAuthMessage(message) {
-
-    if (authMessage) {
-
-        authMessage.textContent =
-            message;
+        authButton.textContent =
+            "Create account";
 
     }
 
 }
 
 
+loginTab.addEventListener(
+    "click",
+    () => setAuthMode("login")
+);
+
+
+signupTab.addEventListener(
+    "click",
+    () => setAuthMode("signup")
+);
+
+
 /* =========================================================
-   SIGNUP / LOGIN
+   SHOW APP / AUTH
 ========================================================= */
 
-if (authForm) {
+function showApp() {
 
-    authForm.addEventListener(
-        "submit",
-        async event => {
+    authScreen.classList.add("hidden");
+    app.classList.remove("hidden");
 
-            event.preventDefault();
+}
 
-            const user =
-                authUsername.value
-                    .trim()
-                    .toLowerCase();
 
-            const password =
-                authPassword.value;
+function showAuth() {
 
-            if (!user || !password) {
-
-                showAuthMessage(
-                    "Please enter username and password."
-                );
-
-                return;
-
-            }
-
-            authSubmit.disabled = true;
-
-            showAuthMessage(
-                "Please wait..."
-            );
-
-
-            /* =================================================
-               SIGNUP
-            ================================================= */
-
-            if (authMode === "signup") {
-
-                try {
-
-                    const email =
-                        usernameToEmail(user);
-
-
-                    /* CHECK EXISTING PROFILE */
-
-                    const {
-                        data: existingProfile,
-                        error: profileCheckError
-                    } =
-                        await supabaseClient
-                            .from("profiles")
-                            .select("id")
-                            .eq(
-                                "username",
-                                user
-                            )
-                            .maybeSingle();
-
-
-                    if (profileCheckError) {
-
-                        console.error(
-                            profileCheckError
-                        );
-
-                        showAuthMessage(
-                            "Could not check username."
-                        );
-
-                        return;
-
-                    }
-
-
-                    if (existingProfile) {
-
-                        showAuthMessage(
-                            "Username already exists."
-                        );
-
-                        return;
-
-                    }
-
-
-                    /* CREATE AUTH USER */
-
-                    const {
-                        data,
-                        error
-                    } =
-                        await supabaseClient.auth.signUp({
-
-                            email: email,
-
-                            password: password,
-
-                            options: {
-
-                                data: {
-
-                                    username: user
-
-                                }
-
-                            }
-
-                        });
-
-
-                    if (error) {
-
-                        console.error(error);
-
-                        showAuthMessage(
-                            error.message
-                        );
-
-                        return;
-
-                    }
-
-
-                    if (!data.user) {
-
-                        showAuthMessage(
-                            "Could not create account."
-                        );
-
-                        return;
-
-                    }
-
-
-                    currentUser =
-                        data.user;
-
-
-                    /* LOAD PROFILE */
-
-                    await loadProfile();
-
-                    await loadTasks();
-
-
-                    showApp();
-
-                    renderDashboard();
-
-
-                } catch (error) {
-
-                    console.error(error);
-
-                    showAuthMessage(
-                        "Something went wrong while creating account."
-                    );
-
-                } finally {
-
-                    authSubmit.disabled = false;
-
-                }
-
-                return;
-
-            }
-
-
-            /* =================================================
-               LOGIN
-            ================================================= */
-
-            try {
-
-                /* GET INTERNAL EMAIL */
-
-                const {
-                    data: loginEmail,
-                    error: rpcError
-                } =
-                    await supabaseClient.rpc(
-                        "get_login_email",
-                        {
-                            login_username: user
-                        }
-                    );
-
-
-                if (rpcError) {
-
-                    console.error(rpcError);
-
-                    showAuthMessage(
-                        "Login failed."
-                    );
-
-                    return;
-
-                }
-
-
-                if (!loginEmail) {
-
-                    showAuthMessage(
-                        "Username not found."
-                    );
-
-                    return;
-
-                }
-
-
-                /* SIGN IN */
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient.auth.signInWithPassword({
-
-                        email: loginEmail,
-
-                        password: password
-
-                    });
-
-
-                if (error) {
-
-                    console.error(error);
-
-                    showAuthMessage(
-                        error.message
-                    );
-
-                    return;
-
-                }
-
-
-                currentUser =
-                    data.user;
-
-
-                await loadProfile();
-
-                await loadTasks();
-
-
-                showApp();
-
-                renderDashboard();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                showAuthMessage(
-                    "Something went wrong while logging in."
-                );
-
-            } finally {
-
-                authSubmit.disabled = false;
-
-            }
-
-        }
-    );
+    app.classList.add("hidden");
+    authScreen.classList.remove("hidden");
 
 }
 
@@ -457,7 +202,6 @@ async function loadProfile() {
 
     if (!currentUser)
         return;
-
 
     const {
         data,
@@ -476,7 +220,7 @@ async function loadProfile() {
     if (error) {
 
         console.error(
-            "PROFILE LOAD ERROR:",
+            "PROFILE ERROR:",
             error
         );
 
@@ -485,8 +229,43 @@ async function loadProfile() {
     }
 
 
-    currentProfile =
-        data;
+    currentProfile = data;
+
+    updateProfileUI();
+
+}
+
+
+function updateProfileUI() {
+
+    const usernameElement =
+        document.getElementById("username");
+
+    const avatarElement =
+        document.getElementById("avatar");
+
+
+    let name =
+        currentProfile?.username ||
+        currentProfile?.name ||
+        currentUser?.email?.split("@")[0] ||
+        "Student";
+
+
+    if (usernameElement) {
+
+        usernameElement.textContent = name;
+
+    }
+
+
+    if (avatarElement) {
+
+        avatarElement.textContent =
+            name.charAt(0)
+                .toUpperCase();
+
+    }
 
 }
 
@@ -513,7 +292,7 @@ async function loadTasks() {
                 currentUser.id
             )
             .order(
-                "date",
+                "due_date",
                 {
                     ascending: true
                 }
@@ -541,73 +320,321 @@ async function loadTasks() {
 
 
 /* =========================================================
-   SHOW APP
+   AUTH
 ========================================================= */
 
-function showApp() {
+authForm.addEventListener(
+    "submit",
+    async event => {
 
-    if (authScreen)
-        authScreen.style.display = "none";
+        event.preventDefault();
 
-    if (app)
-        app.style.display = "block";
+        const username =
+            authUsername.value
+                .trim()
+                .toLowerCase();
 
-}
+        const password =
+            authPassword.value;
 
 
-/* =========================================================
-   SHOW AUTH
-========================================================= */
+        if (!username || !password) {
 
-function showAuth() {
+            showAuthMessage(
+                "Please enter your username and password."
+            );
 
-    if (authScreen)
-        authScreen.style.display = "flex";
+            return;
 
-    if (app)
-        app.style.display = "none";
+        }
 
-}
+
+        authButton.disabled = true;
+
+
+        /* =========================
+           SIGN UP
+        ========================= */
+
+        if (authMode === "signup") {
+
+            const name =
+                authName.value.trim();
+
+            if (!name) {
+
+                showAuthMessage(
+                    "Please enter your name."
+                );
+
+                authButton.disabled = false;
+
+                return;
+
+            }
+
+
+            try {
+
+                const email =
+                    usernameToEmail(username);
+
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .auth
+                        .signUp({
+
+                            email,
+                            password,
+
+                            options: {
+
+                                data: {
+
+                                    username,
+                                    name
+
+                                }
+
+                            }
+
+                        });
+
+
+                if (error) {
+
+                    showAuthMessage(
+                        error.message
+                    );
+
+                    return;
+
+                }
+
+
+                if (!data.user) {
+
+                    showAuthMessage(
+                        "Account could not be created."
+                    );
+
+                    return;
+
+                }
+
+
+                currentUser =
+                    data.user;
+
+
+                await loadProfile();
+
+                /*
+                   If your database trigger
+                   creates the profile,
+                   loadProfile will get it.
+
+                   If not, create it here.
+                */
+
+                if (!currentProfile) {
+
+                    const {
+                        error: profileError
+                    } =
+                        await supabaseClient
+                            .from("profiles")
+                            .insert({
+
+                                id:
+                                    currentUser.id,
+
+                                username,
+
+                                name
+
+                            });
+
+
+                    if (profileError) {
+
+                        console.error(
+                            profileError
+                        );
+
+                    }
+
+                }
+
+
+                await loadProfile();
+
+                await loadTasks();
+
+                showApp();
+
+                renderDashboard();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                showAuthMessage(
+                    "Something went wrong while creating the account."
+                );
+
+            } finally {
+
+                authButton.disabled = false;
+
+            }
+
+
+            return;
+
+        }
+
+
+        /* =========================
+           LOGIN
+        ========================= */
+
+        try {
+
+            const {
+                data: loginEmail,
+                error: rpcError
+            } =
+                await supabaseClient.rpc(
+                    "get_login_email",
+                    {
+                        login_username:
+                            username
+                    }
+                );
+
+
+            if (rpcError) {
+
+                console.error(rpcError);
+
+                showAuthMessage(
+                    "Login failed. Please try again."
+                );
+
+                return;
+
+            }
+
+
+            if (!loginEmail) {
+
+                showAuthMessage(
+                    "Username not found."
+                );
+
+                return;
+
+            }
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .auth
+                    .signInWithPassword({
+
+                        email:
+                            loginEmail,
+
+                        password
+
+                    });
+
+
+            if (error) {
+
+                showAuthMessage(
+                    error.message
+                );
+
+                return;
+
+            }
+
+
+            currentUser =
+                data.user;
+
+
+            await loadProfile();
+
+            await loadTasks();
+
+
+            showApp();
+
+            renderDashboard();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            showAuthMessage(
+                "Something went wrong while logging in."
+            );
+
+        } finally {
+
+            authButton.disabled = false;
+
+        }
+
+    }
+);
 
 
 /* =========================================================
    LOGOUT
 ========================================================= */
 
-if (logoutBtn) {
+logoutButton.addEventListener(
+    "click",
+    async () => {
 
-    logoutBtn.addEventListener(
-        "click",
-        async () => {
+        await supabaseClient
+            .auth
+            .signOut();
 
-            await supabaseClient.auth.signOut();
 
-            currentUser = null;
+        currentUser = null;
 
-            currentProfile = null;
+        currentProfile = null;
 
-            currentTasks = [];
+        currentTasks = [];
 
-            showAuth();
 
-        }
-    );
+        authPassword.value = "";
 
-}
+        showAuth();
+
+    }
+);
 
 
 /* =========================================================
    DATE HELPERS
 ========================================================= */
 
-function getWeekDate(offset) {
-
-    const date =
-        new Date();
-
-    date.setDate(
-        date.getDate() + offset
-    );
+function formatDateInput(date) {
 
     return date
         .toISOString()
@@ -623,15 +650,20 @@ function readableDate(dateString) {
 
     const date =
         new Date(
-            dateString + "T00:00:00"
+            `${dateString}T00:00:00`
         );
+
 
     return date.toLocaleDateString(
         undefined,
         {
+
+            weekday: "short",
+
             day: "numeric",
-            month: "short",
-            year: "numeric"
+
+            month: "short"
+
         }
     );
 
@@ -650,406 +682,31 @@ function daysUntil(dateString) {
         0
     );
 
+
     const target =
         new Date(
-            dateString + "T00:00:00"
+            `${dateString}T00:00:00`
         );
 
-    target.setHours(
-        0,
-        0,
-        0,
-        0
-    );
 
     return Math.round(
         (
             target - today
         ) /
-        (
-            1000 *
-            60 *
-            60 *
-            24
-        )
+        86400000
     );
 
 }
 
 
 /* =========================================================
-   WEEK DATA
+   GET DATE FROM TASK
 ========================================================= */
 
-function getWeekData() {
+function getTaskDate(task) {
 
-    const week = [];
-
-    for (
-        let i = 0;
-        i < 7;
-        i++
-    ) {
-
-        const date =
-            getWeekDate(i);
-
-        const tasks =
-            currentTasks.filter(
-                task =>
-                    task.date === date
-            );
-
-        week.push({
-
-            date,
-
-            tasks
-
-        });
-
-    }
-
-    return week;
-
-}
-
-
-/* =========================================================
-   RENDER DASHBOARD
-========================================================= */
-
-function renderDashboard() {
-
-    renderTasks();
-
-    renderWeek();
-
-    renderSuggestions();
-
-    renderReminders();
-
-}
-
-
-/* =========================================================
-   RENDER TASKS
-========================================================= */
-
-function renderTasks() {
-
-    const container =
-        document.getElementById(
-            "taskList"
-        );
-
-    if (!container)
-        return;
-
-
-    container.innerHTML = "";
-
-
-    const sortedTasks =
-        [...currentTasks].sort(
-            (a, b) =>
-                new Date(a.date) -
-                new Date(b.date)
-        );
-
-
-    if (sortedTasks.length === 0) {
-
-        container.innerHTML =
-            "<p>No tasks yet.</p>";
-
-        return;
-
-    }
-
-
-    sortedTasks.forEach(
-        task => {
-
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-            item.className =
-                "task-item";
-
-
-            item.innerHTML = `
-
-                <div class="task-info">
-
-                    <h3>
-                        ${escapeHtml(task.name)}
-                    </h3>
-
-                    <p>
-                        ${escapeHtml(task.category || "")}
-                    </p>
-
-                </div>
-
-                <div class="task-date">
-
-                    ${readableDate(task.date)}
-
-                </div>
-
-                <div class="task-effort">
-
-                    ${task.effort || 0}
-
-                </div>
-
-                <button
-                    onclick="openEditTask(${task.id})"
-                >
-                    Edit
-                </button>
-
-                <button
-                    onclick="deleteTask(${task.id})"
-                >
-                    Delete
-                </button>
-
-            `;
-
-
-            container.appendChild(
-                item
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHtml(value) {
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-    div.textContent =
-        value ?? "";
-
-    return div.innerHTML;
-
-}
-
-
-/* =========================================================
-   RENDER WEEK
-========================================================= */
-
-function renderWeek() {
-
-    const container =
-        document.getElementById(
-            "weekContainer"
-        );
-
-    if (!container)
-        return;
-
-
-    const week =
-        getWeekData();
-
-
-    container.innerHTML = "";
-
-
-    week.forEach(
-        day => {
-
-            const element =
-                document.createElement(
-                    "div"
-                );
-
-            element.className =
-                "week-day";
-
-
-            element.innerHTML = `
-
-                <strong>
-                    ${readableDate(day.date)}
-                </strong>
-
-                <span>
-                    ${day.tasks.length}
-                    task${day.tasks.length === 1 ? "" : "s"}
-                </span>
-
-            `;
-
-
-            container.appendChild(
-                element
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SUGGESTIONS
-========================================================= */
-
-function renderSuggestions() {
-
-    const container =
-        document.getElementById(
-            "suggestions"
-        );
-
-    if (!container)
-        return;
-
-
-    container.innerHTML = "";
-
-
-    const upcoming =
-        [...currentTasks]
-            .sort(
-                (a, b) =>
-                    daysUntil(a.date) -
-                    daysUntil(b.date)
-            )
-            .slice(
-                0,
-                3
-            );
-
-
-    if (!upcoming.length) {
-
-        container.innerHTML =
-            "<p>No suggestions yet.</p>";
-
-        return;
-
-    }
-
-
-    upcoming.forEach(
-        task => {
-
-            const element =
-                document.createElement(
-                    "div"
-                );
-
-            element.className =
-                "suggestion";
-
-
-            element.innerHTML = `
-
-                <strong>
-                    ${escapeHtml(task.name)}
-                </strong>
-
-                <span>
-                    Due ${readableDate(task.date)}
-                </span>
-
-            `;
-
-
-            container.appendChild(
-                element
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   REMINDERS
-========================================================= */
-
-function renderReminders() {
-
-    const container =
-        document.getElementById(
-            "reminders"
-        );
-
-    if (!container)
-        return;
-
-
-    container.innerHTML = "";
-
-
-    const reminders =
-        currentTasks.filter(
-            task => {
-
-                const days =
-                    daysUntil(
-                        task.date
-                    );
-
-                return days >= 0 &&
-                       days <= 2;
-
-            }
-        );
-
-
-    if (!reminders.length) {
-
-        container.innerHTML =
-            "<p>No upcoming reminders.</p>";
-
-        return;
-
-    }
-
-
-    reminders.forEach(
-        task => {
-
-            const element =
-                document.createElement(
-                    "div"
-                );
-
-            element.className =
-                "reminder";
-
-
-            element.textContent =
-                `${task.name} — due ${readableDate(task.date)}`;
-
-
-            container.appendChild(
-                element
-            );
-
-        }
-    );
+    return task.due_date ||
+           task.date;
 
 }
 
@@ -1057,30 +714,42 @@ function renderReminders() {
 /* =========================================================
    OPEN ADD TASK
 ========================================================= */
+
 function openAddTask() {
 
     editingTaskId = null;
 
-    if (taskForm)
-        taskForm.reset();
+    taskForm.reset();
 
-    if (taskCategory)
-        taskCategory.value = "Homework";
 
-    if (taskEffort)
-        taskEffort.value = "1";
+    modalTitle.textContent =
+        "Add a task";
 
-    if (taskDate)
-        taskDate.value = getWeekDate(0);
+    saveTask.textContent =
+        "Add Task";
 
-    const modal =
-        document.getElementById("taskModal");
 
-    if (modal) {
+    deleteTaskButton
+        .classList
+        .add("hidden");
 
-        modal.classList.remove("hidden");
 
-    }
+    taskCategory.value =
+        "Homework";
+
+    taskEffort.value =
+        "1";
+
+
+    taskDate.value =
+        formatDateInput(
+            new Date()
+        );
+
+
+    taskModal
+        .classList
+        .remove("hidden");
 
 }
 
@@ -1102,268 +771,230 @@ function openEditTask(id) {
         return;
 
 
-    editingTaskId =
-        id;
+    editingTaskId = id;
+
+
+    modalTitle.textContent =
+        "Edit task";
+
+    saveTask.textContent =
+        "Save changes";
+
+
+    deleteTaskButton
+        .classList
+        .remove("hidden");
 
 
     taskName.value =
-        task.name;
-
+        task.name || "";
 
     taskCategory.value =
-        task.category;
-
+        task.category || "Other";
 
     taskEffort.value =
-        task.effort;
-
+        task.effort || 1;
 
     taskDate.value =
-        task.date;
+        getTaskDate(task);
 
 
-    const modal =
-        document.getElementById(
-            "taskModal"
-        );
-
-
-    if (modal)
-        modal.style.display = "flex";
+    taskModal
+        .classList
+        .remove("hidden");
 
 }
 
 
 /* =========================================================
-   CLOSE TASK MODAL
+   CLOSE MODAL
 ========================================================= */
 
 function closeTaskModal() {
 
-    const modal =
-        document.getElementById("taskModal");
+    taskModal
+        .classList
+        .add("hidden");
 
-    if (modal) {
-
-        modal.classList.add("hidden");
-
-    }
 
     editingTaskId = null;
 
 }
 
+
 /* =========================================================
    SAVE TASK
 ========================================================= */
 
-if (taskForm) {
+taskForm.addEventListener(
+    "submit",
+    async event => {
 
-    taskForm.addEventListener(
-        "submit",
-        async event => {
+        event.preventDefault();
 
-            event.preventDefault();
 
+        const name =
+            taskName.value.trim();
 
-            const name =
-                taskName.value.trim();
+        const category =
+            taskCategory.value;
 
-            const category =
-                taskCategory.value;
+        const effort =
+            Number(
+                taskEffort.value
+            );
 
-            const effort =
-                Number(
-                    taskEffort.value
-                );
+        const due_date =
+            taskDate.value;
 
-            const date =
-                taskDate.value;
 
+        if (
+            !name ||
+            !due_date ||
+            !effort
+        ) {
 
-            if (
-                !name ||
-                !date ||
-                !effort ||
-                effort <= 0
-            ) {
+            alert(
+                "Please complete all task fields."
+            );
 
-                return;
-
-            }
-
-
-            if (!currentUser) {
-
-                alert(
-                    "Please log in again."
-                );
-
-                return;
-
-            }
-
-
-            saveTask.disabled =
-                true;
-
-
-            try {
-
-
-                /* =================================================
-                   UPDATE EXISTING TASK
-                ================================================= */
-
-                if (editingTaskId) {
-
-                    const {
-                        data,
-                        error
-                    } =
-                        await supabaseClient
-                            .from("tasks")
-                            .update({
-    name,
-    category,
-    effort,
-    date,
-    due_date: date
-})
-                            .eq(
-                                "id",
-                                editingTaskId
-                            )
-                            .eq(
-                                "user_id",
-                                currentUser.id
-                            )
-                            .select()
-                            .single();
-
-
-                    if (error) {
-
-                        console.error(
-                            "TASK UPDATE ERROR:",
-                            error
-                        );
-
-                        alert(
-                            "Could not update the task: " +
-                            error.message
-                        );
-
-                        return;
-
-                    }
-
-
-                    const index =
-                        currentTasks.findIndex(
-                            task =>
-                                task.id ===
-                                editingTaskId
-                        );
-
-
-                    if (index !== -1) {
-
-                        currentTasks[index] =
-                            data;
-
-                    }
-
-
-                }
-
-
-                /* =================================================
-                   CREATE NEW TASK
-                ================================================= */
-
-                else {
-
-                    const {
-                        data,
-                        error
-                    } =
-                        await supabaseClient
-                            .from("tasks")
-                            .insert([
-    {
-        user_id: currentUser.id,
-        name: name,
-        category: category,
-        effort: effort,
-        date: date,
-        due_date: date
-    }
-])
-
-                            
-                            .select()
-                            .single();
-
-
-                    if (error) {
-
-                        console.error(
-                            "TASK INSERT ERROR:",
-                            error
-                        );
-
-                        alert(
-                            "Task error: " +
-                            error.message
-                        );
-
-                        return;
-
-                    }
-
-
-                    console.log(
-                        "TASK CREATED SUCCESSFULLY:",
-                        data
-                    );
-
-
-                    currentTasks.push(
-                        data
-                    );
-
-                }
-
-
-                closeTaskModal();
-
-                renderDashboard();
-
-
-            } catch (error) {
-
-                console.error(
-                    "SAVE TASK ERROR:",
-                    error
-                );
-
-                alert(
-                    "Something went wrong while saving the task."
-                );
-
-
-            } finally {
-
-                saveTask.disabled =
-                    false;
-
-            }
+            return;
 
         }
-    );
 
-}
+
+        saveTask.disabled = true;
+
+
+        try {
+
+            const taskData = {
+
+                name,
+
+                category,
+
+                effort,
+
+                due_date
+
+            };
+
+
+            /* =========================
+               EDIT
+            ========================= */
+
+            if (editingTaskId) {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from("tasks")
+                        .update(taskData)
+                        .eq(
+                            "id",
+                            editingTaskId
+                        )
+                        .eq(
+                            "user_id",
+                            currentUser.id
+                        )
+                        .select()
+                        .single();
+
+
+                if (error)
+                    throw error;
+
+
+                const index =
+                    currentTasks.findIndex(
+                        task =>
+                            task.id ===
+                            editingTaskId
+                    );
+
+
+                if (index !== -1) {
+
+                    currentTasks[index] =
+                        data;
+
+                }
+
+
+            }
+
+
+            /* =========================
+               CREATE
+            ========================= */
+
+            else {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from("tasks")
+                        .insert({
+
+                            user_id:
+                                currentUser.id,
+
+                            name,
+
+                            category,
+
+                            effort,
+
+                            due_date
+
+                        })
+                        .select()
+                        .single();
+
+
+                if (error)
+                    throw error;
+
+
+                currentTasks.push(
+                    data
+                );
+
+            }
+
+
+            closeTaskModal();
+
+            renderDashboard();
+
+
+        } catch (error) {
+
+            console.error(
+                "TASK SAVE ERROR:",
+                error
+            );
+
+            alert(
+                "Task error: " +
+                error.message
+            );
+
+        } finally {
+
+            saveTask.disabled = false;
+
+        }
+
+    }
+);
 
 
 /* =========================================================
@@ -1378,7 +1009,7 @@ async function deleteTask(id) {
 
     const confirmed =
         confirm(
-            "Delete this task?"
+            "Delete this task permanently?"
         );
 
 
@@ -1404,11 +1035,6 @@ async function deleteTask(id) {
 
     if (error) {
 
-        console.error(
-            "TASK DELETE ERROR:",
-            error
-        );
-
         alert(
             "Could not delete task: " +
             error.message
@@ -1426,13 +1052,1220 @@ async function deleteTask(id) {
         );
 
 
+    closeTaskModal();
+
     renderDashboard();
 
 }
 
 
 /* =========================================================
-   AUTH SESSION CHECK
+   MODAL BUTTONS
+========================================================= */
+
+document
+    .getElementById("addTaskTop")
+    .addEventListener(
+        "click",
+        openAddTask
+    );
+
+
+document
+    .getElementById("addTaskButton")
+    .addEventListener(
+        "click",
+        openAddTask
+    );
+
+
+closeModalButton.addEventListener(
+    "click",
+    closeTaskModal
+);
+
+
+cancelModalButton.addEventListener(
+    "click",
+    closeTaskModal
+);
+
+
+deleteTaskButton.addEventListener(
+    "click",
+    () => {
+
+        if (editingTaskId) {
+
+            deleteTask(
+                editingTaskId
+            );
+
+        }
+
+    }
+);
+
+
+taskModal.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target ===
+            taskModal
+        ) {
+
+            closeTaskModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   RENDER DASHBOARD
+========================================================= */
+
+function renderDashboard() {
+
+    renderPressureScore();
+
+    renderRadar();
+
+    renderAlert();
+
+    renderWeek();
+
+    renderTasks();
+
+    renderSuggestions();
+
+    renderReminders();
+
+}
+
+
+/* =========================================================
+   PRESSURE SCORE
+========================================================= */
+
+function renderPressureScore() {
+
+    const scoreElement =
+        document.getElementById("score");
+
+    const totalHoursElement =
+        document.getElementById("totalHours");
+
+    const scoreLabel =
+        document.getElementById("scoreLabel");
+
+    const scoreRing =
+        document.getElementById("scoreRing");
+
+
+    const totalHours =
+        currentTasks.reduce(
+            (total, task) =>
+                total +
+                Number(
+                    task.effort || 0
+                ),
+            0
+        );
+
+
+    let score =
+        Math.min(
+            10,
+            Math.max(
+                1,
+                Math.ceil(
+                    totalHours / 2
+                )
+            )
+        );
+
+
+    scoreElement.textContent =
+        score;
+
+    totalHoursElement.textContent =
+        `${totalHours}h planned`;
+
+
+    let label =
+        "Calm week";
+
+
+    if (score >= 8) {
+
+        label =
+            "High pressure";
+
+    } else if (score >= 5) {
+
+        label =
+            "Busy week";
+
+    }
+
+
+    scoreLabel.textContent =
+        label;
+
+
+    scoreRing.style.background =
+        `conic-gradient(
+            var(--blue)
+            ${score * 10}%,
+            rgba(91,140,255,.08)
+            ${score * 10}%
+        )`;
+
+}
+
+
+/* =========================================================
+   RADAR
+========================================================= */
+
+function renderRadar() {
+
+    const container =
+        document.getElementById(
+            "radarBars"
+        );
+
+    const empty =
+        document.getElementById(
+            "radarEmpty"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (!currentTasks.length) {
+
+        empty.style.display =
+            "block";
+
+        return;
+
+    }
+
+
+    empty.style.display =
+        "none";
+
+
+    const days =
+        ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+
+    const hours =
+        Array(7).fill(0);
+
+
+    currentTasks.forEach(
+        task => {
+
+            const date =
+                new Date(
+                    `${getTaskDate(task)}T00:00:00`
+                );
+
+
+            hours[
+                date.getDay()
+            ] += Number(
+                task.effort || 0
+            );
+
+        }
+    );
+
+
+    const max =
+        Math.max(
+            ...hours,
+            1
+        );
+
+
+    days.forEach(
+        (day, index) => {
+
+            const column =
+                document.createElement(
+                    "div"
+                );
+
+
+            column.className =
+                "radar-column";
+
+
+            let status =
+                "";
+
+
+            if (hours[index] >= 6) {
+
+                status =
+                    "overloaded";
+
+            } else if (
+                hours[index] >= 3
+            ) {
+
+                status =
+                    "busy";
+
+            }
+
+
+            const height =
+                Math.max(
+                    5,
+                    (
+                        hours[index] /
+                        max
+                    ) * 150
+                );
+
+
+            column.innerHTML =
+                `
+                <span class="radar-value">
+                    ${hours[index]}h
+                </span>
+
+                <div
+                    class="radar-bar ${status}"
+                    style="height:${height}px"
+                ></div>
+
+                <span class="radar-day">
+                    ${day}
+                </span>
+                `;
+
+
+            container.appendChild(
+                column
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ALERT
+========================================================= */
+
+function renderAlert() {
+
+    const alert =
+        document.getElementById(
+            "alert"
+        );
+
+
+    const totals = {};
+
+
+    currentTasks.forEach(
+        task => {
+
+            const date =
+                getTaskDate(task);
+
+            totals[date] =
+                (
+                    totals[date] || 0
+                ) +
+                Number(
+                    task.effort || 0
+                );
+
+        }
+    );
+
+
+    let busiestDate = null;
+
+    let busiestHours = 0;
+
+
+    Object.entries(totals)
+        .forEach(
+            ([date, hours]) => {
+
+                if (
+                    hours >
+                    busiestHours
+                ) {
+
+                    busiestDate =
+                        date;
+
+                    busiestHours =
+                        hours;
+
+                }
+
+            }
+        );
+
+
+    if (
+        busiestHours < 4 ||
+        !busiestDate
+    ) {
+
+        alert.classList.add(
+            "hidden"
+        );
+
+        return;
+
+    }
+
+
+    const date =
+        new Date(
+            `${busiestDate}T00:00:00`
+        );
+
+
+    const day =
+        date.toLocaleDateString(
+            undefined,
+            {
+                weekday:
+                    "long"
+            }
+        );
+
+
+    document
+        .getElementById("alertTitle")
+        .textContent =
+            `${day} looks overloaded.`;
+
+
+    document
+        .getElementById("alertText")
+        .textContent =
+            `${busiestHours} hours are planned. Consider starting one task earlier.`;
+
+
+    alert.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* =========================================================
+   WEEK VIEW
+========================================================= */
+
+function renderWeek() {
+
+    const container =
+        document.getElementById(
+            "weekGrid"
+        );
+
+
+    container.innerHTML = "";
+
+
+    const today =
+        new Date();
+
+    today.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    for (
+        let i = 0;
+        i < 7;
+        i++
+    ) {
+
+        const date =
+            new Date(today);
+
+        date.setDate(
+            today.getDate() + i
+        );
+
+
+        const dateString =
+            formatDateInput(date);
+
+
+        const tasks =
+            currentTasks.filter(
+                task =>
+                    getTaskDate(task) ===
+                    dateString
+            );
+
+
+        const hours =
+            tasks.reduce(
+                (total, task) =>
+                    total +
+                    Number(
+                        task.effort || 0
+                    ),
+                0
+            );
+
+
+        let status =
+            "manageable";
+
+        let statusText =
+            "Manageable";
+
+
+        if (hours >= 6) {
+
+            status =
+                "overloaded";
+
+            statusText =
+                "Overloaded";
+
+        } else if (hours >= 3) {
+
+            status =
+                "busy";
+
+            statusText =
+                "Busy";
+
+        }
+
+
+        const day =
+            document.createElement(
+                "div"
+            );
+
+
+        day.className =
+            `day ${status}`;
+
+
+        day.innerHTML =
+            `
+            <div class="day-header">
+
+                <span class="day-name">
+                    ${date.toLocaleDateString(
+                        undefined,
+                        {
+                            weekday:
+                                "short"
+                        }
+                    )}
+                </span>
+
+                <span class="day-number">
+                    ${date.getDate()}
+                </span>
+
+            </div>
+
+            <div class="day-status">
+
+                <span class="status-dot"></span>
+
+                ${statusText}
+
+            </div>
+
+            <div class="day-tasks">
+
+                ${
+                    tasks.length
+                    ?
+                    tasks.map(
+                        task =>
+                            `
+                            <button
+                                class="mini-task"
+                                onclick="openEditTask(${task.id})"
+                            >
+
+                                <span class="mini-dot"></span>
+
+                                <div>
+
+                                    <strong>
+                                        ${escapeHtml(task.name)}
+                                    </strong>
+
+                                    <small>
+                                        ${task.effort}h
+                                    </small>
+
+                                </div>
+
+                            </button>
+                            `
+                    ).join("")
+                    :
+                    `<p class="empty-day">
+                        No tasks
+                    </p>`
+                }
+
+            </div>
+
+            <p class="day-hours">
+                ${hours}h planned
+            </p>
+            `;
+
+
+        container.appendChild(
+            day
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   TASK LIST
+========================================================= */
+
+function renderTasks() {
+
+    const container =
+        document.getElementById(
+            "taskList"
+        );
+
+
+    container.innerHTML = "";
+
+
+    const sorted =
+        [...currentTasks]
+        .sort(
+            (a, b) =>
+                new Date(
+                    getTaskDate(a)
+                ) -
+                new Date(
+                    getTaskDate(b)
+                )
+        );
+
+
+    if (!sorted.length) {
+
+        container.innerHTML =
+            `
+            <p class="empty-tasks">
+                No tasks yet.<br>
+                Add your first task to start
+                understanding your workload.
+            </p>
+            `;
+
+        return;
+
+    }
+
+
+    sorted.forEach(
+        task => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "task-row";
+
+
+            row.innerHTML =
+                `
+                <div class="task-icon ${task.category}">
+                    ${task.category
+                        .charAt(0)}
+                </div>
+
+                <div class="task-info">
+
+                    <strong>
+                        ${escapeHtml(task.name)}
+                    </strong>
+
+                    <small>
+                        ${escapeHtml(
+                            task.category
+                        )}
+                        •
+                        ${readableDate(
+                            getTaskDate(task)
+                        )}
+                    </small>
+
+                </div>
+
+                <span class="effort">
+                    ${task.effort}h
+                </span>
+
+                <button
+                    class="task-edit"
+                    onclick="openEditTask(${task.id})"
+                >
+                    Edit
+                </button>
+                `;
+
+
+            container.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SUGGESTIONS
+========================================================= */
+
+function renderSuggestions() {
+
+    const container =
+        document.getElementById(
+            "suggestions"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (!currentTasks.length) {
+
+        container.innerHTML =
+            `
+            <div class="suggestion">
+                <span class="suggestion-number">
+                    01
+                </span>
+
+                <p>
+                    Add a few upcoming tasks and
+                    PRESSURE // OFF will start
+                    identifying pressure points.
+                </p>
+            </div>
+            `;
+
+        return;
+
+    }
+
+
+    const sorted =
+        [...currentTasks]
+        .sort(
+            (a, b) =>
+                daysUntil(
+                    getTaskDate(a)
+                ) -
+                daysUntil(
+                    getTaskDate(b)
+                )
+        );
+
+
+    const suggestions = [];
+
+
+    const upcoming =
+        sorted.find(
+            task =>
+                daysUntil(
+                    getTaskDate(task)
+                ) >= 0
+        );
+
+
+    if (upcoming) {
+
+        suggestions.push(
+            `Start "${upcoming.name}" early because it is one of your nearest deadlines.`
+        );
+
+    }
+
+
+    const heavy =
+        [...currentTasks]
+        .sort(
+            (a, b) =>
+                b.effort -
+                a.effort
+        )[0];
+
+
+    if (
+        heavy &&
+        heavy.effort >= 3
+    ) {
+
+        suggestions.push(
+            `"${heavy.name}" needs ${heavy.effort} hours. Break it into smaller sessions instead of leaving it for one day.`
+        );
+
+    }
+
+
+    suggestions.push(
+        "Keep at least one lighter study period before your busiest day so your workload does not pile up."
+    );
+
+
+    suggestions
+        .slice(0, 3)
+        .forEach(
+            (text, index) => {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                item.className =
+                    "suggestion";
+
+
+                item.innerHTML =
+                    `
+                    <span class="suggestion-number">
+                        0${index + 1}
+                    </span>
+
+                    <p>
+                        ${text}
+                    </p>
+                    `;
+
+
+                container.appendChild(
+                    item
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   REMINDERS
+========================================================= */
+
+function renderReminders() {
+
+    const container =
+        document.getElementById(
+            "reminderList"
+        );
+
+
+    container.innerHTML = "";
+
+
+    const reminders =
+        currentTasks.filter(
+            task => {
+
+                const days =
+                    daysUntil(
+                        getTaskDate(task)
+                    );
+
+
+                return (
+                    days >= 0 &&
+                    days <= 3
+                );
+
+            }
+        );
+
+
+    if (!reminders.length) {
+
+        container.innerHTML =
+            `
+            <p class="no-reminders">
+                No important deadlines in
+                the next three days.
+            </p>
+            `;
+
+        return;
+
+    }
+
+
+    reminders.forEach(
+        task => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "reminder";
+
+
+            item.innerHTML =
+                `
+                <span class="reminder-icon">
+                    🔔
+                </span>
+
+                <div>
+
+                    <strong>
+                        ${escapeHtml(task.name)}
+                    </strong>
+
+                    <p>
+                        Due
+                        ${readableDate(
+                            getTaskDate(task)
+                        )}
+                    </p>
+
+                </div>
+                `;
+
+
+            container.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   AI ASSISTANT
+========================================================= */
+
+function addAIMessage(
+    text,
+    type = "assistant"
+) {
+
+    const container =
+        document.getElementById(
+            "aiMessages"
+        );
+
+
+    const message =
+        document.createElement(
+            "div"
+        );
+
+
+    message.className =
+        `ai-message ${type}`;
+
+
+    message.innerHTML =
+        type === "assistant"
+        ?
+        `
+        <span class="message-icon">
+            ✦
+        </span>
+
+        <p>${escapeHtml(text)}</p>
+        `
+        :
+        `
+        <p>${escapeHtml(text)}</p>
+        `;
+
+
+    container.appendChild(
+        message
+    );
+
+
+    container.scrollTop =
+        container.scrollHeight;
+
+}
+
+
+function getAssistantResponse(question) {
+
+    const q =
+        question.toLowerCase();
+
+
+    if (!currentTasks.length) {
+
+        return "You do not have any tasks yet. Add your upcoming work first, and I can identify busy days, deadlines and possible pressure points.";
+
+    }
+
+
+    if (
+        q.includes("today")
+    ) {
+
+        const today =
+            formatDateInput(
+                new Date()
+            );
+
+
+        const todayTasks =
+            currentTasks.filter(
+                task =>
+                    getTaskDate(task) ===
+                    today
+            );
+
+
+        if (!todayTasks.length) {
+
+            return "You have no tasks scheduled for today. A good move would be to start one of your nearest upcoming deadlines early.";
+
+        }
+
+
+        return `Today you have ${todayTasks.length} task(s). Start with the highest-effort task first, then move to smaller tasks.`;
+
+    }
+
+
+    if (
+        q.includes("hardest") ||
+        q.includes("hard")
+    ) {
+
+        const totals = {};
+
+
+        currentTasks.forEach(
+            task => {
+
+                const date =
+                    getTaskDate(task);
+
+                totals[date] =
+                    (
+                        totals[date] || 0
+                    ) +
+                    Number(
+                        task.effort
+                    );
+
+            }
+        );
+
+
+        const hardest =
+            Object.entries(totals)
+            .sort(
+                (a, b) =>
+                    b[1] - a[1]
+            )[0];
+
+
+        const date =
+            new Date(
+                `${hardest[0]}T00:00:00`
+            );
+
+
+        return `${date.toLocaleDateString(undefined,{weekday:"long"})} is currently your hardest day with ${hardest[1]} planned hours. Try moving preparation for at least one task earlier.`;
+
+    }
+
+
+    if (
+        q.includes("reduce") ||
+        q.includes("pressure")
+    ) {
+
+        return "To reduce pressure, start your nearest deadline early, split large tasks into smaller sessions, and avoid scheduling every difficult task on the same day.";
+
+    }
+
+
+    const nearest =
+        [...currentTasks]
+        .sort(
+            (a, b) =>
+                daysUntil(
+                    getTaskDate(a)
+                ) -
+                daysUntil(
+                    getTaskDate(b)
+                )
+        )[0];
+
+
+    return `Based on your current workload, "${nearest.name}" is one of the first tasks worth checking because of its deadline and position in your schedule.`;
+
+}
+
+
+document
+    .getElementById("aiForm")
+    .addEventListener(
+        "submit",
+        event => {
+
+            event.preventDefault();
+
+
+            const input =
+                document.getElementById(
+                    "aiInput"
+                );
+
+
+            const question =
+                input.value.trim();
+
+
+            if (!question)
+                return;
+
+
+            addAIMessage(
+                question,
+                "user"
+            );
+
+
+            input.value = "";
+
+
+            setTimeout(
+                () => {
+
+                    addAIMessage(
+                        getAssistantResponse(
+                            question
+                        )
+                    );
+
+                },
+                300
+            );
+
+        }
+    );
+
+
+document
+    .querySelectorAll(
+        ".quick-prompts button"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const question =
+                        button.dataset.prompt;
+
+
+                    addAIMessage(
+                        question,
+                        "user"
+                    );
+
+
+                    setTimeout(
+                        () => {
+
+                            addAIMessage(
+                                getAssistantResponse(
+                                    question
+                                )
+                            );
+
+                        },
+                        250
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        value ?? "";
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   SESSION CHECK
 ========================================================= */
 
 async function checkSession() {
@@ -1440,18 +2273,17 @@ async function checkSession() {
     try {
 
         const {
-            data,
-            error
+            data:
+            {
+                session
+            }
         } =
-            await supabaseClient.auth.getSession();
+            await supabaseClient
+                .auth
+                .getSession();
 
 
-        if (error) {
-
-            console.error(
-                "SESSION ERROR:",
-                error
-            );
+        if (!session) {
 
             showAuth();
 
@@ -1460,31 +2292,25 @@ async function checkSession() {
         }
 
 
-        if (data.session) {
-
-            currentUser =
-                data.session.user;
+        currentUser =
+            session.user;
 
 
-            await loadProfile();
+        await loadProfile();
 
-            await loadTasks();
+        await loadTasks();
 
 
-            showApp();
+        showApp();
 
-            renderDashboard();
-
-        } else {
-
-            showAuth();
-
-        }
+        renderDashboard();
 
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
         showAuth();
 
@@ -1492,135 +2318,11 @@ async function checkSession() {
 
 }
 
-/* =========================================================
-   TASK MODAL BUTTONS
-========================================================= */
 
-const addTaskTop =
-    document.getElementById("addTaskTop");
-
-const addTaskButton =
-    document.getElementById("addTaskButton");
-
-const closeModalButton =
-    document.getElementById("closeModal");
-
-const cancelModalButton =
-    document.getElementById("cancelModal");
-
-const deleteTaskButton =
-    document.getElementById("deleteTask");
-
-const taskModal =
-    document.getElementById("taskModal");
-
-
-if (addTaskTop) {
-
-    addTaskTop.addEventListener(
-        "click",
-        () => {
-
-            openAddTask();
-
-        }
-    );
-
-}
-
-
-if (addTaskButton) {
-
-    addTaskButton.addEventListener(
-        "click",
-        () => {
-
-            openAddTask();
-
-        }
-    );
-
-}
-
-
-if (closeModalButton) {
-
-    closeModalButton.addEventListener(
-        "click",
-        () => {
-
-            closeTaskModal();
-
-        }
-    );
-
-}
-
-
-if (cancelModalButton) {
-
-    cancelModalButton.addEventListener(
-        "click",
-        () => {
-
-            closeTaskModal();
-
-        }
-    );
-
-}
-
-
-if (deleteTaskButton) {
-
-    deleteTaskButton.addEventListener(
-        "click",
-        async () => {
-
-            if (!editingTaskId)
-                return;
-
-            await deleteTask(
-                editingTaskId
-            );
-
-            closeTaskModal();
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   CLOSE MODAL WHEN CLICKING OUTSIDE
-========================================================= */
-
-if (taskModal) {
-
-    taskModal.addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target ===
-                taskModal
-            ) {
-
-                closeTaskModal();
-
-            }
-
-        }
-    );
-
-}
 /* =========================================================
    INITIALIZE
 ========================================================= */
 
-setAuthMode(
-    "login"
-);
+setAuthMode("login");
 
 checkSession();

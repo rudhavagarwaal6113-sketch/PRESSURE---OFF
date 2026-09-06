@@ -2500,7 +2500,486 @@ async function checkSession() {
 
 }
 
+/* =========================================================
+   WORKLOAD ASSISTANT
+========================================================= */
 
+function getTaskDate(task) {
+
+    return task.due_date || task.date;
+
+}
+
+
+function getTaskPriority(task) {
+
+    const date =
+        getTaskDate(task);
+
+    const days =
+        daysUntil(date);
+
+    const effort =
+        Number(task.effort) || 1;
+
+
+    let urgencyScore = 0;
+
+
+    if (days < 0) {
+
+        urgencyScore = 100;
+
+    } else if (days === 0) {
+
+        urgencyScore = 90;
+
+    } else if (days === 1) {
+
+        urgencyScore = 80;
+
+    } else if (days === 2) {
+
+        urgencyScore = 70;
+
+    } else if (days <= 4) {
+
+        urgencyScore = 50;
+
+    } else {
+
+        urgencyScore = 20;
+
+    }
+
+
+    return urgencyScore +
+           effort * 5;
+
+}
+
+
+function getHighestPriorityTask() {
+
+    if (!currentTasks.length)
+        return null;
+
+
+    const upcomingTasks =
+        currentTasks.filter(task => {
+
+            const days =
+                daysUntil(
+                    getTaskDate(task)
+                );
+
+            return days >= 0;
+
+        });
+
+
+    if (!upcomingTasks.length)
+        return null;
+
+
+    return [...upcomingTasks]
+        .sort((a, b) => {
+
+            return getTaskPriority(b) -
+                   getTaskPriority(a);
+
+        })[0];
+
+}
+
+
+function getHardestDay() {
+
+    const week =
+        getWeekData();
+
+
+    let hardestDay =
+        null;
+
+    let highestEffort =
+        0;
+
+
+    week.forEach(day => {
+
+        const total =
+            day.tasks.reduce(
+                (sum, task) =>
+                    sum +
+                    (Number(task.effort) || 0),
+                0
+            );
+
+
+        if (total > highestEffort) {
+
+            highestEffort =
+                total;
+
+            hardestDay = {
+
+                ...day,
+
+                effort: total
+
+            };
+
+        }
+
+    });
+
+
+    return hardestDay;
+
+}
+
+
+function getOverloadedDays() {
+
+    return getWeekData()
+        .filter(day => {
+
+            const effort =
+                day.tasks.reduce(
+                    (sum, task) =>
+                        sum +
+                        (Number(task.effort) || 0),
+                    0
+                );
+
+
+            return effort >= 5 ||
+                   day.tasks.length >= 4;
+
+        });
+
+}
+
+
+function getAssistantResponse(question) {
+
+    const message =
+        question
+            .toLowerCase()
+            .trim();
+
+
+    if (!currentTasks.length) {
+
+        return `
+            You don't have any tasks yet, so your
+            workload is completely clear right now.
+
+            Add your upcoming homework, tests,
+            assignments or projects and I'll help you
+            prioritise them.
+        `;
+
+    }
+
+
+    /* =====================================================
+       WHAT SHOULD I DO TODAY
+    ===================================================== */
+
+    if (
+        message.includes("today") ||
+        message.includes("work on")
+    ) {
+
+        const task =
+            getHighestPriorityTask();
+
+
+        if (!task) {
+
+            return `
+                You don't have any upcoming tasks.
+
+                This is a good time to prepare early,
+                review difficult subjects or organise
+                your upcoming week.
+            `;
+
+        }
+
+
+        const days =
+            daysUntil(
+                getTaskDate(task)
+            );
+
+
+        let urgency = "";
+
+
+        if (days === 0) {
+
+            urgency =
+                "It is due today, so it should be your main priority.";
+
+        } else if (days === 1) {
+
+            urgency =
+                "It is due tomorrow, so you should start it now.";
+
+        } else {
+
+            urgency =
+                `It is due in ${days} days, but its effort level makes it worth starting early.`;
+
+        }
+
+
+        return `
+            Start with "${task.name}".
+
+            ${urgency}
+
+            Estimated effort: ${task.effort} hour(s).
+
+            My recommendation: spend your first focused
+            study session on this before moving to smaller tasks.
+        `;
+
+    }
+
+
+    /* =====================================================
+       HARDEST DAY
+    ===================================================== */
+
+    if (
+        message.includes("hardest") ||
+        message.includes("hard") ||
+        message.includes("busy")
+    ) {
+
+        const day =
+            getHardestDay();
+
+
+        if (!day || day.effort === 0) {
+
+            return `
+                No day looks overloaded right now.
+                Your workload is reasonably spread out.
+            `;
+
+        }
+
+
+        const date =
+            new Date(
+                day.date +
+                "T00:00:00"
+            );
+
+
+        const dayName =
+            date.toLocaleDateString(
+                undefined,
+                {
+                    weekday: "long"
+                }
+            );
+
+
+        return `
+            ${dayName} looks like your hardest day.
+
+            You currently have ${day.tasks.length}
+            task${day.tasks.length === 1 ? "" : "s"}
+            requiring approximately ${day.effort}
+            hour${day.effort === 1 ? "" : "s"}.
+
+            Try moving preparation for at least one
+            large task to an earlier day.
+        `;
+
+    }
+
+
+    /* =====================================================
+       REDUCE PRESSURE
+    ===================================================== */
+
+    if (
+        message.includes("reduce") ||
+        message.includes("pressure") ||
+        message.includes("stress")
+    ) {
+
+        const overloaded =
+            getOverloadedDays();
+
+
+        const priority =
+            getHighestPriorityTask();
+
+
+        let advice =
+            `Your best strategy is to start large tasks before they become urgent.`;
+
+
+        if (priority) {
+
+            advice += `
+
+            The first task I would start early is
+            "${priority.name}".`;
+
+        }
+
+
+        if (overloaded.length) {
+
+            advice += `
+
+            You also have ${overloaded.length}
+            overloaded day${overloaded.length === 1 ? "" : "s"}.
+            Move preparation work away from those days
+            whenever possible.`;
+
+        }
+
+
+        advice += `
+
+        Don't try to complete everything in one session.
+        Break large tasks into smaller sessions of
+        30–60 minutes.`;
+
+        return advice;
+
+    }
+
+
+    /* =====================================================
+       DEADLINES
+    ===================================================== */
+
+    if (
+        message.includes("deadline") ||
+        message.includes("due")
+    ) {
+
+        const tasks =
+            [...currentTasks]
+                .filter(task =>
+                    daysUntil(
+                        getTaskDate(task)
+                    ) >= 0
+                )
+                .sort((a, b) =>
+                    daysUntil(
+                        getTaskDate(a)
+                    ) -
+                    daysUntil(
+                        getTaskDate(b)
+                    )
+                )
+                .slice(0, 3);
+
+
+        if (!tasks.length) {
+
+            return `
+                You don't currently have any upcoming deadlines.
+            `;
+
+        }
+
+
+        let response =
+            "Your next deadlines are:";
+
+
+        tasks.forEach(
+            (task, index) => {
+
+                response += `
+
+                ${index + 1}. ${task.name}
+                — due ${readableDate(getTaskDate(task))}
+                — ${task.effort}h effort`;
+
+            }
+        );
+
+
+        return response;
+
+    }
+
+
+    /* =====================================================
+       DEFAULT SMART RESPONSE
+    ===================================================== */
+
+    const priority =
+        getHighestPriorityTask();
+
+    const hardest =
+        getHardestDay();
+
+
+    let response =
+        `Here's what I see in your workload:`;
+
+
+    if (priority) {
+
+        response += `
+
+        • Your current highest priority is
+        "${priority.name}".`;
+
+    }
+
+
+    if (hardest && hardest.effort > 0) {
+
+        const date =
+            new Date(
+                hardest.date +
+                "T00:00:00"
+            );
+
+
+        const dayName =
+            date.toLocaleDateString(
+                undefined,
+                {
+                    weekday: "long"
+                }
+            );
+
+
+        response += `
+
+        • ${dayName} is currently your busiest day.`;
+
+    }
+
+
+    response += `
+
+    Ask me something like:
+    "What should I work on today?"
+    "Which day is hardest?"
+    or "How can I reduce my pressure?"`;
+
+
+    return response;
+
+}
 /* =========================================================
    INITIALIZE
 ========================================================= */

@@ -1,12 +1,11 @@
-```javascript
 /* =========================================================
    PRESSURE // OFF
-   COMPLETE SCRIPT
+   COMPLETE SCRIPT — CLEAN VERSION
 ========================================================= */
 
 
 /* =========================================================
-   SUPABASE SETUP
+   SUPABASE
 ========================================================= */
 
 const SUPABASE_URL =
@@ -35,107 +34,239 @@ let editingTaskId = null;
 
 
 /* =========================================================
-   DOM ELEMENTS
+   SHORT DOM HELPER
 ========================================================= */
 
-const authScreen =
-    document.getElementById("authScreen");
+function $(id) {
+    return document.getElementById(id);
+}
 
-const app =
-    document.getElementById("app");
 
-const authForm =
-    document.getElementById("authForm");
+/* =========================================================
+   DOM
+========================================================= */
 
-const authUsername =
-    document.getElementById("authUsername");
+const authScreen = $("authScreen");
+const app = $("app");
 
-const authPassword =
-    document.getElementById("authPassword");
+const authForm = $("authForm");
+const authUsername = $("authUsername");
+const authPassword = $("authPassword");
+const authName = $("authName");
+const nameField = $("nameField");
 
-const authName =
-    document.getElementById("authName");
+const authButton = $("authButton");
+const authError = $("authError");
+const authTitle = $("authTitle");
+const authSubtitle = $("authSubtitle");
 
-const nameField =
-    document.getElementById("nameField");
+const loginTab = $("loginTab");
+const signupTab = $("signupTab");
 
-const authButton =
-    document.getElementById("authButton");
+const logoutButton = $("logoutButton");
 
-const authError =
-    document.getElementById("authError");
+const usernameDisplay = $("username");
+const avatar = $("avatar");
 
-const authTitle =
-    document.getElementById("authTitle");
+const taskModal = $("taskModal");
+const modalTitle = $("modalTitle");
+const taskForm = $("taskForm");
 
-const authSubtitle =
-    document.getElementById("authSubtitle");
+const taskName = $("taskName");
+const taskCategory = $("taskCategory");
+const taskEffort = $("taskEffort");
+const taskDate = $("taskDate");
 
-const loginTab =
-    document.getElementById("loginTab");
+const saveTaskButton = $("saveTask");
+const deleteTaskButton = $("deleteTask");
+const closeModalButton = $("closeModal");
+const cancelModalButton = $("cancelModal");
 
-const signupTab =
-    document.getElementById("signupTab");
+const addTaskTop = $("addTaskTop");
+const addTaskButton = $("addTaskButton");
 
-const logoutButton =
-    document.getElementById("logoutButton");
+const notificationButton = $("notificationButton");
+const notificationButton2 = $("notificationButton2");
 
-const usernameDisplay =
-    document.getElementById("username");
+const aiForm = $("aiForm");
+const aiInput = $("aiInput");
+const aiMessages = $("aiMessages");
 
-const avatar =
-    document.getElementById("avatar");
 
-const taskForm =
-    document.getElementById("taskForm");
+/* =========================================================
+   EXTRA CSS
+   Adds controls that the original CSS doesn't provide.
+========================================================= */
 
-const taskName =
-    document.getElementById("taskName");
+function injectExtraStyles() {
 
-const taskCategory =
-    document.getElementById("taskCategory");
+    if ($("pressureExtraStyles")) {
+        return;
+    }
 
-const taskEffort =
-    document.getElementById("taskEffort");
+    const style = document.createElement("style");
 
-const taskDate =
-    document.getElementById("taskDate");
+    style.id = "pressureExtraStyles";
 
-const saveTask =
-    document.getElementById("saveTask");
+    style.textContent = `
 
-const taskModal =
-    document.getElementById("taskModal");
+        .task-row {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
 
-const closeModalButton =
-    document.getElementById("closeModal");
+        .task-row .task-info {
+            flex: 1;
+            min-width: 0;
+        }
 
-const cancelModalButton =
-    document.getElementById("cancelModal");
+        .task-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
 
-const deleteTaskButton =
-    document.getElementById("deleteTask");
+        .task-action {
+            border: 1px solid rgba(255,255,255,.10);
+            background: rgba(255,255,255,.05);
+            color: inherit;
+            border-radius: 8px;
+            padding: 6px 9px;
+            font-size: 11px;
+            cursor: pointer;
+        }
 
-const addTaskTop =
-    document.getElementById("addTaskTop");
+        .task-action:hover {
+            background: rgba(255,255,255,.10);
+        }
 
-const addTaskButton =
-    document.getElementById("addTaskButton");
+        .task-action.delete {
+            color: #ff6975;
+        }
 
-const notificationButton =
-    document.getElementById("notificationButton");
+        .mini-task {
+            cursor: pointer;
+            width: 100%;
+            border: 0;
+            text-align: left;
+            color: inherit;
+        }
 
-const notificationButton2 =
-    document.getElementById("notificationButton2");
+        .suggestion p {
+            margin: 4px 0 0;
+        }
 
-const aiForm =
-    document.getElementById("aiForm");
+        .pressure-profile-panel {
+            position: fixed;
+            top: 78px;
+            right: 24px;
+            width: min(350px, calc(100vw - 32px));
+            z-index: 200;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,.10);
+            border-radius: 18px;
+            background: rgba(15,18,30,.97);
+            box-shadow: 0 20px 60px rgba(0,0,0,.40);
+            backdrop-filter: blur(20px);
+        }
 
-const aiInput =
-    document.getElementById("aiInput");
+        .pressure-profile-panel.hidden {
+            display: none;
+        }
 
-const aiMessages =
-    document.getElementById("aiMessages");
+        .profile-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .profile-big-avatar {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(91,140,255,.15);
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .profile-name {
+            font-weight: 700;
+            font-size: 17px;
+        }
+
+        .profile-username {
+            opacity: .60;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .profile-stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .profile-stat {
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(255,255,255,.04);
+        }
+
+        .profile-stat strong {
+            display: block;
+            font-size: 18px;
+        }
+
+        .profile-stat span {
+            font-size: 11px;
+            opacity: .60;
+        }
+
+        .profile-email {
+            font-size: 12px;
+            opacity: .60;
+            word-break: break-all;
+            margin-bottom: 15px;
+        }
+
+        .profile-close {
+            width: 100%;
+            border: 1px solid rgba(255,255,255,.10);
+            background: rgba(255,255,255,.05);
+            color: inherit;
+            border-radius: 10px;
+            padding: 9px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            .pressure-profile-panel {
+                top: 70px;
+                right: 12px;
+            }
+
+            .task-actions {
+                gap: 3px;
+            }
+
+            .task-action {
+                padding: 5px 6px;
+            }
+        }
+
+    `;
+
+    document.head.appendChild(style);
+}
 
 
 /* =========================================================
@@ -150,86 +281,117 @@ function usernameToEmail(username) {
 
 
 /* =========================================================
-   AUTH MODE
+   AUTH UI
 ========================================================= */
+
+function showAuthMessage(message) {
+
+    if (authError) {
+        authError.textContent = message || "";
+    }
+
+}
+
 
 function setAuthMode(mode) {
 
     authMode = mode;
 
-    if (authMode === "login") {
+    const signup = mode === "signup";
 
+    if (authTitle) {
         authTitle.textContent =
-            "Welcome back";
-
-        authSubtitle.textContent =
-            "See the pressure before it piles up.";
-
-        authButton.textContent =
-            "Log in";
-
-        nameField.classList.add("hidden");
-
-        loginTab.classList.add("active");
-
-        signupTab.classList.remove("active");
-
-    } else {
-
-        authTitle.textContent =
-            "Create your account";
-
-        authSubtitle.textContent =
-            "Start understanding your workload.";
-
-        authButton.textContent =
-            "Create account";
-
-        nameField.classList.remove("hidden");
-
-        loginTab.classList.remove("active");
-
-        signupTab.classList.add("active");
-
+            signup
+                ? "Create your account"
+                : "Welcome back";
     }
 
-    authError.textContent = "";
+    if (authSubtitle) {
+        authSubtitle.textContent =
+            signup
+                ? "Start understanding your workload."
+                : "See the pressure before it piles up.";
+    }
+
+    if (authButton) {
+        authButton.textContent =
+            signup
+                ? "Create account"
+                : "Log in";
+    }
+
+    if (nameField) {
+        nameField.classList.toggle(
+            "hidden",
+            !signup
+        );
+    }
+
+    if (loginTab) {
+        loginTab.classList.toggle(
+            "active",
+            !signup
+        );
+    }
+
+    if (signupTab) {
+        signupTab.classList.toggle(
+            "active",
+            signup
+        );
+    }
+
+    showAuthMessage("");
+
+}
+
+
+if (loginTab) {
+
+    loginTab.addEventListener(
+        "click",
+        () => setAuthMode("login")
+    );
+
+}
+
+
+if (signupTab) {
+
+    signupTab.addEventListener(
+        "click",
+        () => setAuthMode("signup")
+    );
 
 }
 
 
 /* =========================================================
-   AUTH TABS
+   SHOW / HIDE APP
 ========================================================= */
 
-loginTab.addEventListener(
-    "click",
-    () => {
+function showApp() {
 
-        setAuthMode("login");
-
+    if (authScreen) {
+        authScreen.classList.add("hidden");
     }
-);
 
-
-signupTab.addEventListener(
-    "click",
-    () => {
-
-        setAuthMode("signup");
-
+    if (app) {
+        app.classList.remove("hidden");
     }
-);
+
+}
 
 
-/* =========================================================
-   AUTH MESSAGE
-========================================================= */
+function showAuth() {
 
-function showAuthMessage(message) {
+    if (app) {
+        app.classList.add("hidden");
+    }
 
-    authError.textContent =
-        message || "";
+    if (authScreen) {
+        authScreen.classList.remove("hidden");
+    }
 
 }
 
@@ -238,136 +400,270 @@ function showAuthMessage(message) {
    SIGNUP / LOGIN
 ========================================================= */
 
-authForm.addEventListener(
-    "submit",
-    async event => {
+if (authForm) {
 
-        event.preventDefault();
+    authForm.addEventListener(
+        "submit",
+        async event => {
 
-        const username =
-            authUsername.value
-                .trim()
-                .toLowerCase();
+            event.preventDefault();
 
-        const password =
-            authPassword.value;
+            const username =
+                authUsername
+                    ? authUsername.value.trim().toLowerCase()
+                    : "";
 
-        const name =
-            authName.value.trim();
+            const password =
+                authPassword
+                    ? authPassword.value
+                    : "";
+
+            const name =
+                authName
+                    ? authName.value.trim()
+                    : "";
 
 
-        if (!username || !password) {
+            if (!username || !password) {
+
+                showAuthMessage(
+                    "Please enter a username and password."
+                );
+
+                return;
+            }
+
+
+            if (
+                authMode === "signup" &&
+                !name
+            ) {
+
+                showAuthMessage(
+                    "Please enter your name."
+                );
+
+                return;
+            }
+
+
+            if (authButton) {
+                authButton.disabled = true;
+            }
+
 
             showAuthMessage(
-                "Please enter a username and password."
+                authMode === "login"
+                    ? "Logging in..."
+                    : "Creating your account..."
             );
 
-            return;
 
-        }
+            /* =================================================
+               SIGNUP
+            ================================================= */
 
+            if (authMode === "signup") {
 
-        if (
-            authMode === "signup" &&
-            !name
-        ) {
+                try {
 
-            showAuthMessage(
-                "Please enter your name."
-            );
-
-            return;
-
-        }
+                    const email =
+                        usernameToEmail(username);
 
 
-        authButton.disabled = true;
+                    const {
+                        data: existingProfile,
+                        error: profileCheckError
+                    } =
+                        await supabaseClient
+                            .from("profiles")
+                            .select("id")
+                            .eq("username", username)
+                            .maybeSingle();
 
-        showAuthMessage(
-            authMode === "login"
-                ? "Logging in..."
-                : "Creating your account..."
-        );
+
+                    if (profileCheckError) {
+
+                        console.error(
+                            "PROFILE CHECK ERROR:",
+                            profileCheckError
+                        );
+
+                        showAuthMessage(
+                            "Could not check username: " +
+                            profileCheckError.message
+                        );
+
+                        return;
+                    }
 
 
-        /* =================================================
-           SIGN UP
-        ================================================= */
+                    if (existingProfile) {
 
-        if (authMode === "signup") {
+                        showAuthMessage(
+                            "Username already exists."
+                        );
+
+                        return;
+                    }
+
+
+                    const {
+                        data,
+                        error
+                    } =
+                        await supabaseClient.auth.signUp({
+
+                            email,
+
+                            password,
+
+                            options: {
+                                data: {
+                                    username,
+                                    name
+                                }
+                            }
+
+                        });
+
+
+                    if (error) {
+
+                        console.error(
+                            "SIGNUP ERROR:",
+                            error
+                        );
+
+                        showAuthMessage(
+                            error.message
+                        );
+
+                        return;
+                    }
+
+
+                    if (!data || !data.user) {
+
+                        showAuthMessage(
+                            "Account could not be created."
+                        );
+
+                        return;
+                    }
+
+
+                    currentUser = data.user;
+
+
+                    /*
+                       If Supabase returns a session,
+                       continue directly into the app.
+                    */
+
+                    if (data.session) {
+
+                        await finishAuthentication();
+
+                    } else {
+
+                        /*
+                           This usually means email confirmation
+                           is enabled in Supabase.
+                        */
+
+                        showAuthMessage(
+                            "Account created. Please log in."
+                        );
+
+                        setAuthMode("login");
+
+                        if (authUsername) {
+                            authUsername.value = username;
+                        }
+
+                        if (authPassword) {
+                            authPassword.value = "";
+                        }
+
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "SIGNUP CRASH:",
+                        error
+                    );
+
+                    showAuthMessage(
+                        "Something went wrong while creating your account."
+                    );
+
+                } finally {
+
+                    if (authButton) {
+                        authButton.disabled = false;
+                    }
+
+                }
+
+                return;
+            }
+
+
+            /* =================================================
+               LOGIN
+            ================================================= */
 
             try {
 
-                const email =
-                    usernameToEmail(username);
-
-
-                /* CHECK USERNAME */
-
                 const {
-                    data: existingProfile,
-                    error: profileCheckError
+                    data: loginEmail,
+                    error: rpcError
                 } =
-                    await supabaseClient
-                        .from("profiles")
-                        .select("id")
-                        .eq(
-                            "username",
-                            username
-                        )
-                        .maybeSingle();
+                    await supabaseClient.rpc(
+                        "get_login_email",
+                        {
+                            login_username: username
+                        }
+                    );
 
 
-                if (profileCheckError) {
+                if (rpcError) {
 
                     console.error(
-                        "PROFILE CHECK ERROR:",
-                        profileCheckError
+                        "LOGIN RPC ERROR:",
+                        rpcError
                     );
 
                     showAuthMessage(
-                        "Could not check username."
+                        "Login failed: " +
+                        rpcError.message
                     );
 
                     return;
-
                 }
 
 
-                if (existingProfile) {
+                if (!loginEmail) {
 
                     showAuthMessage(
-                        "Username already exists."
+                        "Username not found."
                     );
 
                     return;
-
                 }
 
-
-                /* CREATE AUTH USER */
 
                 const {
                     data,
                     error
                 } =
-                    await supabaseClient.auth.signUp({
+                    await supabaseClient.auth.signInWithPassword({
 
-                        email: email,
+                        email: loginEmail,
 
-                        password: password,
-
-                        options: {
-
-                            data: {
-
-                                username: username,
-
-                                name: name
-
-                            }
-
-                        }
+                        password
 
                     });
 
@@ -375,7 +671,7 @@ authForm.addEventListener(
                 if (error) {
 
                     console.error(
-                        "SIGNUP ERROR:",
+                        "LOGIN ERROR:",
                         error
                     );
 
@@ -384,18 +680,16 @@ authForm.addEventListener(
                     );
 
                     return;
-
                 }
 
 
-                if (!data.user) {
+                if (!data || !data.user) {
 
                     showAuthMessage(
-                        "Could not create account."
+                        "Login succeeded but no user was returned."
                     );
 
                     return;
-
                 }
 
 
@@ -403,194 +697,105 @@ authForm.addEventListener(
                     data.user;
 
 
-                /* LOAD PROFILE */
-
-                await loadProfile();
-
-
-                /* LOAD TASKS */
-
-                await loadTasks();
-
-
-                showApp();
-
-                renderDashboard();
+                await finishAuthentication();
 
 
             } catch (error) {
 
                 console.error(
-                    "SIGNUP CRASH:",
+                    "LOGIN CRASH:",
                     error
                 );
 
                 showAuthMessage(
-                    "Something went wrong while creating your account."
+                    "Something went wrong while logging in."
                 );
 
             } finally {
 
-                authButton.disabled = false;
+                if (authButton) {
+                    authButton.disabled = false;
+                }
 
             }
-
-            return;
 
         }
+    );
 
-
-        /* =================================================
-           LOGIN
-        ================================================= */
-
-        try {
-
-            const {
-                data: loginEmail,
-                error: rpcError
-            } =
-                await supabaseClient.rpc(
-                    "get_login_email",
-                    {
-                        login_username: username
-                    }
-                );
-
-
-            if (rpcError) {
-
-                console.error(
-                    "LOGIN RPC ERROR:",
-                    rpcError
-                );
-
-                showAuthMessage(
-                    "Login failed: " +
-                    rpcError.message
-                );
-
-                return;
-
-            }
-
-
-            if (!loginEmail) {
-
-                showAuthMessage(
-                    "Username not found."
-                );
-
-                return;
-
-            }
-
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient.auth.signInWithPassword({
-
-                    email: loginEmail,
-
-                    password: password
-
-                });
-
-
-            if (error) {
-
-                console.error(
-                    "LOGIN ERROR:",
-                    error
-                );
-
-                showAuthMessage(
-                    error.message
-                );
-
-                return;
-
-            }
-
-
-            currentUser =
-                data.user;
-
-
-            await loadProfile();
-
-            await loadTasks();
-
-            showApp();
-
-            renderDashboard();
-
-
-        } catch (error) {
-
-            console.error(
-                "LOGIN CRASH:",
-                error
-            );
-
-            showAuthMessage(
-                "Something went wrong while logging in."
-            );
-
-        } finally {
-
-            authButton.disabled = false;
-
-        }
-
-    }
-);
+}
 
 
 /* =========================================================
-   LOAD PROFILE
+   FINISH AUTHENTICATION
+========================================================= */
+
+async function finishAuthentication() {
+
+    await loadProfile();
+
+    await loadTasks();
+
+    showApp();
+
+    renderDashboard();
+
+    updateProfileUI();
+
+    updateNotificationButtons();
+
+}
+
+
+/* =========================================================
+   PROFILE
 ========================================================= */
 
 async function loadProfile() {
 
-    if (!currentUser)
+    if (!currentUser) {
         return;
+    }
 
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("profiles")
-            .select("*")
-            .eq(
-                "id",
-                currentUser.id
-            )
-            .maybeSingle();
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("profiles")
+                .select("*")
+                .eq("id", currentUser.id)
+                .maybeSingle();
 
 
-    if (error) {
+        if (error) {
 
-        console.error(
-            "PROFILE LOAD ERROR:",
+            console.warn(
+                "PROFILE LOAD WARNING:",
+                error
+            );
+
+            currentProfile = null;
+
+        } else {
+
+            currentProfile =
+                data || null;
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "PROFILE LOAD CRASH:",
             error
         );
 
         currentProfile = null;
 
-        updateProfileUI();
-
-        return;
-
     }
-
-
-    currentProfile =
-        data || null;
 
 
     updateProfileUI();
@@ -598,39 +803,58 @@ async function loadProfile() {
 }
 
 
-/* =========================================================
-   PROFILE UI
-========================================================= */
-
-function updateProfileUI() {
-
-    if (!currentUser)
-        return;
-
+function getDisplayName() {
 
     const metadata =
-        currentUser.user_metadata || {};
+        currentUser?.user_metadata || {};
 
 
-    const profileName =
+    return (
         currentProfile?.name ||
         metadata.name ||
         currentProfile?.username ||
         metadata.username ||
-        currentUser.email?.split("@")[0] ||
-        "Student";
+        currentUser?.email?.split("@")[0] ||
+        "Student"
+    );
+
+}
 
 
-    const profileUsername =
+function getUsername() {
+
+    const metadata =
+        currentUser?.user_metadata || {};
+
+
+    return (
         currentProfile?.username ||
         metadata.username ||
-        "student";
+        "student"
+    );
+
+}
+
+
+function updateProfileUI() {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    const name =
+        getDisplayName();
+
+
+    const username =
+        getUsername();
 
 
     if (usernameDisplay) {
 
         usernameDisplay.textContent =
-            profileName;
+            name;
 
     }
 
@@ -638,17 +862,231 @@ function updateProfileUI() {
     if (avatar) {
 
         avatar.textContent =
-            profileName
-                .charAt(0)
-                .toUpperCase();
+            name.charAt(0).toUpperCase();
 
     }
 
 
-    /* Update title information */
-
     document.title =
-        `PRESSURE // OFF — ${profileName}`;
+        `PRESSURE // OFF — ${name}`;
+
+
+    setupProfilePanel();
+
+    updateProfilePanel();
+
+}
+
+
+/* =========================================================
+   PROFILE PANEL
+========================================================= */
+
+function setupProfilePanel() {
+
+    if ($("pressureProfilePanel")) {
+        return;
+    }
+
+
+    const panel =
+        document.createElement("div");
+
+    panel.id =
+        "pressureProfilePanel";
+
+    panel.className =
+        "pressure-profile-panel hidden";
+
+
+    document.body.appendChild(panel);
+
+
+    const userPill =
+        document.querySelector(".user-pill");
+
+
+    const avatarElement =
+        $("avatar");
+
+
+    if (userPill) {
+
+        userPill.style.cursor =
+            "pointer";
+
+        userPill.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+                toggleProfilePanel();
+
+            }
+        );
+
+    } else if (avatarElement) {
+
+        avatarElement.style.cursor =
+            "pointer";
+
+        avatarElement.addEventListener(
+            "click",
+            toggleProfilePanel
+        );
+
+    }
+
+
+    panel.addEventListener(
+        "click",
+        event => {
+            event.stopPropagation();
+        }
+    );
+
+
+    document.addEventListener(
+        "click",
+        () => {
+
+            panel.classList.add(
+                "hidden"
+            );
+
+        }
+    );
+
+}
+
+
+function updateProfilePanel() {
+
+    const panel =
+        $("pressureProfilePanel");
+
+
+    if (!panel || !currentUser) {
+        return;
+    }
+
+
+    const name =
+        getDisplayName();
+
+    const username =
+        getUsername();
+
+    const totalHours =
+        currentTasks.reduce(
+            (sum, task) =>
+                sum +
+                (Number(task.effort) || 0),
+            0
+        );
+
+
+    panel.innerHTML = `
+
+        <div class="profile-top">
+
+            <div class="profile-big-avatar">
+                ${escapeHtml(
+                    name.charAt(0).toUpperCase()
+                )}
+            </div>
+
+            <div>
+
+                <div class="profile-name">
+                    ${escapeHtml(name)}
+                </div>
+
+                <div class="profile-username">
+                    @${escapeHtml(username)}
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="profile-stat-grid">
+
+            <div class="profile-stat">
+                <strong>
+                    ${currentTasks.length}
+                </strong>
+                <span>
+                    Tasks
+                </span>
+            </div>
+
+            <div class="profile-stat">
+                <strong>
+                    ${formatHours(totalHours)}
+                </strong>
+                <span>
+                    Planned
+                </span>
+            </div>
+
+        </div>
+
+        <div class="profile-email">
+            ${escapeHtml(currentUser.email || "")}
+        </div>
+
+        <button
+            type="button"
+            class="profile-close"
+            id="profileCloseButton"
+        >
+            Close
+        </button>
+
+    `;
+
+
+    const close =
+        $("profileCloseButton");
+
+
+    if (close) {
+
+        close.addEventListener(
+            "click",
+            () => {
+
+                panel.classList.add(
+                    "hidden"
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+function toggleProfilePanel() {
+
+    const panel =
+        $("pressureProfilePanel");
+
+
+    if (!panel) {
+        return;
+    }
+
+
+    updateProfilePanel();
+
+
+    panel.classList.toggle(
+        "hidden"
+    );
 
 }
 
@@ -659,91 +1097,53 @@ function updateProfileUI() {
 
 async function loadTasks() {
 
-    if (!currentUser)
+    if (!currentUser) {
         return;
+    }
 
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("tasks")
-            .select("*")
-            .eq(
-                "user_id",
-                currentUser.id
-            )
-            .order(
-                "date",
-                {
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("tasks")
+                .select("*")
+                .eq("user_id", currentUser.id)
+                .order("date", {
                     ascending: true
-                }
+                });
+
+
+        if (error) {
+
+            console.error(
+                "TASK LOAD ERROR:",
+                error
             );
 
+            currentTasks = [];
 
-    if (error) {
+            return;
+        }
+
+
+        currentTasks =
+            data || [];
+
+
+    } catch (error) {
 
         console.error(
-            "TASK LOAD ERROR:",
+            "TASK LOAD CRASH:",
             error
         );
 
         currentTasks = [];
 
-        return;
-
     }
-
-
-    currentTasks =
-        data || [];
-
-}
-
-
-/* =========================================================
-   SHOW APP
-========================================================= */
-
-function showApp() {
-
-    authScreen.classList.add(
-        "hidden"
-    );
-
-    app.classList.remove(
-        "hidden"
-    );
-
-    authScreen.style.display =
-        "none";
-
-    app.style.display =
-        "block";
-
-}
-
-
-/* =========================================================
-   SHOW AUTH
-========================================================= */
-
-function showAuth() {
-
-    app.classList.add(
-        "hidden"
-    );
-
-    authScreen.classList.remove(
-        "hidden"
-    );
-
-    app.style.display =
-        "none";
-
-    authScreen.style.display =
-        "grid";
 
 }
 
@@ -752,68 +1152,76 @@ function showAuth() {
    LOGOUT
 ========================================================= */
 
-logoutButton.addEventListener(
-    "click",
-    async () => {
+if (logoutButton) {
 
-        logoutButton.disabled = true;
+    logoutButton.addEventListener(
+        "click",
+        async () => {
 
-        try {
+            logoutButton.disabled = true;
 
-            const {
-                error
-            } =
-                await supabaseClient.auth.signOut();
+            try {
+
+                const {
+                    error
+                } =
+                    await supabaseClient.auth.signOut();
 
 
-            if (error) {
+                if (error) {
+
+                    console.error(
+                        "LOGOUT ERROR:",
+                        error
+                    );
+
+                    alert(
+                        "Could not log out: " +
+                        error.message
+                    );
+
+                    return;
+                }
+
+
+                currentUser = null;
+                currentProfile = null;
+                currentTasks = [];
+                editingTaskId = null;
+
+
+                closeTaskModal();
+
+                showAuth();
+
+                if (authForm) {
+                    authForm.reset();
+                }
+
+                setAuthMode("login");
+
+
+            } catch (error) {
 
                 console.error(
-                    "LOGOUT ERROR:",
+                    "LOGOUT CRASH:",
                     error
                 );
 
                 alert(
-                    "Could not log out: " +
-                    error.message
+                    "Something went wrong while logging out."
                 );
 
-                return;
+            } finally {
+
+                logoutButton.disabled = false;
 
             }
 
-
-            currentUser = null;
-
-            currentProfile = null;
-
-            currentTasks = [];
-
-            closeTaskModal();
-
-            showAuth();
-
-            authForm.reset();
-
-            setAuthMode("login");
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            alert(
-                "Something went wrong while logging out."
-            );
-
-        } finally {
-
-            logoutButton.disabled = false;
-
         }
+    );
 
-    }
-);
+}
 
 
 /* =========================================================
@@ -825,6 +1233,7 @@ function getLocalDate(offset = 0) {
     const date =
         new Date();
 
+
     date.setHours(
         12,
         0,
@@ -832,34 +1241,54 @@ function getLocalDate(offset = 0) {
         0
     );
 
+
     date.setDate(
         date.getDate() + offset
     );
 
-    return date
-        .toISOString()
-        .split("T")[0];
+
+    const year =
+        date.getFullYear();
+
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(2, "0");
+
+
+    return `${year}-${month}-${day}`;
 
 }
 
 
-function getWeekDate(offset) {
+function getTaskDate(task) {
 
-    return getLocalDate(offset);
+    return (
+        task?.date ||
+        task?.due_date ||
+        ""
+    );
 
 }
 
 
 function readableDate(dateString) {
 
-    if (!dateString)
+    if (!dateString) {
         return "";
+    }
+
 
     const date =
         new Date(
-            dateString +
-            "T00:00:00"
+            dateString + "T00:00:00"
         );
+
 
     return date.toLocaleDateString(
         undefined,
@@ -875,14 +1304,16 @@ function readableDate(dateString) {
 
 function readableShortDate(dateString) {
 
-    if (!dateString)
+    if (!dateString) {
         return "";
+    }
+
 
     const date =
         new Date(
-            dateString +
-            "T00:00:00"
+            dateString + "T00:00:00"
         );
+
 
     return date.toLocaleDateString(
         undefined,
@@ -897,11 +1328,16 @@ function readableShortDate(dateString) {
 
 function getDayName(dateString) {
 
+    if (!dateString) {
+        return "";
+    }
+
+
     const date =
         new Date(
-            dateString +
-            "T00:00:00"
+            dateString + "T00:00:00"
         );
+
 
     return date.toLocaleDateString(
         undefined,
@@ -915,12 +1351,14 @@ function getDayName(dateString) {
 
 function daysUntil(dateString) {
 
-    if (!dateString)
+    if (!dateString) {
         return 999;
+    }
 
 
     const today =
         new Date();
+
 
     today.setHours(
         0,
@@ -932,9 +1370,9 @@ function daysUntil(dateString) {
 
     const target =
         new Date(
-            dateString +
-            "T00:00:00"
+            dateString + "T00:00:00"
         );
+
 
     target.setHours(
         0,
@@ -949,13 +1387,21 @@ function daysUntil(dateString) {
             target.getTime() -
             today.getTime()
         ) /
-        (
-            1000 *
-            60 *
-            60 *
-            24
-        )
+        86400000
     );
+
+}
+
+
+function formatHours(value) {
+
+    const number =
+        Number(value) || 0;
+
+
+    return `${number
+        .toFixed(1)
+        .replace(".0", "")}h`;
 
 }
 
@@ -967,12 +1413,12 @@ function daysUntil(dateString) {
 function escapeHtml(value) {
 
     const div =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
+
 
     div.textContent =
         value ?? "";
+
 
     return div.innerHTML;
 
@@ -995,39 +1441,29 @@ function getWeekData() {
     ) {
 
         const date =
-            getWeekDate(i);
+            getLocalDate(i);
 
 
         const tasks =
             currentTasks.filter(
                 task =>
-                    task.date === date
+                    getTaskDate(task) === date
             );
 
 
         const hours =
             tasks.reduce(
-                (
-                    total,
-                    task
-                ) =>
-                    total +
-                    (
-                        Number(task.effort) ||
-                        0
-                    ),
+                (sum, task) =>
+                    sum +
+                    (Number(task.effort) || 0),
                 0
             );
 
 
         week.push({
-
             date,
-
             tasks,
-
             hours
-
         });
 
     }
@@ -1047,14 +1483,15 @@ function getTaskPressure(task) {
     const effort =
         Number(task.effort) || 0;
 
+
     const days =
-        daysUntil(task.date);
+        daysUntil(
+            getTaskDate(task)
+        );
 
 
     let score = 0;
 
-
-    /* Effort */
 
     score +=
         Math.min(
@@ -1063,19 +1500,21 @@ function getTaskPressure(task) {
         );
 
 
-    /* Deadline proximity */
+    if (days < 0) {
 
-    if (days <= 0) {
+        score += 60;
 
-        score += 45;
+    } else if (days === 0) {
+
+        score += 50;
 
     } else if (days === 1) {
 
-        score += 38;
+        score += 42;
 
     } else if (days === 2) {
 
-        score += 30;
+        score += 32;
 
     } else if (days <= 4) {
 
@@ -1128,7 +1567,7 @@ function getDayStatus(hours) {
 
 
 /* =========================================================
-   RENDER DASHBOARD
+   DASHBOARD
 ========================================================= */
 
 function renderDashboard() {
@@ -1147,6 +1586,8 @@ function renderDashboard() {
 
     renderReminders();
 
+    updateProfilePanel();
+
 }
 
 
@@ -1156,21 +1597,16 @@ function renderDashboard() {
 
 function calculateWeeklyScore() {
 
-    if (!currentTasks.length)
+    if (!currentTasks.length) {
         return 1;
+    }
 
 
     const totalEffort =
         currentTasks.reduce(
-            (
-                total,
-                task
-            ) =>
-                total +
-                (
-                    Number(task.effort) ||
-                    0
-                ),
+            (sum, task) =>
+                sum +
+                (Number(task.effort) || 0),
             0
         );
 
@@ -1178,30 +1614,37 @@ function calculateWeeklyScore() {
     const urgentTasks =
         currentTasks.filter(
             task =>
-                daysUntil(task.date) <= 2
+                daysUntil(
+                    getTaskDate(task)
+                ) <= 2 &&
+                daysUntil(
+                    getTaskDate(task)
+                ) >= 0
+        ).length;
+
+
+    const overdueTasks =
+        currentTasks.filter(
+            task =>
+                daysUntil(
+                    getTaskDate(task)
+                ) < 0
         ).length;
 
 
     const overloadedDays =
-        getWeekData()
-            .filter(
-                day =>
-                    day.hours >= 5
-            )
-            .length;
+        getWeekData().filter(
+            day =>
+                day.hours >= 5
+        ).length;
 
 
     let score =
         1 +
-        (
-            totalEffort * 0.65
-        ) +
-        (
-            urgentTasks * 0.8
-        ) +
-        (
-            overloadedDays * 1.2
-        );
+        totalEffort * 0.55 +
+        urgentTasks * 0.9 +
+        overdueTasks * 1.5 +
+        overloadedDays * 1.2;
 
 
     score =
@@ -1222,24 +1665,16 @@ function calculateWeeklyScore() {
 function renderScore() {
 
     const scoreElement =
-        document.getElementById(
-            "score"
-        );
+        $("score");
 
     const scoreRing =
-        document.getElementById(
-            "scoreRing"
-        );
+        $("scoreRing");
 
     const scoreLabel =
-        document.getElementById(
-            "scoreLabel"
-        );
+        $("scoreLabel");
 
     const totalHours =
-        document.getElementById(
-            "totalHours"
-        );
+        $("totalHours");
 
 
     const score =
@@ -1248,32 +1683,21 @@ function renderScore() {
 
     const total =
         currentTasks.reduce(
-            (
-                sum,
-                task
-            ) =>
+            (sum, task) =>
                 sum +
-                (
-                    Number(task.effort) ||
-                    0
-                ),
+                (Number(task.effort) || 0),
             0
         );
 
 
     if (scoreElement) {
-
-        scoreElement.textContent =
-            score;
-
+        scoreElement.textContent = score;
     }
 
 
     if (totalHours) {
-
         totalHours.textContent =
-            `${total.toFixed(1).replace(".0", "")}h planned`;
-
+            `${formatHours(total)} planned`;
     }
 
 
@@ -1306,10 +1730,14 @@ function renderScore() {
 
     if (scoreRing) {
 
+        const percentage =
+            score * 10;
+
+
         scoreRing.style.background =
             `conic-gradient(
-                var(--blue) ${score * 10}%,
-                rgba(91,140,255,.08) ${score * 10}%
+                var(--blue) ${percentage}%,
+                rgba(91,140,255,.08) ${percentage}%
             )`;
 
     }
@@ -1324,18 +1752,15 @@ function renderScore() {
 function renderRadar() {
 
     const container =
-        document.getElementById(
-            "radarBars"
-        );
+        $("radarBars");
 
     const empty =
-        document.getElementById(
-            "radarEmpty"
-        );
+        $("radarEmpty");
 
 
-    if (!container)
+    if (!container) {
         return;
+    }
 
 
     const week =
@@ -1355,15 +1780,15 @@ function renderRadar() {
     }
 
 
-    if (!currentTasks.length)
+    if (!currentTasks.length) {
         return;
+    }
 
 
     const maxHours =
         Math.max(
             ...week.map(
-                day =>
-                    day.hours
+                day => day.hours
             ),
             1
         );
@@ -1373,9 +1798,8 @@ function renderRadar() {
         day => {
 
             const column =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
+
 
             column.className =
                 "radar-column";
@@ -1388,9 +1812,8 @@ function renderRadar() {
 
 
             const bar =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
+
 
             bar.className =
                 `radar-bar ${status.className}`;
@@ -1402,8 +1825,7 @@ function renderRadar() {
                     (
                         day.hours /
                         maxHours
-                    ) *
-                    100
+                    ) * 100
                 );
 
 
@@ -1412,24 +1834,24 @@ function renderRadar() {
 
 
             const value =
-                document.createElement(
-                    "span"
-                );
+                document.createElement("span");
+
 
             value.className =
                 "radar-value";
 
+
             value.textContent =
-                `${day.hours.toFixed(1).replace(".0", "")}h`;
+                formatHours(day.hours);
 
 
             const dayLabel =
-                document.createElement(
-                    "span"
-                );
+                document.createElement("span");
+
 
             dayLabel.className =
                 "radar-day";
+
 
             dayLabel.textContent =
                 new Date(
@@ -1441,26 +1863,16 @@ function renderRadar() {
                         {
                             weekday: "short"
                         }
-                    )
-                    .slice(0, 3);
+                    );
 
 
-            column.appendChild(
-                value
-            );
+            column.appendChild(value);
 
-            column.appendChild(
-                bar
-            );
+            column.appendChild(bar);
 
-            column.appendChild(
-                dayLabel
-            );
+            column.appendChild(dayLabel);
 
-
-            container.appendChild(
-                column
-            );
+            container.appendChild(column);
 
         }
     );
@@ -1475,23 +1887,18 @@ function renderRadar() {
 function renderAlert() {
 
     const alertCard =
-        document.getElementById(
-            "alert"
-        );
+        $("alert");
 
     const alertTitle =
-        document.getElementById(
-            "alertTitle"
-        );
+        $("alertTitle");
 
     const alertText =
-        document.getElementById(
-            "alertText"
-        );
+        $("alertText");
 
 
-    if (!alertCard)
+    if (!alertCard) {
         return;
+    }
 
 
     const week =
@@ -1517,13 +1924,9 @@ function renderAlert() {
 
 
     const worstDay =
-        overloaded.sort(
-            (
-                a,
-                b
-            ) =>
-                b.hours -
-                a.hours
+        [...overloaded].sort(
+            (a, b) =>
+                b.hours - a.hours
         )[0];
 
 
@@ -1549,7 +1952,9 @@ function renderAlert() {
     if (alertText) {
 
         alertText.textContent =
-            `${worstDay.hours.toFixed(1).replace(".0", "")} hours are planned. Consider starting one of these tasks earlier.`;
+            `${formatHours(
+                worstDay.hours
+            )} are planned. Consider starting one of these tasks earlier.`;
 
     }
 
@@ -1557,19 +1962,18 @@ function renderAlert() {
 
 
 /* =========================================================
-   WEEKLY VIEW
+   WEEK
 ========================================================= */
 
 function renderWeek() {
 
     const container =
-        document.getElementById(
-            "weekGrid"
-        );
+        $("weekGrid");
 
 
-    if (!container)
+    if (!container) {
         return;
+    }
 
 
     const week =
@@ -1589,9 +1993,7 @@ function renderWeek() {
 
 
             const element =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             element.className =
@@ -1614,10 +2016,6 @@ function renderWeek() {
                 );
 
 
-            const dayNumber =
-                date.getDate();
-
-
             element.innerHTML = `
 
                 <div class="day-header">
@@ -1627,7 +2025,7 @@ function renderWeek() {
                     </span>
 
                     <span class="day-number">
-                        ${dayNumber}
+                        ${date.getDate()}
                     </span>
 
                 </div>
@@ -1644,38 +2042,42 @@ function renderWeek() {
 
                     ${
                         day.tasks.length
-                        ?
-                        day.tasks.map(
-                            task => `
-                                <button
-                                    class="mini-task"
-                                    type="button"
-                                    data-task-id="${task.id}"
-                                >
+                            ? day.tasks.map(
+                                task => `
 
-                                    <span class="mini-dot"></span>
+                                    <button
+                                        type="button"
+                                        class="mini-task"
+                                        data-task-id="${task.id}"
+                                    >
 
-                                    <span>
+                                        <span class="mini-dot"></span>
 
-                                        <strong>
-                                            ${escapeHtml(task.name)}
-                                        </strong>
+                                        <span>
 
-                                        <small>
-                                            ${Number(task.effort) || 0}h
-                                        </small>
+                                            <strong>
+                                                ${escapeHtml(
+                                                    task.name
+                                                )}
+                                            </strong>
 
-                                    </span>
+                                            <small>
+                                                ${formatHours(
+                                                    task.effort
+                                                )}
+                                            </small>
 
-                                </button>
+                                        </span>
+
+                                    </button>
+
+                                `
+                            ).join("")
+                            : `
+                                <span class="empty-day">
+                                    No tasks
+                                </span>
                             `
-                        ).join("")
-                        :
-                        `
-                            <span class="empty-day">
-                                No tasks
-                            </span>
-                        `
                     }
 
                 </div>
@@ -1684,9 +2086,8 @@ function renderWeek() {
 
                     ${
                         day.hours > 0
-                        ? `${day.hours.toFixed(1).replace(".0", "")}h planned`
-                        : "Free"
-
+                            ? `${formatHours(day.hours)} planned`
+                            : "Free"
                     }
 
                 </div>
@@ -1695,20 +2096,18 @@ function renderWeek() {
 
 
             element
-                .querySelectorAll(
-                    ".mini-task"
-                )
+                .querySelectorAll(".mini-task")
                 .forEach(
                     button => {
 
                         button.addEventListener(
                             "click",
-                            () => {
+                            event => {
+
+                                event.stopPropagation();
 
                                 openEditTask(
-                                    Number(
-                                        button.dataset.taskId
-                                    )
+                                    button.dataset.taskId
                                 );
 
                             }
@@ -1729,7 +2128,7 @@ function renderWeek() {
 
 
 /* =========================================================
-   TASK LIST
+   TASK ICON
 ========================================================= */
 
 function getCategoryIcon(category) {
@@ -1737,36 +2136,33 @@ function getCategoryIcon(category) {
     const icons = {
 
         Test: "T",
-
         Homework: "H",
-
         Project: "P",
-
         Assignment: "A",
-
         Tuition: "U",
-
         Other: "•"
 
     };
 
 
-    return icons[category] ||
-        "•";
+    return icons[category] || "•";
 
 }
 
 
+/* =========================================================
+   TASK LIST
+========================================================= */
+
 function renderTasks() {
 
     const container =
-        document.getElementById(
-            "taskList"
-        );
+        $("taskList");
 
 
-    if (!container)
+    if (!container) {
         return;
+    }
 
 
     container.innerHTML = "";
@@ -1795,12 +2191,13 @@ function renderTasks() {
 
     const sortedTasks =
         [...currentTasks].sort(
-            (
-                a,
-                b
-            ) =>
-                new Date(a.date) -
-                new Date(b.date)
+            (a, b) =>
+                new Date(
+                    getTaskDate(a)
+                ) -
+                new Date(
+                    getTaskDate(b)
+                )
         );
 
 
@@ -1808,22 +2205,19 @@ function renderTasks() {
         task => {
 
             const row =
-                document.createElement(
-                    "button"
-                );
+                document.createElement("div");
 
-
-            row.type =
-                "button";
 
             row.className =
                 "task-row";
 
 
+            const date =
+                getTaskDate(task);
+
+
             const days =
-                daysUntil(
-                    task.date
-                );
+                daysUntil(date);
 
 
             let deadlineText;
@@ -1847,27 +2241,33 @@ function renderTasks() {
             } else {
 
                 deadlineText =
-                    `Due ${readableShortDate(task.date)}`;
+                    `Due ${readableShortDate(date)}`;
 
             }
 
 
             row.innerHTML = `
 
-                <span class="task-icon ${escapeHtml(task.category || "Other")}">
+                <span class="task-icon">
 
-                    ${getCategoryIcon(task.category)}
+                    ${getCategoryIcon(
+                        task.category
+                    )}
 
                 </span>
 
                 <span class="task-info">
 
                     <strong>
-                        ${escapeHtml(task.name)}
+                        ${escapeHtml(
+                            task.name
+                        )}
                     </strong>
 
                     <small>
-                        ${escapeHtml(task.category || "Other")}
+                        ${escapeHtml(
+                            task.category || "Other"
+                        )}
                         ·
                         ${deadlineText}
                     </small>
@@ -1875,12 +2275,64 @@ function renderTasks() {
                 </span>
 
                 <span class="effort">
+                    ${formatHours(task.effort)}
+                </span>
 
-                    ${Number(task.effort) || 0}h
+                <span class="task-actions">
+
+                    <button
+                        type="button"
+                        class="task-action edit"
+                    >
+                        Edit
+                    </button>
+
+                    <button
+                        type="button"
+                        class="task-action delete"
+                    >
+                        Delete
+                    </button>
 
                 </span>
 
             `;
+
+
+            const editButton =
+                row.querySelector(".edit");
+
+
+            const deleteButton =
+                row.querySelector(".delete");
+
+
+            editButton.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+                    openEditTask(
+                        task.id
+                    );
+
+                }
+            );
+
+
+            deleteButton.addEventListener(
+                "click",
+                async event => {
+
+                    event.stopPropagation();
+
+                    await deleteTask(
+                        task.id
+                    );
+
+                }
+            );
 
 
             row.addEventListener(
@@ -1912,170 +2364,154 @@ function renderTasks() {
 function renderSuggestions() {
 
     const container =
-        document.getElementById(
-            "suggestions"
-        );
+        $("suggestions");
 
 
-    if (!container)
+    if (!container) {
         return;
+    }
 
 
     container.innerHTML = "";
 
 
-    if (!currentTasks.length) {
-
-        container.innerHTML = `
-
-            <div class="suggestion">
-
-                <span class="suggestion-number">
-                    1
-                </span>
-
-                <div>
-
-                    <strong>
-                        Add your first task
-                    </strong>
-
-                    <p>
-                        Once you add tasks, I'll identify deadlines, busy days and useful ways to spread your work.
-                    </p>
-
-                </div>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
     const suggestions = [];
 
 
-    /* Highest pressure task */
+    if (!currentTasks.length) {
 
-    const highestPressureTask =
-        [...currentTasks]
-            .sort(
-                (
-                    a,
-                    b
-                ) =>
-                    getTaskPressure(b) -
-                    getTaskPressure(a)
+        suggestions.push({
+            title: "Add your first task",
+            text:
+                "Add homework, tests, projects or assignments and I'll start analysing your workload."
+        });
+
+    } else {
+
+        const overdue =
+            currentTasks.filter(
+                task =>
+                    daysUntil(
+                        getTaskDate(task)
+                    ) < 0
+            );
+
+
+        const urgent =
+            [...currentTasks]
+                .filter(
+                    task => {
+
+                        const days =
+                            daysUntil(
+                                getTaskDate(task)
+                            );
+
+                        return (
+                            days >= 0 &&
+                            days <= 2
+                        );
+
+                    }
+                )
+                .sort(
+                    (a, b) =>
+                        getTaskPressure(b) -
+                        getTaskPressure(a)
+                );
+
+
+        const week =
+            getWeekData();
+
+
+        const busiestDay =
+            [...week].sort(
+                (a, b) =>
+                    b.hours - a.hours
             )[0];
 
 
-    if (highestPressureTask) {
+        const largestTask =
+            [...currentTasks].sort(
+                (a, b) =>
+                    (Number(b.effort) || 0) -
+                    (Number(a.effort) || 0)
+            )[0];
 
-        const days =
-            daysUntil(
-                highestPressureTask.date
-            );
 
+        if (overdue.length) {
 
-        if (days <= 1) {
-
-            suggestions.push(
-                `Prioritise "${highestPressureTask.name}" — its deadline is very close.`
-            );
-
-        } else {
-
-            suggestions.push(
-                `Start "${highestPressureTask.name}" early. It has one of the highest pressure scores in your workload.`
-            );
+            suggestions.push({
+                title: "Clear overdue work",
+                text:
+                    `"${overdue[0].name}" is overdue. Put it ahead of non-urgent work.`
+            });
 
         }
 
-    }
+
+        if (urgent.length) {
+
+            suggestions.push({
+                title: "Protect your deadline",
+                text:
+                    `Start "${urgent[0].name}" soon because its deadline is close.`
+            });
+
+        }
 
 
-    /* Busiest day */
+        if (
+            busiestDay &&
+            busiestDay.hours >= 3
+        ) {
 
-    const week =
-        getWeekData();
+            suggestions.push({
+                title: "Watch your busiest day",
+                text:
+                    `${getDayName(
+                        busiestDay.date
+                    )} has ${formatHours(
+                        busiestDay.hours
+                    )} planned. Move preparation earlier if possible.`
+            });
 
-
-    const busiestDay =
-        [...week]
-            .sort(
-                (
-                    a,
-                    b
-                ) =>
-                    b.hours -
-                    a.hours
-            )[0];
-
-
-    if (
-        busiestDay &&
-        busiestDay.hours >= 3
-    ) {
-
-        suggestions.push(
-            `${getDayName(busiestDay.date)} has ${busiestDay.hours.toFixed(1).replace(".0", "")} hours planned. Move preparation earlier if possible.`
-        );
-
-    }
+        }
 
 
-    /* Large effort task */
+        if (
+            largestTask &&
+            Number(largestTask.effort) >= 2
+        ) {
 
-    const largeTask =
-        [...currentTasks]
-            .sort(
-                (
-                    a,
-                    b
-                ) =>
-                    (
-                        Number(b.effort) || 0
-                    ) -
-                    (
-                        Number(a.effort) || 0
-                    )
-            )[0];
+            suggestions.push({
+                title: "Split the big task",
+                text:
+                    `"${largestTask.name}" is ${formatHours(
+                        largestTask.effort
+                    )}. Break it into smaller sessions.`
+            });
+
+        }
 
 
-    if (
-        largeTask &&
-        Number(largeTask.effort) >= 2
-    ) {
-
-        suggestions.push(
-            `Break "${largeTask.name}" into smaller sessions instead of doing it all at once.`
-        );
+        suggestions.push({
+            title: "Use focused sessions",
+            text:
+                "Finish one high-priority task before jumping between several smaller ones."
+        });
 
     }
-
-
-    /* General */
-
-    suggestions.push(
-        "Try to finish one high-priority task before starting several smaller ones."
-    );
 
 
     suggestions
         .slice(0, 4)
         .forEach(
-            (
-                text,
-                index
-            ) => {
+            (suggestion, index) => {
 
                 const element =
-                    document.createElement(
-                        "div"
-                    );
+                    document.createElement("div");
 
 
                 element.className =
@@ -2090,8 +2526,16 @@ function renderSuggestions() {
 
                     <div>
 
+                        <strong>
+                            ${escapeHtml(
+                                suggestion.title
+                            )}
+                        </strong>
+
                         <p>
-                            ${escapeHtml(text)}
+                            ${escapeHtml(
+                                suggestion.text
+                            )}
                         </p>
 
                     </div>
@@ -2116,13 +2560,12 @@ function renderSuggestions() {
 function renderReminders() {
 
     const container =
-        document.getElementById(
-            "reminderList"
-        );
+        $("reminderList");
 
 
-    if (!container)
+    if (!container) {
         return;
+    }
 
 
     container.innerHTML = "";
@@ -2145,7 +2588,6 @@ function renderReminders() {
         `;
 
         return;
-
     }
 
 
@@ -2153,16 +2595,18 @@ function renderReminders() {
         [...currentTasks]
             .filter(
                 task =>
-                    daysUntil(task.date) >= 0 &&
-                    daysUntil(task.date) <= 3
+                    daysUntil(
+                        getTaskDate(task)
+                    ) <= 3
             )
             .sort(
-                (
-                    a,
-                    b
-                ) =>
-                    new Date(a.date) -
-                    new Date(b.date)
+                (a, b) =>
+                    daysUntil(
+                        getTaskDate(a)
+                    ) -
+                    daysUntil(
+                        getTaskDate(b)
+                    )
             );
 
 
@@ -2193,9 +2637,7 @@ function renderReminders() {
             task => {
 
                 const element =
-                    document.createElement(
-                        "div"
-                    );
+                    document.createElement("div");
 
 
                 element.className =
@@ -2204,35 +2646,29 @@ function renderReminders() {
 
                 const days =
                     daysUntil(
-                        task.date
+                        getTaskDate(task)
                     );
 
-
-                let title;
 
                 let description;
 
 
-                if (days === 0) {
+                if (days < 0) {
 
-                    title =
-                        task.name;
+                    description =
+                        "This task is overdue. Move it to the top of your list.";
+
+                } else if (days === 0) {
 
                     description =
                         "Due today — consider working on it now.";
 
                 } else if (days === 1) {
 
-                    title =
-                        task.name;
-
                     description =
                         "Due tomorrow — don't leave it until the last minute.";
 
                 } else {
-
-                    title =
-                        task.name;
 
                     description =
                         `Due in ${days} days. A small session today could reduce pressure later.`;
@@ -2249,11 +2685,15 @@ function renderReminders() {
                     <div>
 
                         <strong>
-                            ${escapeHtml(title)}
+                            ${escapeHtml(
+                                task.name
+                            )}
                         </strong>
 
                         <p>
-                            ${escapeHtml(description)}
+                            ${escapeHtml(
+                                description
+                            )}
                         </p>
 
                     </div>
@@ -2272,7 +2712,7 @@ function renderReminders() {
 
 
 /* =========================================================
-   OPEN ADD TASK
+   ADD TASK
 ========================================================= */
 
 function openAddTask() {
@@ -2280,115 +2720,150 @@ function openAddTask() {
     editingTaskId = null;
 
 
-    taskForm.reset();
+    if (taskForm) {
+        taskForm.reset();
+    }
 
 
-    taskCategory.value =
-        "Homework";
+    if (taskCategory) {
+        taskCategory.value =
+            "Homework";
+    }
 
 
-    taskEffort.value =
-        "1";
+    if (taskEffort) {
+        taskEffort.value =
+            "1";
+    }
 
 
-    taskDate.value =
-        getWeekDate(0);
+    if (taskDate) {
+        taskDate.value =
+            getLocalDate(0);
+    }
 
 
-    document.getElementById(
-        "modalTitle"
-    ).textContent =
-        "Add a task";
+    if (modalTitle) {
+        modalTitle.textContent =
+            "Add a task";
+    }
 
 
-    saveTask.textContent =
-        "Add Task";
+    if (saveTaskButton) {
+        saveTaskButton.textContent =
+            "Add Task";
+    }
 
 
-    deleteTaskButton.classList.add(
-        "hidden"
-    );
+    if (deleteTaskButton) {
+        deleteTaskButton.classList.add(
+            "hidden"
+        );
+    }
 
 
-    taskModal.classList.remove(
-        "hidden"
-    );
+    if (taskModal) {
+        taskModal.classList.remove(
+            "hidden"
+        );
+    }
 
 }
 
-
-/* =========================================================
-   OPEN EDIT TASK
-========================================================= */
 
 function openEditTask(id) {
 
     const task =
         currentTasks.find(
             item =>
-                Number(item.id) ===
-                Number(id)
+                String(item.id) ===
+                String(id)
         );
 
 
-    if (!task)
+    if (!task) {
         return;
+    }
 
 
     editingTaskId =
-        Number(id);
+        task.id;
 
 
-    taskName.value =
-        task.name || "";
+    if (taskName) {
+        taskName.value =
+            task.name || "";
+    }
 
 
-    taskCategory.value =
-        task.category ||
-        "Homework";
+    if (taskCategory) {
+        taskCategory.value =
+            task.category || "Homework";
+    }
 
 
-    taskEffort.value =
-        task.effort ||
-        1;
+    if (taskEffort) {
+        taskEffort.value =
+            task.effort || 1;
+    }
 
 
-    taskDate.value =
-        task.date ||
-        "";
+    if (taskDate) {
+        taskDate.value =
+            getTaskDate(task);
+    }
 
 
-    document.getElementById(
-        "modalTitle"
-    ).textContent =
-        "Edit task";
+    if (modalTitle) {
+        modalTitle.textContent =
+            "Edit task";
+    }
 
 
-    saveTask.textContent =
-        "Save changes";
+    if (saveTaskButton) {
+        saveTaskButton.textContent =
+            "Save changes";
+    }
 
 
-    deleteTaskButton.classList.remove(
-        "hidden"
-    );
+    if (deleteTaskButton) {
+        deleteTaskButton.classList.remove(
+            "hidden"
+        );
+    }
 
 
-    taskModal.classList.remove(
-        "hidden"
-    );
+    if (taskModal) {
+        taskModal.classList.remove(
+            "hidden"
+        );
+    }
 
 }
 
 
+/* Make inline HTML onclick work. */
+
+window.openAddTask =
+    openAddTask;
+
+window.openEditTask =
+    openEditTask;
+
+
 /* =========================================================
-   CLOSE TASK MODAL
+   CLOSE MODAL
 ========================================================= */
 
 function closeTaskModal() {
 
-    taskModal.classList.add(
-        "hidden"
-    );
+    if (taskModal) {
+
+        taskModal.classList.add(
+            "hidden"
+        );
+
+    }
 
 
     editingTaskId =
@@ -2397,292 +2872,318 @@ function closeTaskModal() {
 }
 
 
-/* =========================================================
-   MODAL BUTTONS
-========================================================= */
-
-addTaskTop.addEventListener(
-    "click",
-    openAddTask
-);
+window.closeTaskModal =
+    closeTaskModal;
 
 
-addTaskButton.addEventListener(
-    "click",
-    openAddTask
-);
+if (addTaskTop) {
+
+    addTaskTop.addEventListener(
+        "click",
+        openAddTask
+    );
+
+}
 
 
-closeModalButton.addEventListener(
-    "click",
-    closeTaskModal
-);
+if (addTaskButton) {
+
+    addTaskButton.addEventListener(
+        "click",
+        openAddTask
+    );
+
+}
 
 
-cancelModalButton.addEventListener(
-    "click",
-    closeTaskModal
-);
+if (closeModalButton) {
+
+    closeModalButton.addEventListener(
+        "click",
+        closeTaskModal
+    );
+
+}
 
 
-taskModal.addEventListener(
-    "click",
-    event => {
+if (cancelModalButton) {
 
-        if (
-            event.target ===
-            taskModal
-        ) {
+    cancelModalButton.addEventListener(
+        "click",
+        closeTaskModal
+    );
 
-            closeTaskModal();
+}
+
+
+if (taskModal) {
+
+    taskModal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                taskModal
+            ) {
+
+                closeTaskModal();
+
+            }
 
         }
+    );
 
-    }
-);
+}
 
 
 /* =========================================================
    SAVE TASK
 ========================================================= */
 
-taskForm.addEventListener(
-    "submit",
-    async event => {
+if (taskForm) {
 
-        event.preventDefault();
+    taskForm.addEventListener(
+        "submit",
+        async event => {
 
-
-        const name =
-            taskName.value.trim();
-
-        const category =
-            taskCategory.value;
-
-        const effort =
-            Number(
-                taskEffort.value
-            );
-
-        const date =
-            taskDate.value;
+            event.preventDefault();
 
 
-        if (!name) {
-
-            alert(
-                "Please enter a task name."
-            );
-
-            return;
-
-        }
+            const name =
+                taskName
+                    ? taskName.value.trim()
+                    : "";
 
 
-        if (!date) {
-
-            alert(
-                "Please select a due date."
-            );
-
-            return;
-
-        }
+            const category =
+                taskCategory
+                    ? taskCategory.value
+                    : "Other";
 
 
-        if (
-            !effort ||
-            effort <= 0
-        ) {
-
-            alert(
-                "Please enter a valid effort."
-            );
-
-            return;
-
-        }
+            const effort =
+                taskEffort
+                    ? Number(taskEffort.value)
+                    : 0;
 
 
-        if (!currentUser) {
-
-            alert(
-                "Please log in again."
-            );
-
-            return;
-
-        }
+            const date =
+                taskDate
+                    ? taskDate.value
+                    : "";
 
 
-        saveTask.disabled =
-            true;
+            if (!name) {
 
+                alert(
+                    "Please enter a task name."
+                );
 
-        try {
-
-            /* =================================================
-               UPDATE
-            ================================================= */
-
-            if (editingTaskId) {
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .from("tasks")
-                        .update({
-
-                            name,
-
-                            category,
-
-                            effort,
-
-                            date,
-
-                            due_date: date
-
-                        })
-                        .eq(
-                            "id",
-                            editingTaskId
-                        )
-                        .eq(
-                            "user_id",
-                            currentUser.id
-                        )
-                        .select()
-                        .single();
-
-
-                if (error) {
-
-                    console.error(
-                        "TASK UPDATE ERROR:",
-                        error
-                    );
-
-                    alert(
-                        "Could not update task: " +
-                        error.message
-                    );
-
-                    return;
-
-                }
-
-
-                const index =
-                    currentTasks.findIndex(
-                        task =>
-                            Number(task.id) ===
-                            Number(editingTaskId)
-                    );
-
-
-                if (index !== -1) {
-
-                    currentTasks[index] =
-                        data;
-
-                }
+                return;
 
             }
 
 
-            /* =================================================
-               CREATE
-            ================================================= */
+            if (!date) {
 
-            else {
+                alert(
+                    "Please select a due date."
+                );
 
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .from("tasks")
-                        .insert([
+                return;
 
-                            {
+            }
+
+
+            if (
+                !effort ||
+                effort <= 0
+            ) {
+
+                alert(
+                    "Please enter a valid effort."
+                );
+
+                return;
+
+            }
+
+
+            if (!currentUser) {
+
+                alert(
+                    "Please log in again."
+                );
+
+                return;
+
+            }
+
+
+            if (saveTaskButton) {
+                saveTaskButton.disabled = true;
+            }
+
+
+            try {
+
+                /* =================================================
+                   UPDATE
+                ================================================= */
+
+                if (editingTaskId !== null) {
+
+                    const {
+                        data,
+                        error
+                    } =
+                        await supabaseClient
+                            .from("tasks")
+                            .update({
+
+                                name,
+
+                                category,
+
+                                effort,
+
+                                date,
+
+                                due_date: date
+
+                            })
+                            .eq(
+                                "id",
+                                editingTaskId
+                            )
+                            .eq(
+                                "user_id",
+                                currentUser.id
+                            )
+                            .select()
+                            .single();
+
+
+                    if (error) {
+
+                        console.error(
+                            "TASK UPDATE ERROR:",
+                            error
+                        );
+
+                        alert(
+                            "Could not update task: " +
+                            error.message
+                        );
+
+                        return;
+
+                    }
+
+
+                    const index =
+                        currentTasks.findIndex(
+                            task =>
+                                String(task.id) ===
+                                String(editingTaskId)
+                        );
+
+
+                    if (index !== -1) {
+
+                        currentTasks[index] =
+                            data;
+
+                    }
+
+                }
+
+                /* =================================================
+                   CREATE
+                ================================================= */
+
+                else {
+
+                    const {
+                        data,
+                        error
+                    } =
+                        await supabaseClient
+                            .from("tasks")
+                            .insert([{
 
                                 user_id:
                                     currentUser.id,
 
-                                name:
-                                    name,
+                                name,
 
-                                category:
-                                    category,
+                                category,
 
-                                effort:
-                                    effort,
+                                effort,
 
-                                date:
-                                    date,
+                                date,
 
                                 due_date:
                                     date
 
-                            }
-
-                        ])
-                        .select()
-                        .single();
+                            }])
+                            .select()
+                            .single();
 
 
-                if (error) {
+                    if (error) {
 
-                    console.error(
-                        "TASK INSERT ERROR:",
-                        error
+                        console.error(
+                            "TASK INSERT ERROR:",
+                            error
+                        );
+
+                        alert(
+                            "Could not create task: " +
+                            error.message
+                        );
+
+                        return;
+
+                    }
+
+
+                    currentTasks.push(
+                        data
                     );
-
-                    alert(
-                        "Could not create task: " +
-                        error.message
-                    );
-
-                    return;
 
                 }
 
 
-                currentTasks.push(
-                    data
+                closeTaskModal();
+
+                renderDashboard();
+
+
+            } catch (error) {
+
+                console.error(
+                    "SAVE TASK CRASH:",
+                    error
                 );
+
+                alert(
+                    "Something went wrong while saving the task."
+                );
+
+            } finally {
+
+                if (saveTaskButton) {
+                    saveTaskButton.disabled = false;
+                }
 
             }
 
-
-            closeTaskModal();
-
-            renderDashboard();
-
-
-        } catch (error) {
-
-            console.error(
-                "SAVE TASK ERROR:",
-                error
-            );
-
-            alert(
-                "Something went wrong while saving the task."
-            );
-
-        } finally {
-
-            saveTask.disabled =
-                false;
-
         }
+    );
 
-    }
-);
+}
 
 
 /* =========================================================
@@ -2691,20 +3192,22 @@ taskForm.addEventListener(
 
 async function deleteTask(id) {
 
-    if (!currentUser)
+    if (!currentUser) {
         return;
+    }
 
 
     const task =
         currentTasks.find(
             item =>
-                Number(item.id) ===
-                Number(id)
+                String(item.id) ===
+                String(id)
         );
 
 
-    if (!task)
+    if (!task) {
         return;
+    }
 
 
     const confirmed =
@@ -2713,8 +3216,9 @@ async function deleteTask(id) {
         );
 
 
-    if (!confirmed)
+    if (!confirmed) {
         return;
+    }
 
 
     try {
@@ -2725,10 +3229,7 @@ async function deleteTask(id) {
             await supabaseClient
                 .from("tasks")
                 .delete()
-                .eq(
-                    "id",
-                    id
-                )
+                .eq("id", id)
                 .eq(
                     "user_id",
                     currentUser.id
@@ -2748,15 +3249,14 @@ async function deleteTask(id) {
             );
 
             return;
-
         }
 
 
         currentTasks =
             currentTasks.filter(
                 item =>
-                    Number(item.id) !==
-                    Number(id)
+                    String(item.id) !==
+                    String(id)
             );
 
 
@@ -2781,28 +3281,34 @@ async function deleteTask(id) {
 }
 
 
+window.deleteTask =
+    deleteTask;
+
+
+if (deleteTaskButton) {
+
+    deleteTaskButton.addEventListener(
+        "click",
+        async () => {
+
+            if (
+                editingTaskId !== null
+            ) {
+
+                await deleteTask(
+                    editingTaskId
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
 /* =========================================================
-   DELETE BUTTON
-========================================================= */
-
-deleteTaskButton.addEventListener(
-    "click",
-    async () => {
-
-        if (!editingTaskId)
-            return;
-
-
-        await deleteTask(
-            editingTaskId
-        );
-
-    }
-);
-
-
-/* =========================================================
-   SMART REMINDER NOTIFICATIONS
+   NOTIFICATIONS
 ========================================================= */
 
 async function enableNotifications() {
@@ -2820,29 +3326,41 @@ async function enableNotifications() {
     }
 
 
-    const permission =
-        await Notification.requestPermission();
+    try {
+
+        const permission =
+            await Notification.requestPermission();
 
 
-    if (
-        permission ===
-        "granted"
-    ) {
+        if (
+            permission ===
+            "granted"
+        ) {
 
-        localStorage.setItem(
-            "pressureNotifications",
-            "enabled"
-        );
+            localStorage.setItem(
+                "pressureNotifications",
+                "enabled"
+            );
 
 
-        updateNotificationButtons();
+            updateNotificationButtons();
 
-        sendReminderNotification();
+            sendReminderNotification();
 
-    } else {
 
-        alert(
-            "Notifications were not enabled. You can allow them from your browser settings."
+        } else {
+
+            alert(
+                "Notifications were not enabled. Check your browser permissions."
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "NOTIFICATION ERROR:",
+            error
         );
 
     }
@@ -2855,8 +3373,7 @@ function updateNotificationButtons() {
     const enabled =
         localStorage.getItem(
             "pressureNotifications"
-        ) ===
-        "enabled";
+        ) === "enabled";
 
 
     if (notificationButton) {
@@ -2884,46 +3401,57 @@ function updateNotificationButtons() {
 function sendReminderNotification() {
 
     if (
-        !("Notification" in window) ||
-        Notification.permission !==
-            "granted"
-    )
+        !("Notification" in window)
+    ) {
         return;
-
-
-    const urgentTasks =
-        currentTasks.filter(
-            task =>
-                daysUntil(task.date) >= 0 &&
-                daysUntil(task.date) <= 1
-        );
-
-
-    if (!urgentTasks.length)
-        return;
-
-
-    const task =
-        urgentTasks[0];
-
-
-    let body;
+    }
 
 
     if (
-        daysUntil(task.date) ===
-        0
+        Notification.permission !==
+        "granted"
     ) {
-
-        body =
-            `"${task.name}" is due today.`;
-
-    } else {
-
-        body =
-            `"${task.name}" is due tomorrow.`;
-
+        return;
     }
+
+
+    const urgent =
+        [...currentTasks]
+            .filter(
+                task =>
+                    daysUntil(
+                        getTaskDate(task)
+                    ) >= 0 &&
+                    daysUntil(
+                        getTaskDate(task)
+                    ) <= 1
+            )
+            .sort(
+                (a, b) =>
+                    getTaskPressure(b) -
+                    getTaskPressure(a)
+            );
+
+
+    if (!urgent.length) {
+        return;
+    }
+
+
+    const task =
+        urgent[0];
+
+
+    const days =
+        daysUntil(
+            getTaskDate(task)
+        );
+
+
+    const body =
+        days === 0
+            ? `"${task.name}" is due today.`
+            : `"${task.name}" is due tomorrow.`;
 
 
     new Notification(
@@ -2956,9 +3484,6 @@ if (notificationButton2) {
 }
 
 
-updateNotificationButtons();
-
-
 /* =========================================================
    AI ASSISTANT
 ========================================================= */
@@ -2968,24 +3493,20 @@ function addAIMessage(
     type = "assistant"
 ) {
 
-    if (!aiMessages)
+    if (!aiMessages) {
         return;
+    }
 
 
     const element =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     element.className =
         `ai-message ${type}`;
 
 
-    if (
-        type ===
-        "assistant"
-    ) {
+    if (type === "assistant") {
 
         element.innerHTML = `
 
@@ -3024,22 +3545,16 @@ function addAIMessage(
 
 
 /* =========================================================
-   AI WORKLOAD ANALYSIS
+   AI ANALYSIS
 ========================================================= */
 
 function analyseWorkload() {
 
     const totalHours =
         currentTasks.reduce(
-            (
-                total,
-                task
-            ) =>
-                total +
-                (
-                    Number(task.effort) ||
-                    0
-                ),
+            (sum, task) =>
+                sum +
+                (Number(task.effort) || 0),
             0
         );
 
@@ -3049,46 +3564,52 @@ function analyseWorkload() {
 
 
     const busiestDay =
-        [...week]
-            .sort(
-                (
-                    a,
-                    b
-                ) =>
-                    b.hours -
-                    a.hours
-            )[0];
+        [...week].sort(
+            (a, b) =>
+                b.hours - a.hours
+        )[0];
+
+
+    const overdue =
+        currentTasks.filter(
+            task =>
+                daysUntil(
+                    getTaskDate(task)
+                ) < 0
+        );
+
+
+    const urgent =
+        currentTasks.filter(
+            task => {
+
+                const days =
+                    daysUntil(
+                        getTaskDate(task)
+                    );
+
+                return (
+                    days >= 0 &&
+                    days <= 2
+                );
+
+            }
+        );
 
 
     const nextTask =
         [...currentTasks]
             .filter(
                 task =>
-                    daysUntil(task.date) >= 0
+                    daysUntil(
+                        getTaskDate(task)
+                    ) >= 0
             )
             .sort(
-                (
-                    a,
-                    b
-                ) =>
+                (a, b) =>
                     getTaskPressure(b) -
                     getTaskPressure(a)
             )[0];
-
-
-    const overdue =
-        currentTasks.filter(
-            task =>
-                daysUntil(task.date) < 0
-        );
-
-
-    const urgent =
-        currentTasks.filter(
-            task =>
-                daysUntil(task.date) >= 0 &&
-                daysUntil(task.date) <= 2
-        );
 
 
     return {
@@ -3097,11 +3618,11 @@ function analyseWorkload() {
 
         busiestDay,
 
-        nextTask,
-
         overdue,
 
         urgent,
+
+        nextTask,
 
         week
 
@@ -3111,12 +3632,10 @@ function analyseWorkload() {
 
 
 /* =========================================================
-   AI RESPONSE ENGINE
+   AI RESPONSE
 ========================================================= */
 
-function generateAIResponse(
-    question
-) {
+function generateAIResponse(question) {
 
     const q =
         question
@@ -3130,17 +3649,16 @@ function generateAIResponse(
 
     if (!currentTasks.length) {
 
-        return `
-You don't have any tasks yet.
-
-Add your homework, tests, projects or assignments and I'll analyse your deadlines, effort and busy days for you.
-        `.trim();
+        return (
+            "You don't have any tasks yet. " +
+            "Add your homework, tests, projects or assignments and I'll analyse your deadlines, effort and busy days."
+        );
 
     }
 
 
     /* =====================================================
-       TODAY
+       TODAY / NOW
     ===================================================== */
 
     if (
@@ -3149,33 +3667,49 @@ Add your homework, tests, projects or assignments and I'll analyse your deadline
         q.includes("start")
     ) {
 
+        const todayTasks =
+            currentTasks
+                .filter(
+                    task =>
+                        daysUntil(
+                            getTaskDate(task)
+                        ) === 0
+                )
+                .sort(
+                    (a, b) =>
+                        getTaskPressure(b) -
+                        getTaskPressure(a)
+                );
+
+
+        if (todayTasks.length) {
+
+            const top =
+                todayTasks[0];
+
+
+            return (
+                `Start with "${top.name}". ` +
+                `It is due today and needs about ${formatHours(top.effort)}. ` +
+                `Finish this before moving to lower-pressure work.`
+            );
+
+        }
+
+
         if (analysis.nextTask) {
 
             const task =
                 analysis.nextTask;
 
-            const days =
-                daysUntil(
-                    task.date
-                );
 
-
-            if (days === 0) {
-
-                return `
-Start with "${task.name}".
-
-It's due today and needs about ${task.effort} hour(s). I'd make this your first priority.
-                `.trim();
-
-            }
-
-
-            return `
-I'd start with "${task.name}".
-
-It's due ${readableDate(task.date)} and needs about ${task.effort} hour(s). Starting it now should reduce pressure later.
-            `.trim();
+            return (
+                `I'd start with "${task.name}". ` +
+                `It is due ${readableDate(
+                    getTaskDate(task)
+                )} and needs about ${formatHours(task.effort)}. ` +
+                `Starting it now should reduce future pressure.`
+            );
 
         }
 
@@ -3199,21 +3733,28 @@ It's due ${readableDate(task.date)} and needs about ${task.effort} hour(s). Star
 
         if (task) {
 
-            return `
-Your highest-priority task is "${task.name}".
+            const days =
+                daysUntil(
+                    getTaskDate(task)
+                );
 
-Due: ${readableDate(task.date)}
-Effort: ${task.effort} hour(s)
-Time remaining: ${
-                daysUntil(task.date) < 0
+
+            const remaining =
+                days < 0
                     ? "overdue"
-                    : daysUntil(task.date) === 0
+                    : days === 0
                         ? "today"
-                        : `${daysUntil(task.date)} day(s)`
-            }
+                        : `${days} day(s)`;
 
-I'd tackle this before lower-pressure tasks.
-            `.trim();
+
+            return (
+                `Your highest-priority task is "${task.name}". ` +
+                `It is due ${readableDate(
+                    getTaskDate(task)
+                )}, needs about ${formatHours(task.effort)}, ` +
+                `and has ${remaining} remaining. ` +
+                `I'd tackle this before lower-pressure tasks.`
+            );
 
         }
 
@@ -3221,14 +3762,14 @@ I'd tackle this before lower-pressure tasks.
 
 
     /* =====================================================
-       HARDEST DAY
+       HARDEST / BUSIEST DAY
     ===================================================== */
 
     if (
         q.includes("hardest") ||
         q.includes("busiest") ||
-        q.includes("difficult day") ||
-        q.includes("worst day")
+        q.includes("worst day") ||
+        q.includes("difficult day")
     ) {
 
         const day =
@@ -3238,23 +3779,26 @@ I'd tackle this before lower-pressure tasks.
         if (day) {
 
             const taskNames =
-                day.tasks
-                    .map(
-                        task =>
-                            task.name
-                    )
-                    .join(", ");
+                day.tasks.length
+                    ? day.tasks
+                        .map(
+                            task =>
+                                task.name
+                        )
+                        .join(", ")
+                    : "No tasks";
 
 
-            return `
-Your busiest day is ${getDayName(day.date)} (${readableDate(day.date)}).
-
-You have ${day.hours.toFixed(1).replace(".0", "")} hour(s) planned that day.
-
-Tasks: ${taskNames || "None"}
-
-I'd move preparation for at least one of those tasks to an earlier day.
-            `.trim();
+            return (
+                `Your busiest day is ${getDayName(
+                    day.date
+                )}. ` +
+                `You have ${formatHours(
+                    day.hours
+                )} planned. ` +
+                `The tasks are: ${taskNames}. ` +
+                `I'd prepare for at least one of them earlier.`
+            );
 
         }
 
@@ -3262,40 +3806,57 @@ I'd move preparation for at least one of those tasks to an earlier day.
 
 
     /* =====================================================
-       PRESSURE
+       PRESSURE / STRESS
     ===================================================== */
 
     if (
         q.includes("pressure") ||
         q.includes("stress") ||
         q.includes("overwhelm") ||
-        q.includes("overloaded")
+        q.includes("overloaded") ||
+        q.includes("reduce")
     ) {
 
-        if (
-            analysis.busiestDay &&
-            analysis.busiestDay.hours >= 5
-        ) {
+        const overloaded =
+            analysis.week.filter(
+                day =>
+                    day.hours >= 5
+            );
 
-            return `
-Your main pressure point is ${getDayName(analysis.busiestDay.date),}.
 
-You have ${analysis.busiestDay.hours.toFixed(1).replace(".0", "")} hours concentrated there.
+        if (overloaded.length) {
 
-The simplest fix is to start one of those tasks earlier instead of trying to remove everything from that day.
-            `.replace(
-                "is ${getDayName(analysis.busiestDay.date),}",
-                `is ${getDayName(analysis.busiestDay.date)}`
-            ).trim();
+            const worst =
+                [...overloaded].sort(
+                    (a, b) =>
+                        b.hours - a.hours
+                )[0];
+
+
+            const moveTask =
+                [...worst.tasks].sort(
+                    (a, b) =>
+                        (Number(b.effort) || 0) -
+                        (Number(a.effort) || 0)
+                )[0];
+
+
+            return (
+                `${getDayName(
+                    worst.date
+                )} is your main pressure point with ${formatHours(
+                    worst.hours
+                )} planned. ` +
+                `I'd start "${moveTask.name}" before that day so you don't have to do everything at once.`
+            );
 
         }
 
 
-        return `
-Your workload doesn't currently show a major overload.
-
-The best way to keep it that way is to start high-effort tasks before their deadlines and avoid stacking several tasks on the same day.
-        `.trim();
+        return (
+            "Your workload doesn't currently show a major overload. " +
+            "Keep it that way by starting high-effort tasks early and avoiding several deadlines on the same day."
+        );
 
     }
 
@@ -3310,19 +3871,36 @@ The best way to keep it that way is to start high-effort tasks before their dead
         q.includes("coming up")
     ) {
 
+        if (analysis.urgent.length) {
+
+            const urgent =
+                [...analysis.urgent].sort(
+                    (a, b) =>
+                        getTaskPressure(b) -
+                        getTaskPressure(a)
+                )[0];
+
+
+            return (
+                `The most urgent deadline is "${urgent.name}". ` +
+                `It is due ${readableDate(
+                    getTaskDate(urgent)
+                )} and needs about ${formatHours(
+                    urgent.effort
+                )}.`
+            );
+
+        }
+
+
         if (analysis.nextTask) {
 
-            const task =
-                analysis.nextTask;
-
-
-            return `
-Your most important upcoming deadline is "${task.name}".
-
-It's due ${readableDate(task.date)} and requires about ${task.effort} hour(s).
-
-I'd work on this before tasks with later deadlines.
-            `.trim();
+            return (
+                `Your next major deadline is "${analysis.nextTask.name}" ` +
+                `on ${readableDate(
+                    getTaskDate(analysis.nextTask)
+                )}.`
+            );
 
         }
 
@@ -3330,7 +3908,7 @@ I'd work on this before tasks with later deadlines.
 
 
     /* =====================================================
-       HOW MANY HOURS
+       HOURS / WORKLOAD
     ===================================================== */
 
     if (
@@ -3339,79 +3917,115 @@ I'd work on this before tasks with later deadlines.
         q.includes("workload")
     ) {
 
-        return `
-You currently have ${analysis.totalHours.toFixed(1).replace(".0", "")} hour(s) of planned work across ${currentTasks.length} task(s).
-
-Your busiest day is ${analysis.busiestDay ? getDayName(analysis.busiestDay.date) : "not clear yet"}.
-
-You have ${analysis.urgent.length} urgent task(s) due within the next two days.
-        `.trim();
+        return (
+            `You currently have ${formatHours(
+                analysis.totalHours
+            )} planned across ${currentTasks.length} task(s). ` +
+            `Your busiest day is ${
+                analysis.busiestDay
+                    ? getDayName(
+                        analysis.busiestDay.date
+                    )
+                    : "not clear yet"
+            }, and you have ${analysis.urgent.length} urgent task(s).`
+        );
 
     }
 
 
     /* =====================================================
-       PLAN MY WEEK
+       PLAN
     ===================================================== */
 
     if (
-        q.includes("plan my week") ||
-        q.includes("schedule my week") ||
-        q.includes("organize my week") ||
-        q.includes("organise my week")
+        q.includes("plan") ||
+        q.includes("schedule") ||
+        q.includes("organize") ||
+        q.includes("organise")
     ) {
 
         const ordered =
             [...currentTasks]
                 .sort(
-                    (
-                        a,
-                        b
-                    ) =>
+                    (a, b) =>
                         getTaskPressure(b) -
                         getTaskPressure(a)
                 )
                 .slice(0, 4);
 
 
-        return `
-Here's how I'd approach your week:
+        const names =
+            ordered
+                .map(
+                    (task, index) =>
+                        `${index + 1}. ${task.name}`
+                )
+                .join("\n");
 
-1. Start with "${ordered[0]?.name || "your highest-priority task"}".
-2. Work on high-effort tasks before their deadlines.
-3. Avoid leaving more than one large task for the same day.
-4. Use lighter days for preparation and smaller assignments.
 
-You have ${analysis.totalHours.toFixed(1).replace(".0", "")} hour(s) of work planned overall.
-        `.trim();
+        return (
+            `Here's the order I'd use:\n\n` +
+            `${names}\n\n` +
+            `Do the highest-pressure task first, then use lighter tasks to fill gaps. ` +
+            `Your total planned workload is ${formatHours(
+                analysis.totalHours
+            )}.`
+        );
 
     }
 
 
     /* =====================================================
-       GENERAL RESPONSE
+       OVERDUE
     ===================================================== */
 
-    return `
-I've analysed your current workload.
+    if (
+        q.includes("overdue") ||
+        q.includes("late")
+    ) {
 
-• ${currentTasks.length} task(s)
-• ${analysis.totalHours.toFixed(1).replace(".0", "")} hour(s) planned
-• ${analysis.urgent.length} urgent task(s)
-• Busiest day: ${
-        analysis.busiestDay
-            ? getDayName(analysis.busiestDay.date)
-            : "none"
+        if (analysis.overdue.length) {
+
+            return (
+                `You have ${analysis.overdue.length} overdue task(s). ` +
+                `The first one I'd clear is "${analysis.overdue[0].name}". ` +
+                `Don't let overdue work compete with too many new tasks.`
+            );
+
+        }
+
+
+        return (
+            "Good news — you don't currently have any overdue tasks."
+        );
+
     }
 
-Try asking:
 
-"What should I work on today?"
-"Which day is hardest?"
-"Which deadline should I prioritise?"
-"How can I reduce my pressure?"
-"Plan my week"
-    `.trim();
+    /* =====================================================
+       GENERAL
+    ===================================================== */
+
+    return (
+        `I've analysed your workload:\n\n` +
+        `• ${currentTasks.length} task(s)\n` +
+        `• ${formatHours(
+            analysis.totalHours
+        )} planned\n` +
+        `• ${analysis.urgent.length} urgent task(s)\n` +
+        `• ${analysis.overdue.length} overdue task(s)\n` +
+        `• Busiest day: ${
+            analysis.busiestDay
+                ? getDayName(
+                    analysis.busiestDay.date
+                )
+                : "none"
+        }\n\n` +
+        `Try asking me "What should I work on today?", ` +
+        `"Which day is hardest?", ` +
+        `"How can I reduce my pressure?", ` +
+        `or "Plan my week".`
+    );
 
 }
 
@@ -3420,50 +4034,59 @@ Try asking:
    AI FORM
 ========================================================= */
 
-aiForm.addEventListener(
-    "submit",
-    event => {
+if (aiForm) {
 
-        event.preventDefault();
+    aiForm.addEventListener(
+        "submit",
+        event => {
 
-
-        const question =
-            aiInput.value.trim();
+            event.preventDefault();
 
 
-        if (!question)
-            return;
+            const question =
+                aiInput
+                    ? aiInput.value.trim()
+                    : "";
 
 
-        addAIMessage(
-            question,
-            "user"
-        );
+            if (!question) {
+                return;
+            }
 
 
-        aiInput.value = "";
+            addAIMessage(
+                question,
+                "user"
+            );
 
 
-        setTimeout(
-            () => {
+            if (aiInput) {
+                aiInput.value = "";
+            }
 
-                const response =
-                    generateAIResponse(
-                        question
+
+            setTimeout(
+                () => {
+
+                    const response =
+                        generateAIResponse(
+                            question
+                        );
+
+
+                    addAIMessage(
+                        response,
+                        "assistant"
                     );
 
+                },
+                250
+            );
 
-                addAIMessage(
-                    response,
-                    "assistant"
-                );
+        }
+    );
 
-            },
-            300
-        );
-
-    }
-);
+}
 
 
 /* =========================================================
@@ -3485,8 +4108,9 @@ document
                         button.dataset.prompt;
 
 
-                    if (!question)
+                    if (!question) {
                         return;
+                    }
 
 
                     addAIMessage(
@@ -3498,19 +4122,15 @@ document
                     setTimeout(
                         () => {
 
-                            const response =
+                            addAIMessage(
                                 generateAIResponse(
                                     question
-                                );
-
-
-                            addAIMessage(
-                                response,
+                                ),
                                 "assistant"
                             );
 
                         },
-                        300
+                        250
                     );
 
                 }
@@ -3521,7 +4141,7 @@ document
 
 
 /* =========================================================
-   SESSION CHECK
+   SESSION
 ========================================================= */
 
 async function checkSession() {
@@ -3549,28 +4169,22 @@ async function checkSession() {
         }
 
 
-        if (data.session) {
+        if (
+            data &&
+            data.session
+        ) {
 
             currentUser =
                 data.session.user;
 
 
-            await loadProfile();
-
-            await loadTasks();
-
-
-            showApp();
-
-            renderDashboard();
-
+            await finishAuthentication();
 
         } else {
 
             showAuth();
 
         }
-
 
     } catch (error) {
 
@@ -3587,11 +4201,11 @@ async function checkSession() {
 
 
 /* =========================================================
-   AUTH STATE LISTENER
+   AUTH STATE
 ========================================================= */
 
 supabaseClient.auth.onAuthStateChange(
-    async (
+    (
         event,
         session
     ) => {
@@ -3608,8 +4222,6 @@ supabaseClient.auth.onAuthStateChange(
             currentTasks = [];
 
             showAuth();
-
-            return;
 
         }
 
@@ -3630,12 +4242,46 @@ supabaseClient.auth.onAuthStateChange(
 
 
 /* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key ===
+            "Escape"
+        ) {
+
+            closeTaskModal();
+
+            const profilePanel =
+                $("pressureProfilePanel");
+
+
+            if (profilePanel) {
+
+                profilePanel.classList.add(
+                    "hidden"
+                );
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================================================
    INITIALIZE
 ========================================================= */
 
-setAuthMode(
-    "login"
-);
+injectExtraStyles();
+
+setAuthMode("login");
+
+updateNotificationButtons();
 
 checkSession();
-```

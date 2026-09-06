@@ -23,9 +23,13 @@
     >
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=League+Spartan:wght@500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
         rel="stylesheet"
     >
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
 
     <link
         rel="stylesheet"
@@ -35,74 +39,35 @@
 
 <body>
 
-    <!-- =================================================
+    <!-- =====================================================
          AUTH SCREEN
-    ================================================== -->
+    ====================================================== -->
 
-    <section id="authScreen" class="auth-screen">
-
-        <div class="auth-glow"></div>
+    <section
+        id="authScreen"
+        class="auth-screen"
+    >
 
         <div class="auth-card">
 
-            <div class="brand">
+            <div class="auth-brand">
                 PRESSURE <span>// OFF</span>
             </div>
 
-            <div class="auth-tabs">
+            <p class="eyebrow">
+                STUDENT WORKLOAD AWARENESS
+            </p>
 
-                <button
-                    id="loginTab"
-                    class="auth-tab active"
-                    type="button"
-                >
-                    Log in
-                </button>
+            <h1 id="authTitle">
+                Welcome Back
+            </h1>
 
-                <button
-                    id="signupTab"
-                    class="auth-tab"
-                    type="button"
-                >
-                    Create account
-                </button>
-
-            </div>
-
-            <div class="auth-heading">
-
-                <p class="eyebrow">
-                    STUDENT WORKLOAD AWARENESS
-                </p>
-
-                <h1 id="authTitle">
-                    Welcome back
-                </h1>
-
-                <p id="authSubtitle">
-                    See the pressure before it piles up.
-                </p>
-
-            </div>
+            <p class="auth-description">
+                Understand your workload before it becomes
+                overwhelming.
+            </p>
 
             <form id="authForm">
-
-                <div
-                    id="nameField"
-                    class="field hidden"
-                >
-
-                    <label for="authName">
-                        Your name
-                    </label>
-
-                    <input
-                        id="authName"
-                        type="text"
-                        placeholder="Alex"
-                    >
-
-                </div>
 
                 <div class="field">
 
@@ -114,6 +79,7 @@
                         id="authUsername"
                         type="text"
                         placeholder="Choose a username"
+                        autocomplete="username"
                         required
                     >
 
@@ -129,28 +95,38 @@
                         id="authPassword"
                         type="password"
                         placeholder="••••••••"
+                        autocomplete="current-password"
                         required
                     >
 
                 </div>
 
                 <p
-                    id="authError"
+                    id="authMessage"
                     class="error-message"
                 ></p>
 
                 <button
-                    id="authButton"
+                    id="authSubmit"
                     class="primary-button"
                     type="submit"
                 >
-                    Log in
+                    Login
                 </button>
 
             </form>
 
+            <button
+                id="authSwitch"
+                class="auth-switch"
+                type="button"
+            >
+                Don't have an account? Sign up
+            </button>
+
             <p class="local-note">
-                Your prototype data stays in this browser.
+                Your account and workload are securely connected
+                to your PRESSURE // OFF profile.
             </p>
 
         </div>
@@ -158,9 +134,349 @@
     </section>
 
 
-    <!-- =================================================
+    <!-- =====================================================
+         PROFILE PAGE
+    ====================================================== -->
+
+    <section
+        id="profilePage"
+        class="profile-page hidden"
+    >
+
+        <header class="topbar profile-topbar">
+
+            <button
+                id="profileBackButton"
+                class="ghost-button"
+                type="button"
+            >
+                ← Dashboard
+            </button>
+
+            <div class="brand">
+                PRESSURE <span>// OFF</span>
+            </div>
+
+            <button
+                id="profileLogoutButton"
+                class="ghost-button"
+                type="button"
+            >
+                Log out
+            </button>
+
+        </header>
+
+
+        <main class="profile-container">
+
+            <!-- PROFILE HERO -->
+
+            <section class="profile-hero-card">
+
+                <div class="profile-avatar-large">
+                    <span id="profileAvatarLetter">
+                        S
+                    </span>
+                </div>
+
+                <div class="profile-main-info">
+
+                    <p class="eyebrow">
+                        YOUR PROFILE
+                    </p>
+
+                    <h1 id="profileName">
+                        Student
+                    </h1>
+
+                    <p
+                        id="profileUsername"
+                        class="profile-username"
+                    >
+                        @student
+                    </p>
+
+                    <div class="profile-tags">
+
+                        <span id="profileRole">
+                            STUDENT
+                        </span>
+
+                        <span id="profileMemberSince">
+                            MEMBER
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- PROFILE STATS -->
+
+            <section class="profile-stats-grid">
+
+                <article class="profile-stat-card">
+
+                    <p class="eyebrow">
+                        TASKS
+                    </p>
+
+                    <strong id="profileTaskCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Total tasks
+                    </span>
+
+                </article>
+
+
+                <article class="profile-stat-card">
+
+                    <p class="eyebrow">
+                        EFFORT
+                    </p>
+
+                    <strong id="profileHours">
+                        0h
+                    </strong>
+
+                    <span>
+                        Planned workload
+                    </span>
+
+                </article>
+
+
+                <article class="profile-stat-card">
+
+                    <p class="eyebrow">
+                        NEXT DEADLINE
+                    </p>
+
+                    <strong id="profileNextDeadline">
+                        —
+                    </strong>
+
+                    <span>
+                        Upcoming task
+                    </span>
+
+                </article>
+
+
+                <article class="profile-stat-card">
+
+                    <p class="eyebrow">
+                        STATUS
+                    </p>
+
+                    <strong id="profilePressureStatus">
+                        CALM
+                    </strong>
+
+                    <span>
+                        Current workload
+                    </span>
+
+                </article>
+
+            </section>
+
+
+            <!-- PROFILE CONTENT -->
+
+            <section class="profile-content-grid">
+
+                <!-- ABOUT -->
+
+                <article class="card profile-about-card">
+
+                    <div class="card-heading">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                ACCOUNT
+                            </p>
+
+                            <h2>
+                                About you
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="profile-detail-list">
+
+                        <div class="profile-detail">
+
+                            <span>
+                                Username
+                            </span>
+
+                            <strong id="profileDetailUsername">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-detail">
+
+                            <span>
+                                Name
+                            </span>
+
+                            <strong id="profileDetailName">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-detail">
+
+                            <span>
+                                Role
+                            </span>
+
+                            <strong id="profileDetailRole">
+                                Student
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-detail">
+
+                            <span>
+                                Email
+                            </span>
+
+                            <strong id="profileDetailEmail">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-detail">
+
+                            <span>
+                                Joined
+                            </span>
+
+                            <strong id="profileDetailJoined">
+                                —
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- CATEGORY BREAKDOWN -->
+
+                <article class="card profile-category-card">
+
+                    <div class="card-heading">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                WORKLOAD
+                            </p>
+
+                            <h2>
+                                Task Breakdown
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        id="profileCategoryBars"
+                        class="profile-category-bars"
+                    ></div>
+
+                    <p
+                        id="profileCategoryEmpty"
+                        class="radar-empty"
+                    >
+                        Add tasks to see your workload breakdown.
+                    </p>
+
+                </article>
+
+            </section>
+
+
+            <!-- RECENT TASKS -->
+
+            <article class="card profile-recent-card">
+
+                <div class="card-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            YOUR WORKLOAD
+                        </p>
+
+                        <h2>
+                            Recent Tasks
+                        </h2>
+
+                    </div>
+
+                    <button
+                        id="profileAddTaskButton"
+                        class="small-add"
+                        type="button"
+                    >
+                        + Add task
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="profileRecentTasks"
+                    class="profile-recent-tasks"
+                ></div>
+
+                <p
+                    id="profileTasksEmpty"
+                    class="radar-empty"
+                >
+                    You haven't added any tasks yet.
+                </p>
+
+            </article>
+
+
+            <footer>
+                PRESSURE // OFF — Student Workload Awareness Prototype
+            </footer>
+
+        </main>
+
+    </section>
+
+
+    <!-- =====================================================
          APPLICATION
-    ================================================== -->
+    ====================================================== -->
 
     <main
         id="app"
@@ -186,7 +502,12 @@
                     🔔
                 </button>
 
-                <div class="user-pill">
+
+                <button
+                    id="profileButton"
+                    class="user-pill profile-button"
+                    type="button"
+                >
 
                     <div
                         id="avatar"
@@ -199,7 +520,8 @@
                         Student
                     </span>
 
-                </div>
+                </button>
+
 
                 <button
                     id="logoutButton"
@@ -231,10 +553,12 @@
 
                 <p class="hero-description">
                     Understand where your academic workload
-                    is building before your week gets away from you.
+                    is building before your week gets away
+                    from you.
                 </p>
 
             </div>
+
 
             <button
                 id="addTaskTop"
@@ -252,7 +576,6 @@
 
         <section class="dashboard-grid">
 
-
             <!-- PRESSURE SCORE -->
 
             <article class="card score-card">
@@ -260,61 +583,93 @@
                 <div class="card-heading">
 
                     <div>
+
                         <p class="eyebrow">
-                            THIS WEEK
+                            PRESSURE SCORE
                         </p>
 
                         <h2>
-                            Weekly Pressure
+                            This week
                         </h2>
+
                     </div>
 
-                    <span class="card-icon">
-                        ◉
+                    <div
+                        id="scoreBadge"
+                        class="score-badge"
+                    >
+                        CALM
+                    </div>
+
+                </div>
+
+
+                <div class="score-display">
+
+                    <strong id="pressureScore">
+                        0
+                    </strong>
+
+                    <span>
+                        / 100
                     </span>
 
                 </div>
 
-                <div class="score-layout">
+
+                <div class="score-meter">
 
                     <div
-                        id="scoreRing"
-                        class="score-ring"
-                    >
+                        id="scoreMeterFill"
+                        class="score-meter-fill"
+                    ></div>
 
-                        <div class="score-inner">
+                </div>
 
-                            <strong id="score">
-                                1
-                            </strong>
 
-                            <span>
-                                / 10
-                            </span>
+                <p
+                    id="scoreMessage"
+                    class="score-message"
+                >
+                    Your workload looks manageable.
+                </p>
 
-                        </div>
+            </article>
 
-                    </div>
+
+            <!-- TOTAL HOURS -->
+
+            <article class="card hours-card">
+
+                <div class="card-heading">
 
                     <div>
 
-                        <h3 id="scoreLabel">
-                            Calm week
-                        </h3>
-
-                        <p id="totalHours">
-                            0h planned
+                        <p class="eyebrow">
+                            PLANNED EFFORT
                         </p>
 
-                        <p class="muted">
-                            Based on effort,
-                            task density and
-                            deadline proximity.
-                        </p>
+                        <h2>
+                            Hours this week
+                        </h2>
 
                     </div>
 
                 </div>
+
+
+                <div class="big-number">
+
+                    <strong id="totalHours">
+                        0h
+                    </strong>
+
+                </div>
+
+                <p class="muted">
+                    Based on effort, task density and
+                    deadline proximity.
+                </p>
 
             </article>
 
@@ -326,6 +681,7 @@
                 <div class="card-heading">
 
                     <div>
+
                         <p class="eyebrow">
                             WORKLOAD DISTRIBUTION
                         </p>
@@ -333,14 +689,17 @@
                         <h2>
                             Pressure Radar
                         </h2>
+
                     </div>
 
                 </div>
+
 
                 <div
                     id="radarBars"
                     class="radar-bars"
                 ></div>
+
 
                 <div
                     id="radarEmpty"
@@ -367,7 +726,7 @@
                 <div>
 
                     <strong id="alertTitle">
-                        Wednesday looks overloaded.
+                        Your week looks overloaded.
                     </strong>
 
                     <p id="alertText">
@@ -386,6 +745,7 @@
                 <div class="card-heading">
 
                     <div>
+
                         <p class="eyebrow">
                             YOUR WEEK
                         </p>
@@ -393,7 +753,9 @@
                         <h2>
                             Weekly View
                         </h2>
+
                     </div>
+
 
                     <button
                         id="addTaskButton"
@@ -404,6 +766,7 @@
                     </button>
 
                 </div>
+
 
                 <div
                     id="weekGrid"
@@ -441,10 +804,12 @@
 
                 </div>
 
+
                 <p class="ai-intro">
                     Ask about your current workload and
                     get a planning recommendation.
                 </p>
+
 
                 <div
                     id="aiMessages"
@@ -467,6 +832,7 @@
                     </div>
 
                 </div>
+
 
                 <div class="quick-prompts">
 
@@ -493,6 +859,7 @@
 
                 </div>
 
+
                 <form
                     id="aiForm"
                     class="ai-form"
@@ -513,6 +880,7 @@
                     </button>
 
                 </form>
+
 
                 <p class="ai-disclaimer">
                     Planning recommendations only.
@@ -541,6 +909,7 @@
 
                     </div>
 
+
                     <button
                         class="small-add"
                         type="button"
@@ -551,15 +920,36 @@
 
                 </div>
 
+
                 <div
                     id="taskList"
                     class="task-list"
                 ></div>
 
+
+                <div
+                    id="taskEmpty"
+                    class="empty-state"
+                >
+                    <div class="empty-icon">
+                        ✓
+                    </div>
+
+                    <h3>
+                        No tasks yet
+                    </h3>
+
+                    <p>
+                        Add your first task to start
+                        understanding your workload.
+                    </p>
+
+                </div>
+
             </article>
 
 
-            <!-- REMINDERS -->
+            <!-- SMART REMINDERS -->
 
             <article class="card reminders-card">
 
@@ -568,12 +958,30 @@
                     <div>
 
                         <p class="eyebrow">
-                            STAY AHEAD
+                            SMART REMINDERS
                         </p>
 
                         <h2>
-                            Smart Reminders
+                            Stay ahead
                         </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="reminder-box">
+
+                    <div>
+
+                        <strong>
+                            Browser reminders
+                        </strong>
+
+                        <p>
+                            Get notified about upcoming
+                            deadlines.
+                        </p>
 
                     </div>
 
@@ -586,6 +994,7 @@
                     </button>
 
                 </div>
+
 
                 <div
                     id="reminderList"
@@ -615,10 +1024,12 @@
 
                 </div>
 
+
                 <div
                     id="suggestions"
                     class="suggestions"
                 ></div>
+
 
                 <p class="disclaimer">
                     Suggestions are planning recommendations,
@@ -639,9 +1050,9 @@
     </main>
 
 
-    <!-- =================================================
+    <!-- =====================================================
          TASK MODAL
-    ================================================== -->
+    ====================================================== -->
 
     <div
         id="taskModal"
@@ -664,6 +1075,7 @@
 
                 </div>
 
+
                 <button
                     id="closeModal"
                     class="close-button"
@@ -673,6 +1085,7 @@
                 </button>
 
             </div>
+
 
             <form id="taskForm">
 
@@ -685,11 +1098,12 @@
                     <input
                         id="taskName"
                         type="text"
-                        placeholder="e.g. Biology Test"
+                        placeholder="e.g. Science project"
                         required
                     >
 
                 </div>
+
 
                 <div class="form-row">
 
@@ -702,15 +1116,15 @@
                         <select id="taskCategory">
 
                             <option>
-                                Test
-                            </option>
-
-                            <option>
                                 Homework
                             </option>
 
                             <option>
                                 Project
+                            </option>
+
+                            <option>
+                                Exam
                             </option>
 
                             <option>
@@ -728,6 +1142,7 @@
                         </select>
 
                     </div>
+
 
                     <div class="field">
 
@@ -748,6 +1163,7 @@
 
                 </div>
 
+
                 <div class="field">
 
                     <label for="taskDate">
@@ -762,6 +1178,7 @@
 
                 </div>
 
+
                 <div class="modal-actions">
 
                     <button
@@ -771,6 +1188,7 @@
                     >
                         Delete
                     </button>
+
 
                     <div class="modal-right-actions">
 
@@ -787,7 +1205,7 @@
                             class="primary-button"
                             type="submit"
                         >
-                            Add Task
+                            Save task
                         </button>
 
                     </div>
@@ -800,7 +1218,11 @@
 
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
     <script src="script.js"></script>
 
 </body>

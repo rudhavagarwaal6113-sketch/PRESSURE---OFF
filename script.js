@@ -1,6 +1,6 @@
 /* =========================================================
    PRESSURE // OFF
-   COMPLETE SCRIPT — CLEAN VERSION
+   COMPLETE SCRIPT — PROFILE PAGE VERSION
 ========================================================= */
 
 
@@ -94,8 +94,58 @@ const aiMessages = $("aiMessages");
 
 
 /* =========================================================
+   REAL PROFILE PAGE DOM
+========================================================= */
+
+const profilePage = $("profilePage");
+const profileButton = $("profileButton");
+const backToDashboard = $("backToDashboard");
+const profilePageLogout = $("profilePageLogout");
+
+const profileAvatarLetter = $("profileAvatarLetter");
+const profileName = $("profileName");
+const profileUsername = $("profileUsername");
+const profileRole = $("profileRole");
+const profileMemberSince = $("profileMemberSince");
+
+const profileTaskCount = $("profileTaskCount");
+const profileHours = $("profileHours");
+const profileNextDeadline = $("profileNextDeadline");
+const profilePressureStatus = $("profilePressureStatus");
+
+const profileDetailUsername =
+    $("profileDetailUsername");
+
+const profileDetailName =
+    $("profileDetailName");
+
+const profileDetailRole =
+    $("profileDetailRole");
+
+const profileDetailEmail =
+    $("profileDetailEmail");
+
+const profileDetailJoined =
+    $("profileDetailJoined");
+
+const profileCategoryBars =
+    $("profileCategoryBars");
+
+const profileCategoryEmpty =
+    $("profileCategoryEmpty");
+
+const profileRecentTasks =
+    $("profileRecentTasks");
+
+const profileTasksEmpty =
+    $("profileTasksEmpty");
+
+const profileAddTaskButton =
+    $("profileAddTaskButton");
+
+
+/* =========================================================
    EXTRA CSS
-   Adds controls that the original CSS doesn't provide.
 ========================================================= */
 
 function injectExtraStyles() {
@@ -104,9 +154,11 @@ function injectExtraStyles() {
         return;
     }
 
-    const style = document.createElement("style");
+    const style =
+        document.createElement("style");
 
-    style.id = "pressureExtraStyles";
+    style.id =
+        "pressureExtraStyles";
 
     style.textContent = `
 
@@ -161,106 +213,334 @@ function injectExtraStyles() {
             margin: 4px 0 0;
         }
 
-        .pressure-profile-panel {
-            position: fixed;
-            top: 78px;
-            right: 24px;
-            width: min(350px, calc(100vw - 32px));
-            z-index: 200;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,.10);
-            border-radius: 18px;
-            background: rgba(15,18,30,.97);
-            box-shadow: 0 20px 60px rgba(0,0,0,.40);
-            backdrop-filter: blur(20px);
-        }
+        /* ================================================
+           PROFILE PAGE
+        ================================================ */
 
-        .pressure-profile-panel.hidden {
+        .profile-page.hidden {
             display: none;
         }
 
-        .profile-top {
+        .profile-page {
+            min-height: 100vh;
+        }
+
+        .profile-container {
+            width: min(1180px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 38px 0 60px;
+        }
+
+        .profile-topbar {
+            width: 100%;
+        }
+
+        .profile-hero-card {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 18px;
+            gap: 28px;
+            padding: 34px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 24px;
+            background: rgba(255,255,255,.035);
+            box-shadow: 0 20px 60px rgba(0,0,0,.20);
         }
 
-        .profile-big-avatar {
-            width: 48px;
-            height: 48px;
+        .profile-avatar-large {
+            width: 110px;
+            height: 110px;
+            min-width: 110px;
             display: grid;
             place-items: center;
-            border-radius: 50%;
-            background: rgba(91,140,255,.15);
-            font-weight: 700;
-            font-size: 20px;
+            border-radius: 28px;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(91,140,255,.30),
+                    rgba(91,140,255,.08)
+                );
+            border: 1px solid rgba(91,140,255,.25);
+            font-size: 46px;
+            font-weight: 800;
         }
 
-        .profile-name {
-            font-weight: 700;
-            font-size: 17px;
+        .profile-main-info {
+            min-width: 0;
+        }
+
+        .profile-main-info h1 {
+            margin: 4px 0 5px;
+            font-size: clamp(30px, 5vw, 48px);
+            line-height: 1;
         }
 
         .profile-username {
-            opacity: .60;
-            font-size: 12px;
-            margin-top: 3px;
+            opacity: .55;
+            font-size: 14px;
         }
 
-        .profile-stat-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+        .profile-tags {
+            display: flex;
+            flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 16px;
+            margin-top: 15px;
         }
 
-        .profile-stat {
-            padding: 12px;
-            border-radius: 12px;
-            background: rgba(255,255,255,.04);
+        .profile-tags span {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(255,255,255,.06);
+            border: 1px solid rgba(255,255,255,.08);
+            font-size: 10px;
+            letter-spacing: .08em;
+            font-weight: 700;
         }
 
-        .profile-stat strong {
+        .profile-stats-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .profile-stat-card {
+            padding: 22px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,.07);
+            background: rgba(255,255,255,.03);
+        }
+
+        .profile-stat-card strong {
             display: block;
-            font-size: 18px;
+            margin: 5px 0;
+            font-size: 29px;
         }
 
-        .profile-stat span {
-            font-size: 11px;
-            opacity: .60;
-        }
-
-        .profile-email {
+        .profile-stat-card > span {
             font-size: 12px;
-            opacity: .60;
-            word-break: break-all;
-            margin-bottom: 15px;
+            opacity: .55;
         }
 
-        .profile-close {
+        .profile-content-grid {
+            display: grid;
+            grid-template-columns:
+                minmax(0, 1fr)
+                minmax(0, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-about-card,
+        .profile-category-card,
+        .profile-recent-card {
+            padding: 24px;
+        }
+
+        .profile-detail-list {
+            display: flex;
+            flex-direction: column;
+            margin-top: 8px;
+        }
+
+        .profile-detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+
+        .profile-detail:last-child {
+            border-bottom: 0;
+        }
+
+        .profile-detail span {
+            font-size: 12px;
+            opacity: .5;
+        }
+
+        .profile-detail strong {
+            max-width: 65%;
+            text-align: right;
+            font-size: 13px;
+            word-break: break-word;
+        }
+
+        .profile-category-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .profile-category-item {
             width: 100%;
+        }
+
+        .profile-category-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 7px;
+            font-size: 12px;
+        }
+
+        .profile-category-head span:last-child {
+            opacity: .55;
+        }
+
+        .profile-category-track {
+            width: 100%;
+            height: 8px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: rgba(255,255,255,.06);
+        }
+
+        .profile-category-fill {
+            height: 100%;
+            min-width: 3px;
+            border-radius: inherit;
+            background: var(--blue, #5b8cff);
+        }
+
+        .profile-recent-tasks {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .profile-recent-task {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 13px 14px;
+            border-radius: 13px;
+            background: rgba(255,255,255,.035);
+            border: 1px solid rgba(255,255,255,.05);
+            cursor: pointer;
+            transition: .18s ease;
+        }
+
+        .profile-recent-task:hover {
+            background: rgba(255,255,255,.06);
+            transform: translateY(-1px);
+        }
+
+        .profile-recent-task-icon {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            border-radius: 10px;
+            background: rgba(91,140,255,.10);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .profile-recent-task-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .profile-recent-task-info strong {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 13px;
+        }
+
+        .profile-recent-task-info span {
+            display: block;
+            margin-top: 3px;
+            font-size: 11px;
+            opacity: .50;
+        }
+
+        .profile-recent-task-effort {
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .profile-page footer {
+            margin-top: 35px;
+        }
+
+        .small-add {
             border: 1px solid rgba(255,255,255,.10);
             background: rgba(255,255,255,.05);
             color: inherit;
-            border-radius: 10px;
-            padding: 9px;
+            border-radius: 9px;
+            padding: 8px 11px;
             cursor: pointer;
+            font-size: 11px;
+        }
+
+        .small-add:hover {
+            background: rgba(255,255,255,.09);
+        }
+
+        @media (max-width: 800px) {
+
+            .profile-stats-grid {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+            .profile-content-grid {
+                grid-template-columns: 1fr;
+            }
+
         }
 
         @media (max-width: 600px) {
-            .pressure-profile-panel {
-                top: 70px;
-                right: 12px;
+
+            .profile-container {
+                width: min(100% - 24px, 1180px);
+                padding-top: 20px;
             }
 
-            .task-actions {
-                gap: 3px;
+            .profile-hero-card {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 24px;
             }
 
-            .task-action {
-                padding: 5px 6px;
+            .profile-avatar-large {
+                width: 82px;
+                height: 82px;
+                min-width: 82px;
+                border-radius: 22px;
+                font-size: 34px;
             }
+
+            .profile-stats-grid {
+                gap: 9px;
+            }
+
+            .profile-stat-card {
+                padding: 17px;
+            }
+
+            .profile-stat-card strong {
+                font-size: 23px;
+            }
+
+            .profile-about-card,
+            .profile-category-card,
+            .profile-recent-card {
+                padding: 18px;
+            }
+
         }
 
     `;
@@ -274,9 +554,7 @@ function injectExtraStyles() {
 ========================================================= */
 
 function usernameToEmail(username) {
-
     return `${username}@pressure-off.internal`;
-
 }
 
 
@@ -287,7 +565,8 @@ function usernameToEmail(username) {
 function showAuthMessage(message) {
 
     if (authError) {
-        authError.textContent = message || "";
+        authError.textContent =
+            message || "";
     }
 
 }
@@ -297,49 +576,69 @@ function setAuthMode(mode) {
 
     authMode = mode;
 
-    const signup = mode === "signup";
+    const signup =
+        mode === "signup";
+
 
     if (authTitle) {
+
         authTitle.textContent =
             signup
                 ? "Create your account"
                 : "Welcome back";
+
     }
 
+
     if (authSubtitle) {
+
         authSubtitle.textContent =
             signup
                 ? "Start understanding your workload."
                 : "See the pressure before it piles up.";
+
     }
 
+
     if (authButton) {
+
         authButton.textContent =
             signup
                 ? "Create account"
                 : "Log in";
+
     }
 
+
     if (nameField) {
+
         nameField.classList.toggle(
             "hidden",
             !signup
         );
+
     }
 
+
     if (loginTab) {
+
         loginTab.classList.toggle(
             "active",
             !signup
         );
+
     }
 
+
     if (signupTab) {
+
         signupTab.classList.toggle(
             "active",
             signup
         );
+
     }
+
 
     showAuthMessage("");
 
@@ -363,6 +662,7 @@ if (signupTab) {
         () => setAuthMode("signup")
     );
 
+
 }
 
 
@@ -380,6 +680,10 @@ function showApp() {
         app.classList.remove("hidden");
     }
 
+    if (profilePage) {
+        profilePage.classList.add("hidden");
+    }
+
 }
 
 
@@ -387,6 +691,10 @@ function showAuth() {
 
     if (app) {
         app.classList.add("hidden");
+    }
+
+    if (profilePage) {
+        profilePage.classList.add("hidden");
     }
 
     if (authScreen) {
@@ -408,15 +716,20 @@ if (authForm) {
 
             event.preventDefault();
 
+
             const username =
                 authUsername
-                    ? authUsername.value.trim().toLowerCase()
+                    ? authUsername.value
+                        .trim()
+                        .toLowerCase()
                     : "";
+
 
             const password =
                 authPassword
                     ? authPassword.value
                     : "";
+
 
             const name =
                 authName
@@ -468,17 +781,23 @@ if (authForm) {
                 try {
 
                     const email =
-                        usernameToEmail(username);
+                        usernameToEmail(
+                            username
+                        );
 
 
                     const {
                         data: existingProfile,
-                        error: profileCheckError
+                        error:
+                            profileCheckError
                     } =
                         await supabaseClient
                             .from("profiles")
                             .select("id")
-                            .eq("username", username)
+                            .eq(
+                                "username",
+                                username
+                            )
                             .maybeSingle();
 
 
@@ -512,20 +831,21 @@ if (authForm) {
                         data,
                         error
                     } =
-                        await supabaseClient.auth.signUp({
+                        await supabaseClient.auth
+                            .signUp({
 
-                            email,
+                                email,
 
-                            password,
+                                password,
 
-                            options: {
-                                data: {
-                                    username,
-                                    name
+                                options: {
+                                    data: {
+                                        username,
+                                        name
+                                    }
                                 }
-                            }
 
-                        });
+                            });
 
 
                     if (error) {
@@ -543,7 +863,10 @@ if (authForm) {
                     }
 
 
-                    if (!data || !data.user) {
+                    if (
+                        !data ||
+                        !data.user
+                    ) {
 
                         showAuthMessage(
                             "Account could not be created."
@@ -553,12 +876,13 @@ if (authForm) {
                     }
 
 
-                    currentUser = data.user;
+                    currentUser =
+                        data.user;
 
 
                     /*
-                       If Supabase returns a session,
-                       continue directly into the app.
+                       Create profile row if a session
+                       is immediately available.
                     */
 
                     if (data.session) {
@@ -567,23 +891,22 @@ if (authForm) {
 
                     } else {
 
-                        /*
-                           This usually means email confirmation
-                           is enabled in Supabase.
-                        */
-
                         showAuthMessage(
                             "Account created. Please log in."
                         );
 
                         setAuthMode("login");
 
+
                         if (authUsername) {
-                            authUsername.value = username;
+                            authUsername.value =
+                                username;
                         }
 
+
                         if (authPassword) {
-                            authPassword.value = "";
+                            authPassword.value =
+                                "";
                         }
 
                     }
@@ -624,7 +947,8 @@ if (authForm) {
                     await supabaseClient.rpc(
                         "get_login_email",
                         {
-                            login_username: username
+                            login_username:
+                                username
                         }
                     );
 
@@ -659,13 +983,14 @@ if (authForm) {
                     data,
                     error
                 } =
-                    await supabaseClient.auth.signInWithPassword({
+                    await supabaseClient.auth
+                        .signInWithPassword({
 
-                        email: loginEmail,
+                            email: loginEmail,
 
-                        password
+                            password
 
-                    });
+                        });
 
 
                 if (error) {
@@ -683,7 +1008,10 @@ if (authForm) {
                 }
 
 
-                if (!data || !data.user) {
+                if (
+                    !data ||
+                    !data.user
+                ) {
 
                     showAuthMessage(
                         "Login succeeded but no user was returned."
@@ -747,7 +1075,7 @@ async function finishAuthentication() {
 
 
 /* =========================================================
-   PROFILE
+   PROFILE DATA
 ========================================================= */
 
 async function loadProfile() {
@@ -766,7 +1094,10 @@ async function loadProfile() {
             await supabaseClient
                 .from("profiles")
                 .select("*")
-                .eq("id", currentUser.id)
+                .eq(
+                    "id",
+                    currentUser.id
+                )
                 .maybeSingle();
 
 
@@ -798,6 +1129,80 @@ async function loadProfile() {
     }
 
 
+    /*
+       If the profile doesn't exist yet, try to
+       create it from Supabase auth metadata.
+    */
+
+    if (!currentProfile) {
+
+        try {
+
+            const metadata =
+                currentUser.user_metadata || {};
+
+
+            const username =
+                metadata.username ||
+                currentUser.email
+                    ?.split("@")[0] ||
+                "student";
+
+
+            const name =
+                metadata.name ||
+                username;
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .insert([{
+
+                        id:
+                            currentUser.id,
+
+                        username,
+
+                        name,
+
+                        role:
+                            "student"
+
+                    }])
+                    .select()
+                    .single();
+
+
+            if (!error) {
+
+                currentProfile =
+                    data;
+
+            } else {
+
+                console.warn(
+                    "PROFILE CREATE WARNING:",
+                    error
+                );
+
+            }
+
+        } catch (error) {
+
+            console.warn(
+                "PROFILE CREATE CRASH:",
+                error
+            );
+
+        }
+
+    }
+
+
     updateProfileUI();
 
 }
@@ -814,7 +1219,8 @@ function getDisplayName() {
         metadata.name ||
         currentProfile?.username ||
         metadata.username ||
-        currentUser?.email?.split("@")[0] ||
+        currentUser?.email
+            ?.split("@")[0] ||
         "Student"
     );
 
@@ -830,11 +1236,38 @@ function getUsername() {
     return (
         currentProfile?.username ||
         metadata.username ||
+        currentUser?.email
+            ?.split("@")[0] ||
         "student"
     );
 
 }
 
+
+function getRole() {
+
+    return (
+        currentProfile?.role ||
+        "student"
+    );
+
+}
+
+
+function getMemberSince() {
+
+    return (
+        currentProfile?.created_at ||
+        currentUser?.created_at ||
+        ""
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE PROFILE UI
+========================================================= */
 
 function updateProfileUI() {
 
@@ -846,9 +1279,11 @@ function updateProfileUI() {
     const name =
         getDisplayName();
 
-
     const username =
         getUsername();
+
+    const role =
+        getRole();
 
 
     if (usernameDisplay) {
@@ -862,7 +1297,9 @@ function updateProfileUI() {
     if (avatar) {
 
         avatar.textContent =
-            name.charAt(0).toUpperCase();
+            name
+                .charAt(0)
+                .toUpperCase();
 
     }
 
@@ -871,103 +1308,18 @@ function updateProfileUI() {
         `PRESSURE // OFF — ${name}`;
 
 
-    setupProfilePanel();
-
-    updateProfilePanel();
+    updateRealProfilePage();
 
 }
 
 
 /* =========================================================
-   PROFILE PANEL
+   REAL PROFILE PAGE
 ========================================================= */
 
-function setupProfilePanel() {
+function updateRealProfilePage() {
 
-    if ($("pressureProfilePanel")) {
-        return;
-    }
-
-
-    const panel =
-        document.createElement("div");
-
-    panel.id =
-        "pressureProfilePanel";
-
-    panel.className =
-        "pressure-profile-panel hidden";
-
-
-    document.body.appendChild(panel);
-
-
-    const userPill =
-        document.querySelector(".user-pill");
-
-
-    const avatarElement =
-        $("avatar");
-
-
-    if (userPill) {
-
-        userPill.style.cursor =
-            "pointer";
-
-        userPill.addEventListener(
-            "click",
-            event => {
-
-                event.stopPropagation();
-
-                toggleProfilePanel();
-
-            }
-        );
-
-    } else if (avatarElement) {
-
-        avatarElement.style.cursor =
-            "pointer";
-
-        avatarElement.addEventListener(
-            "click",
-            toggleProfilePanel
-        );
-
-    }
-
-
-    panel.addEventListener(
-        "click",
-        event => {
-            event.stopPropagation();
-        }
-    );
-
-
-    document.addEventListener(
-        "click",
-        () => {
-
-            panel.classList.add(
-                "hidden"
-            );
-
-        }
-    );
-
-}
-
-
-function updateProfilePanel() {
-
-    const panel =
-        $("pressureProfilePanel");
-
-
-    if (!panel || !currentUser) {
+    if (!currentUser) {
         return;
     }
 
@@ -978,6 +1330,117 @@ function updateProfilePanel() {
     const username =
         getUsername();
 
+    const role =
+        getRole();
+
+    const joined =
+        getMemberSince();
+
+
+    if (profileAvatarLetter) {
+
+        profileAvatarLetter.textContent =
+            name
+                .charAt(0)
+                .toUpperCase();
+
+    }
+
+
+    if (profileName) {
+
+        profileName.textContent =
+            name;
+
+    }
+
+
+    if (profileUsername) {
+
+        profileUsername.textContent =
+            `@${username}`;
+
+    }
+
+
+    if (profileRole) {
+
+        profileRole.textContent =
+            role.toUpperCase();
+
+    }
+
+
+    if (profileMemberSince) {
+
+        profileMemberSince.textContent =
+            joined
+                ? `SINCE ${formatMemberDate(joined)}`
+                : "MEMBER";
+
+    }
+
+
+    if (profileDetailUsername) {
+
+        profileDetailUsername.textContent =
+            `@${username}`;
+
+    }
+
+
+    if (profileDetailName) {
+
+        profileDetailName.textContent =
+            name;
+
+    }
+
+
+    if (profileDetailRole) {
+
+        profileDetailRole.textContent =
+            role.charAt(0).toUpperCase() +
+            role.slice(1);
+
+    }
+
+
+    if (profileDetailEmail) {
+
+        profileDetailEmail.textContent =
+            currentUser.email || "—";
+
+    }
+
+
+    if (profileDetailJoined) {
+
+        profileDetailJoined.textContent =
+            joined
+                ? readableDateFromTimestamp(
+                    joined
+                )
+                : "—";
+
+    }
+
+
+    renderProfileStats();
+
+    renderProfileCategories();
+
+    renderProfileRecentTasks();
+
+}
+
+
+/* =========================================================
+   PROFILE STATS
+========================================================= */
+
+function renderProfileStats() {
+
     const totalHours =
         currentTasks.reduce(
             (sum, task) =>
@@ -987,163 +1450,518 @@ function updateProfilePanel() {
         );
 
 
-    panel.innerHTML = `
-
-        <div class="profile-top">
-
-            <div class="profile-big-avatar">
-                ${escapeHtml(
-                    name.charAt(0).toUpperCase()
-                )}
-            </div>
-
-            <div>
-
-                <div class="profile-name">
-                    ${escapeHtml(name)}
-                </div>
-
-                <div class="profile-username">
-                    @${escapeHtml(username)}
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="profile-stat-grid">
-
-            <div class="profile-stat">
-                <strong>
-                    ${currentTasks.length}
-                </strong>
-                <span>
-                    Tasks
-                </span>
-            </div>
-
-            <div class="profile-stat">
-                <strong>
-                    ${formatHours(totalHours)}
-                </strong>
-                <span>
-                    Planned
-                </span>
-            </div>
-
-        </div>
-
-        <div class="profile-email">
-            ${escapeHtml(currentUser.email || "")}
-        </div>
-
-        <button
-            type="button"
-            class="profile-close"
-            id="profileCloseButton"
-        >
-            Close
-        </button>
-
-    `;
+    const upcoming =
+        [...currentTasks]
+            .filter(
+                task =>
+                    daysUntil(
+                        getTaskDate(task)
+                    ) >= 0
+            )
+            .sort(
+                (a, b) =>
+                    daysUntil(
+                        getTaskDate(a)
+                    ) -
+                    daysUntil(
+                        getTaskDate(b)
+                    )
+            );
 
 
-    const close =
-        $("profileCloseButton");
+    const nextTask =
+        upcoming[0];
 
 
-    if (close) {
+    const score =
+        calculateWeeklyScore();
 
-        close.addEventListener(
-            "click",
-            () => {
 
-                panel.classList.add(
-                    "hidden"
+    let status =
+        "CALM";
+
+
+    if (score >= 8) {
+
+        status =
+            "HIGH";
+
+    } else if (score >= 6) {
+
+        status =
+            "WATCH";
+
+    } else if (score >= 4) {
+
+        status =
+            "BUSY";
+
+    }
+
+
+    if (profileTaskCount) {
+
+        profileTaskCount.textContent =
+            currentTasks.length;
+
+    }
+
+
+    if (profileHours) {
+
+        profileHours.textContent =
+            formatHours(totalHours);
+
+    }
+
+
+    if (profileNextDeadline) {
+
+        if (nextTask) {
+
+            profileNextDeadline.textContent =
+                readableShortDate(
+                    getTaskDate(nextTask)
                 );
 
-            }
-        );
+        } else {
+
+            profileNextDeadline.textContent =
+                "—";
+
+        }
+
+    }
+
+
+    if (profilePressureStatus) {
+
+        profilePressureStatus.textContent =
+            status;
 
     }
 
 }
 
 
-function toggleProfilePanel() {
+/* =========================================================
+   PROFILE CATEGORY BREAKDOWN
+========================================================= */
 
-    const panel =
-        $("pressureProfilePanel");
+function renderProfileCategories() {
 
-
-    if (!panel) {
+    if (!profileCategoryBars) {
         return;
     }
 
 
-    updateProfilePanel();
+    profileCategoryBars.innerHTML = "";
 
 
-    panel.classList.toggle(
-        "hidden"
+    if (!currentTasks.length) {
+
+        if (profileCategoryEmpty) {
+
+            profileCategoryEmpty.style.display =
+                "block";
+
+        }
+
+        return;
+
+    }
+
+
+    if (profileCategoryEmpty) {
+
+        profileCategoryEmpty.style.display =
+            "none";
+
+    }
+
+
+    const categories = {};
+
+
+    currentTasks.forEach(
+        task => {
+
+            const category =
+                task.category ||
+                "Other";
+
+
+            categories[category] =
+                (
+                    categories[category] ||
+                    0
+                ) +
+                (
+                    Number(task.effort) || 0
+                );
+
+        }
+    );
+
+
+    const sorted =
+        Object.entries(categories)
+            .sort(
+                (a, b) =>
+                    b[1] - a[1]
+            );
+
+
+    const max =
+        Math.max(
+            ...sorted.map(
+                item => item[1]
+            ),
+            1
+        );
+
+
+    sorted.forEach(
+        ([category, hours]) => {
+
+            const item =
+                document.createElement("div");
+
+
+            item.className =
+                "profile-category-item";
+
+
+            const percentage =
+                (
+                    hours /
+                    max
+                ) * 100;
+
+
+            item.innerHTML = `
+
+                <div class="profile-category-head">
+
+                    <span>
+                        ${escapeHtml(category)}
+                    </span>
+
+                    <span>
+                        ${formatHours(hours)}
+                    </span>
+
+                </div>
+
+                <div class="profile-category-track">
+
+                    <div
+                        class="profile-category-fill"
+                        style="width:${percentage}%"
+                    ></div>
+
+                </div>
+
+            `;
+
+
+            profileCategoryBars.appendChild(
+                item
+            );
+
+        }
     );
 
 }
 
 
 /* =========================================================
-   LOAD TASKS
+   PROFILE RECENT / UPCOMING TASKS
 ========================================================= */
 
-async function loadTasks() {
+function renderProfileRecentTasks() {
+
+    if (!profileRecentTasks) {
+        return;
+    }
+
+
+    profileRecentTasks.innerHTML = "";
+
+
+    if (!currentTasks.length) {
+
+        if (profileTasksEmpty) {
+
+            profileTasksEmpty.style.display =
+                "block";
+
+        }
+
+        return;
+
+    }
+
+
+    if (profileTasksEmpty) {
+
+        profileTasksEmpty.style.display =
+            "none";
+
+    }
+
+
+    const sorted =
+        [...currentTasks]
+            .sort(
+                (a, b) => {
+
+                    const dateA =
+                        getTaskDate(a);
+
+                    const dateB =
+                        getTaskDate(b);
+
+
+                    return (
+                        new Date(dateA) -
+                        new Date(dateB)
+                    );
+
+                }
+            )
+            .slice(0, 6);
+
+
+    sorted.forEach(
+        task => {
+
+            const element =
+                document.createElement("div");
+
+
+            element.className =
+                "profile-recent-task";
+
+
+            const date =
+                getTaskDate(task);
+
+
+            const days =
+                daysUntil(date);
+
+
+            let deadline;
+
+
+            if (days < 0) {
+
+                deadline =
+                    "Overdue";
+
+            } else if (days === 0) {
+
+                deadline =
+                    "Due today";
+
+            } else if (days === 1) {
+
+                deadline =
+                    "Due tomorrow";
+
+            } else {
+
+                deadline =
+                    `Due ${readableShortDate(
+                        date
+                    )}`;
+
+            }
+
+
+            element.innerHTML = `
+
+                <span class="profile-recent-task-icon">
+
+                    ${getCategoryIcon(
+                        task.category
+                    )}
+
+                </span>
+
+                <span class="profile-recent-task-info">
+
+                    <strong>
+                        ${escapeHtml(
+                            task.name
+                        )}
+                    </strong>
+
+                    <span>
+                        ${escapeHtml(
+                            task.category ||
+                            "Other"
+                        )}
+                        ·
+                        ${escapeHtml(
+                            deadline
+                        )}
+                    </span>
+
+                </span>
+
+                <span class="profile-recent-task-effort">
+
+                    ${formatHours(
+                        task.effort
+                    )}
+
+                </span>
+
+            `;
+
+
+            element.addEventListener(
+                "click",
+                () => {
+
+                    openEditTask(
+                        task.id
+                    );
+
+                }
+            );
+
+
+            profileRecentTasks.appendChild(
+                element
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   PROFILE PAGE NAVIGATION
+========================================================= */
+
+function openProfilePage() {
 
     if (!currentUser) {
         return;
     }
 
 
-    try {
+    if (app) {
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("tasks")
-                .select("*")
-                .eq("user_id", currentUser.id)
-                .order("date", {
-                    ascending: true
-                });
-
-
-        if (error) {
-
-            console.error(
-                "TASK LOAD ERROR:",
-                error
-            );
-
-            currentTasks = [];
-
-            return;
-        }
-
-
-        currentTasks =
-            data || [];
-
-
-    } catch (error) {
-
-        console.error(
-            "TASK LOAD CRASH:",
-            error
+        app.classList.add(
+            "hidden"
         );
 
-        currentTasks = [];
+    }
+
+
+    if (profilePage) {
+
+        profilePage.classList.remove(
+            "hidden"
+        );
 
     }
+
+
+    updateRealProfilePage();
+
+
+    window.scrollTo(
+        0,
+        0
+    );
+
+}
+
+
+function closeProfilePage() {
+
+    if (profilePage) {
+
+        profilePage.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if (app) {
+
+        app.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    window.scrollTo(
+        0,
+        0
+    );
+
+}
+
+
+if (profileButton) {
+
+    profileButton.addEventListener(
+        "click",
+        openProfilePage
+    );
+
+}
+
+
+if (backToDashboard) {
+
+    backToDashboard.addEventListener(
+        "click",
+        closeProfilePage
+    );
+
+}
+
+
+if (profileAddTaskButton) {
+
+    profileAddTaskButton.addEventListener(
+        "click",
+        () => {
+
+            closeProfilePage();
+
+            openAddTask();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   PROFILE PAGE LOGOUT
+========================================================= */
+
+if (profilePageLogout) {
+
+    profilePageLogout.addEventListener(
+        "click",
+        async () => {
+
+            await performLogout();
+
+        }
+    );
 
 }
 
@@ -1152,73 +1970,105 @@ async function loadTasks() {
    LOGOUT
 ========================================================= */
 
+async function performLogout() {
+
+    const buttons = [
+        logoutButton,
+        profilePageLogout
+    ];
+
+
+    buttons.forEach(
+        button => {
+
+            if (button) {
+                button.disabled = true;
+            }
+
+        }
+    );
+
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient.auth.signOut();
+
+
+        if (error) {
+
+            console.error(
+                "LOGOUT ERROR:",
+                error
+            );
+
+            alert(
+                "Could not log out: " +
+                error.message
+            );
+
+            return;
+
+        }
+
+
+        currentUser = null;
+
+        currentProfile = null;
+
+        currentTasks = [];
+
+        editingTaskId = null;
+
+
+        closeTaskModal();
+
+        showAuth();
+
+
+        if (authForm) {
+            authForm.reset();
+        }
+
+
+        setAuthMode("login");
+
+
+    } catch (error) {
+
+        console.error(
+            "LOGOUT CRASH:",
+            error
+        );
+
+        alert(
+            "Something went wrong while logging out."
+        );
+
+    } finally {
+
+        buttons.forEach(
+            button => {
+
+                if (button) {
+                    button.disabled = false;
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
 if (logoutButton) {
 
     logoutButton.addEventListener(
         "click",
-        async () => {
-
-            logoutButton.disabled = true;
-
-            try {
-
-                const {
-                    error
-                } =
-                    await supabaseClient.auth.signOut();
-
-
-                if (error) {
-
-                    console.error(
-                        "LOGOUT ERROR:",
-                        error
-                    );
-
-                    alert(
-                        "Could not log out: " +
-                        error.message
-                    );
-
-                    return;
-                }
-
-
-                currentUser = null;
-                currentProfile = null;
-                currentTasks = [];
-                editingTaskId = null;
-
-
-                closeTaskModal();
-
-                showAuth();
-
-                if (authForm) {
-                    authForm.reset();
-                }
-
-                setAuthMode("login");
-
-
-            } catch (error) {
-
-                console.error(
-                    "LOGOUT CRASH:",
-                    error
-                );
-
-                alert(
-                    "Something went wrong while logging out."
-                );
-
-            } finally {
-
-                logoutButton.disabled = false;
-
-            }
-
-        }
+        performLogout
     );
 
 }
@@ -1243,22 +2093,31 @@ function getLocalDate(offset = 0) {
 
 
     date.setDate(
-        date.getDate() + offset
+        date.getDate() +
+        offset
     );
 
 
     const year =
         date.getFullYear();
 
+
     const month =
         String(
             date.getMonth() + 1
-        ).padStart(2, "0");
+        ).padStart(
+            2,
+            "0"
+        );
+
 
     const day =
         String(
             date.getDate()
-        ).padStart(2, "0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     return `${year}-${month}-${day}`;
@@ -1286,7 +2145,8 @@ function readableDate(dateString) {
 
     const date =
         new Date(
-            dateString + "T00:00:00"
+            dateString +
+            "T00:00:00"
         );
 
 
@@ -1311,7 +2171,8 @@ function readableShortDate(dateString) {
 
     const date =
         new Date(
-            dateString + "T00:00:00"
+            dateString +
+            "T00:00:00"
         );
 
 
@@ -1326,6 +2187,55 @@ function readableShortDate(dateString) {
 }
 
 
+function readableDateFromTimestamp(
+    timestamp
+) {
+
+    if (!timestamp) {
+        return "";
+    }
+
+
+    const date =
+        new Date(timestamp);
+
+
+    return date.toLocaleDateString(
+        undefined,
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+function formatMemberDate(
+    timestamp
+) {
+
+    if (!timestamp) {
+        return "MEMBER";
+    }
+
+
+    const date =
+        new Date(timestamp);
+
+
+    return date.toLocaleDateString(
+        undefined,
+        {
+            month: "short",
+            year: "numeric"
+        }
+    ).toUpperCase();
+
+}
+
+
 function getDayName(dateString) {
 
     if (!dateString) {
@@ -1335,7 +2245,8 @@ function getDayName(dateString) {
 
     const date =
         new Date(
-            dateString + "T00:00:00"
+            dateString +
+            "T00:00:00"
         );
 
 
@@ -1370,7 +2281,8 @@ function daysUntil(dateString) {
 
     const target =
         new Date(
-            dateString + "T00:00:00"
+            dateString +
+            "T00:00:00"
         );
 
 
@@ -1413,7 +2325,9 @@ function formatHours(value) {
 function escapeHtml(value) {
 
     const div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     div.textContent =
@@ -1447,7 +2361,8 @@ function getWeekData() {
         const tasks =
             currentTasks.filter(
                 task =>
-                    getTaskDate(task) === date
+                    getTaskDate(task) ===
+                    date
             );
 
 
@@ -1455,7 +2370,10 @@ function getWeekData() {
             tasks.reduce(
                 (sum, task) =>
                     sum +
-                    (Number(task.effort) || 0),
+                    (
+                        Number(task.effort) ||
+                        0
+                    ),
                 0
             );
 
@@ -1586,7 +2504,7 @@ function renderDashboard() {
 
     renderReminders();
 
-    updateProfilePanel();
+    updateRealProfilePage();
 
 }
 
@@ -1606,20 +2524,30 @@ function calculateWeeklyScore() {
         currentTasks.reduce(
             (sum, task) =>
                 sum +
-                (Number(task.effort) || 0),
+                (
+                    Number(task.effort) ||
+                    0
+                ),
             0
         );
 
 
     const urgentTasks =
         currentTasks.filter(
-            task =>
-                daysUntil(
-                    getTaskDate(task)
-                ) <= 2 &&
-                daysUntil(
-                    getTaskDate(task)
-                ) >= 0
+            task => {
+
+                const days =
+                    daysUntil(
+                        getTaskDate(task)
+                    );
+
+
+                return (
+                    days <= 2 &&
+                    days >= 0
+                );
+
+            }
         ).length;
 
 
@@ -1667,11 +2595,14 @@ function renderScore() {
     const scoreElement =
         $("score");
 
+
     const scoreRing =
         $("scoreRing");
 
+
     const scoreLabel =
         $("scoreLabel");
+
 
     const totalHours =
         $("totalHours");
@@ -1685,19 +2616,27 @@ function renderScore() {
         currentTasks.reduce(
             (sum, task) =>
                 sum +
-                (Number(task.effort) || 0),
+                (
+                    Number(task.effort) ||
+                    0
+                ),
             0
         );
 
 
     if (scoreElement) {
-        scoreElement.textContent = score;
+
+        scoreElement.textContent =
+            score;
+
     }
 
 
     if (totalHours) {
+
         totalHours.textContent =
             `${formatHours(total)} planned`;
+
     }
 
 
@@ -1736,8 +2675,10 @@ function renderScore() {
 
         scoreRing.style.background =
             `conic-gradient(
-                var(--blue) ${percentage}%,
-                rgba(91,140,255,.08) ${percentage}%
+                var(--blue)
+                ${percentage}%,
+                rgba(91,140,255,.08)
+                ${percentage}%
             )`;
 
     }
@@ -1754,6 +2695,7 @@ function renderRadar() {
     const container =
         $("radarBars");
 
+
     const empty =
         $("radarEmpty");
 
@@ -1767,7 +2709,8 @@ function renderRadar() {
         getWeekData();
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
     if (empty) {
@@ -1788,7 +2731,8 @@ function renderRadar() {
     const maxHours =
         Math.max(
             ...week.map(
-                day => day.hours
+                day =>
+                    day.hours
             ),
             1
         );
@@ -1798,7 +2742,9 @@ function renderRadar() {
         day => {
 
             const column =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             column.className =
@@ -1812,7 +2758,9 @@ function renderRadar() {
 
 
             const bar =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             bar.className =
@@ -1834,7 +2782,9 @@ function renderRadar() {
 
 
             const value =
-                document.createElement("span");
+                document.createElement(
+                    "span"
+                );
 
 
             value.className =
@@ -1842,11 +2792,15 @@ function renderRadar() {
 
 
             value.textContent =
-                formatHours(day.hours);
+                formatHours(
+                    day.hours
+                );
 
 
             const dayLabel =
-                document.createElement("span");
+                document.createElement(
+                    "span"
+                );
 
 
             dayLabel.className =
@@ -1866,13 +2820,22 @@ function renderRadar() {
                     );
 
 
-            column.appendChild(value);
+            column.appendChild(
+                value
+            );
 
-            column.appendChild(bar);
+            column.appendChild(
+                bar
+            );
 
-            column.appendChild(dayLabel);
+            column.appendChild(
+                dayLabel
+            );
 
-            container.appendChild(column);
+
+            container.appendChild(
+                column
+            );
 
         }
     );
@@ -1889,8 +2852,10 @@ function renderAlert() {
     const alertCard =
         $("alert");
 
+
     const alertTitle =
         $("alertTitle");
+
 
     const alertText =
         $("alertText");
@@ -1926,7 +2891,8 @@ function renderAlert() {
     const worstDay =
         [...overloaded].sort(
             (a, b) =>
-                b.hours - a.hours
+                b.hours -
+                a.hours
         )[0];
 
 
@@ -1980,7 +2946,8 @@ function renderWeek() {
         getWeekData();
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
     week.forEach(
@@ -1993,7 +2960,9 @@ function renderWeek() {
 
 
             const element =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             element.className =
@@ -2086,7 +3055,9 @@ function renderWeek() {
 
                     ${
                         day.hours > 0
-                            ? `${formatHours(day.hours)} planned`
+                            ? `${formatHours(
+                                day.hours
+                            )} planned`
                             : "Free"
                     }
 
@@ -2096,7 +3067,9 @@ function renderWeek() {
 
 
             element
-                .querySelectorAll(".mini-task")
+                .querySelectorAll(
+                    ".mini-task"
+                )
                 .forEach(
                     button => {
 
@@ -2131,7 +3104,9 @@ function renderWeek() {
    TASK ICON
 ========================================================= */
 
-function getCategoryIcon(category) {
+function getCategoryIcon(
+    category
+) {
 
     const icons = {
 
@@ -2145,7 +3120,10 @@ function getCategoryIcon(category) {
     };
 
 
-    return icons[category] || "•";
+    return (
+        icons[category] ||
+        "•"
+    );
 
 }
 
@@ -2165,7 +3143,8 @@ function renderTasks() {
     }
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
     if (!currentTasks.length) {
@@ -2205,7 +3184,9 @@ function renderTasks() {
         task => {
 
             const row =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             row.className =
@@ -2241,7 +3222,9 @@ function renderTasks() {
             } else {
 
                 deadlineText =
-                    `Due ${readableShortDate(date)}`;
+                    `Due ${readableShortDate(
+                        date
+                    )}`;
 
             }
 
@@ -2266,7 +3249,8 @@ function renderTasks() {
 
                     <small>
                         ${escapeHtml(
-                            task.category || "Other"
+                            task.category ||
+                            "Other"
                         )}
                         ·
                         ${deadlineText}
@@ -2275,7 +3259,9 @@ function renderTasks() {
                 </span>
 
                 <span class="effort">
-                    ${formatHours(task.effort)}
+                    ${formatHours(
+                        task.effort
+                    )}
                 </span>
 
                 <span class="task-actions">
@@ -2300,11 +3286,15 @@ function renderTasks() {
 
 
             const editButton =
-                row.querySelector(".edit");
+                row.querySelector(
+                    ".edit"
+                );
 
 
             const deleteButton =
-                row.querySelector(".delete");
+                row.querySelector(
+                    ".delete"
+                );
 
 
             editButton.addEventListener(
@@ -2372,7 +3362,8 @@ function renderSuggestions() {
     }
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
     const suggestions = [];
@@ -2381,9 +3372,13 @@ function renderSuggestions() {
     if (!currentTasks.length) {
 
         suggestions.push({
-            title: "Add your first task",
+
+            title:
+                "Add your first task",
+
             text:
                 "Add homework, tests, projects or assignments and I'll start analysing your workload."
+
         });
 
     } else {
@@ -2407,6 +3402,7 @@ function renderSuggestions() {
                                 getTaskDate(task)
                             );
 
+
                         return (
                             days >= 0 &&
                             days <= 2
@@ -2428,24 +3424,35 @@ function renderSuggestions() {
         const busiestDay =
             [...week].sort(
                 (a, b) =>
-                    b.hours - a.hours
+                    b.hours -
+                    a.hours
             )[0];
 
 
         const largestTask =
             [...currentTasks].sort(
                 (a, b) =>
-                    (Number(b.effort) || 0) -
-                    (Number(a.effort) || 0)
+                    (
+                        Number(b.effort) ||
+                        0
+                    ) -
+                    (
+                        Number(a.effort) ||
+                        0
+                    )
             )[0];
 
 
         if (overdue.length) {
 
             suggestions.push({
-                title: "Clear overdue work",
+
+                title:
+                    "Clear overdue work",
+
                 text:
                     `"${overdue[0].name}" is overdue. Put it ahead of non-urgent work.`
+
             });
 
         }
@@ -2454,9 +3461,13 @@ function renderSuggestions() {
         if (urgent.length) {
 
             suggestions.push({
-                title: "Protect your deadline",
+
+                title:
+                    "Protect your deadline",
+
                 text:
                     `Start "${urgent[0].name}" soon because its deadline is close.`
+
             });
 
         }
@@ -2468,13 +3479,17 @@ function renderSuggestions() {
         ) {
 
             suggestions.push({
-                title: "Watch your busiest day",
+
+                title:
+                    "Watch your busiest day",
+
                 text:
                     `${getDayName(
                         busiestDay.date
                     )} has ${formatHours(
                         busiestDay.hours
                     )} planned. Move preparation earlier if possible.`
+
             });
 
         }
@@ -2482,24 +3497,34 @@ function renderSuggestions() {
 
         if (
             largestTask &&
-            Number(largestTask.effort) >= 2
+            Number(
+                largestTask.effort
+            ) >= 2
         ) {
 
             suggestions.push({
-                title: "Split the big task",
+
+                title:
+                    "Split the big task",
+
                 text:
                     `"${largestTask.name}" is ${formatHours(
                         largestTask.effort
                     )}. Break it into smaller sessions.`
+
             });
 
         }
 
 
         suggestions.push({
-            title: "Use focused sessions",
+
+            title:
+                "Use focused sessions",
+
             text:
                 "Finish one high-priority task before jumping between several smaller ones."
+
         });
 
     }
@@ -2511,7 +3536,9 @@ function renderSuggestions() {
             (suggestion, index) => {
 
                 const element =
-                    document.createElement("div");
+                    document.createElement(
+                        "div"
+                    );
 
 
                 element.className =
@@ -2568,7 +3595,8 @@ function renderReminders() {
     }
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
     if (!currentTasks.length) {
@@ -2588,6 +3616,7 @@ function renderReminders() {
         `;
 
         return;
+
     }
 
 
@@ -2637,7 +3666,9 @@ function renderReminders() {
             task => {
 
                 const element =
-                    document.createElement("div");
+                    document.createElement(
+                        "div"
+                    );
 
 
                 element.className =
@@ -2717,7 +3748,8 @@ function renderReminders() {
 
 function openAddTask() {
 
-    editingTaskId = null;
+    editingTaskId =
+        null;
 
 
     if (taskForm) {
@@ -2726,46 +3758,60 @@ function openAddTask() {
 
 
     if (taskCategory) {
+
         taskCategory.value =
             "Homework";
+
     }
 
 
     if (taskEffort) {
+
         taskEffort.value =
             "1";
+
     }
 
 
     if (taskDate) {
+
         taskDate.value =
             getLocalDate(0);
+
     }
 
 
     if (modalTitle) {
+
         modalTitle.textContent =
             "Add a task";
+
     }
 
 
     if (saveTaskButton) {
+
         saveTaskButton.textContent =
             "Add Task";
+
     }
 
 
     if (deleteTaskButton) {
+
         deleteTaskButton.classList.add(
             "hidden"
         );
+
     }
 
 
     if (taskModal) {
+
         taskModal.classList.remove(
             "hidden"
         );
+
     }
 
 }
@@ -2791,58 +3837,73 @@ function openEditTask(id) {
 
 
     if (taskName) {
+
         taskName.value =
             task.name || "";
+
     }
 
 
     if (taskCategory) {
+
         taskCategory.value =
-            task.category || "Homework";
+            task.category ||
+            "Homework";
+
     }
 
 
     if (taskEffort) {
+
         taskEffort.value =
             task.effort || 1;
+
     }
 
 
     if (taskDate) {
+
         taskDate.value =
             getTaskDate(task);
+
     }
 
 
     if (modalTitle) {
+
         modalTitle.textContent =
             "Edit task";
+
     }
 
 
     if (saveTaskButton) {
+
         saveTaskButton.textContent =
             "Save changes";
+
     }
 
 
     if (deleteTaskButton) {
+
         deleteTaskButton.classList.remove(
             "hidden"
         );
+
     }
 
 
     if (taskModal) {
+
         taskModal.classList.remove(
             "hidden"
         );
+
     }
 
 }
 
-
-/* Make inline HTML onclick work. */
 
 window.openAddTask =
     openAddTask;
@@ -2964,7 +4025,9 @@ if (taskForm) {
 
             const effort =
                 taskEffort
-                    ? Number(taskEffort.value)
+                    ? Number(
+                        taskEffort.value
+                    )
                     : 0;
 
 
@@ -3022,17 +4085,22 @@ if (taskForm) {
 
 
             if (saveTaskButton) {
-                saveTaskButton.disabled = true;
+
+                saveTaskButton.disabled =
+                    true;
+
             }
 
 
             try {
 
-                /* =================================================
+                /* =============================================
                    UPDATE
-                ================================================= */
+                ============================================= */
 
-                if (editingTaskId !== null) {
+                if (
+                    editingTaskId !== null
+                ) {
 
                     const {
                         data,
@@ -3050,7 +4118,8 @@ if (taskForm) {
 
                                 date,
 
-                                due_date: date
+                                due_date:
+                                    date
 
                             })
                             .eq(
@@ -3085,8 +4154,12 @@ if (taskForm) {
                     const index =
                         currentTasks.findIndex(
                             task =>
-                                String(task.id) ===
-                                String(editingTaskId)
+                                String(
+                                    task.id
+                                ) ===
+                                String(
+                                    editingTaskId
+                                )
                         );
 
 
@@ -3099,9 +4172,9 @@ if (taskForm) {
 
                 }
 
-                /* =================================================
+                /* =============================================
                    CREATE
-                ================================================= */
+                ============================================= */
 
                 else {
 
@@ -3175,7 +4248,10 @@ if (taskForm) {
             } finally {
 
                 if (saveTaskButton) {
-                    saveTaskButton.disabled = false;
+
+                    saveTaskButton.disabled =
+                        false;
+
                 }
 
             }
@@ -3229,7 +4305,10 @@ async function deleteTask(id) {
             await supabaseClient
                 .from("tasks")
                 .delete()
-                .eq("id", id)
+                .eq(
+                    "id",
+                    id
+                )
                 .eq(
                     "user_id",
                     currentUser.id
@@ -3249,6 +4328,7 @@ async function deleteTask(id) {
             );
 
             return;
+
         }
 
 
@@ -3292,7 +4372,8 @@ if (deleteTaskButton) {
         async () => {
 
             if (
-                editingTaskId !== null
+                editingTaskId !==
+                null
             ) {
 
                 await deleteTask(
@@ -3329,7 +4410,8 @@ async function enableNotifications() {
     try {
 
         const permission =
-            await Notification.requestPermission();
+            await Notification
+                .requestPermission();
 
 
         if (
@@ -3418,13 +4500,20 @@ function sendReminderNotification() {
     const urgent =
         [...currentTasks]
             .filter(
-                task =>
-                    daysUntil(
-                        getTaskDate(task)
-                    ) >= 0 &&
-                    daysUntil(
-                        getTaskDate(task)
-                    ) <= 1
+                task => {
+
+                    const days =
+                        daysUntil(
+                            getTaskDate(task)
+                        );
+
+
+                    return (
+                        days >= 0 &&
+                        days <= 1
+                    );
+
+                }
             )
             .sort(
                 (a, b) =>
@@ -3499,7 +4588,9 @@ function addAIMessage(
 
 
     const element =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     element.className =
@@ -3515,7 +4606,9 @@ function addAIMessage(
             </span>
 
             <p>
-                ${escapeHtml(message)}
+                ${escapeHtml(
+                    message
+                )}
             </p>
 
         `;
@@ -3525,7 +4618,9 @@ function addAIMessage(
         element.innerHTML = `
 
             <p>
-                ${escapeHtml(message)}
+                ${escapeHtml(
+                    message
+                )}
             </p>
 
         `;
@@ -3554,7 +4649,10 @@ function analyseWorkload() {
         currentTasks.reduce(
             (sum, task) =>
                 sum +
-                (Number(task.effort) || 0),
+                (
+                    Number(task.effort) ||
+                    0
+                ),
             0
         );
 
@@ -3566,7 +4664,8 @@ function analyseWorkload() {
     const busiestDay =
         [...week].sort(
             (a, b) =>
-                b.hours - a.hours
+                b.hours -
+                a.hours
         )[0];
 
 
@@ -3587,6 +4686,7 @@ function analyseWorkload() {
                     daysUntil(
                         getTaskDate(task)
                     );
+
 
                 return (
                     days >= 0 &&
@@ -3635,7 +4735,9 @@ function analyseWorkload() {
    AI RESPONSE
 ========================================================= */
 
-function generateAIResponse(question) {
+function generateAIResponse(
+    question
+) {
 
     const q =
         question
@@ -3690,7 +4792,9 @@ function generateAIResponse(question) {
 
             return (
                 `Start with "${top.name}". ` +
-                `It is due today and needs about ${formatHours(top.effort)}. ` +
+                `It is due today and needs about ${formatHours(
+                    top.effort
+                )}. ` +
                 `Finish this before moving to lower-pressure work.`
             );
 
@@ -3707,7 +4811,9 @@ function generateAIResponse(question) {
                 `I'd start with "${task.name}". ` +
                 `It is due ${readableDate(
                     getTaskDate(task)
-                )} and needs about ${formatHours(task.effort)}. ` +
+                )} and needs about ${formatHours(
+                    task.effort
+                )}. ` +
                 `Starting it now should reduce future pressure.`
             );
 
@@ -3751,7 +4857,9 @@ function generateAIResponse(question) {
                 `Your highest-priority task is "${task.name}". ` +
                 `It is due ${readableDate(
                     getTaskDate(task)
-                )}, needs about ${formatHours(task.effort)}, ` +
+                )}, needs about ${formatHours(
+                    task.effort
+                )}, ` +
                 `and has ${remaining} remaining. ` +
                 `I'd tackle this before lower-pressure tasks.`
             );
@@ -3829,15 +4937,22 @@ function generateAIResponse(question) {
             const worst =
                 [...overloaded].sort(
                     (a, b) =>
-                        b.hours - a.hours
+                        b.hours -
+                        a.hours
                 )[0];
 
 
             const moveTask =
                 [...worst.tasks].sort(
                     (a, b) =>
-                        (Number(b.effort) || 0) -
-                        (Number(a.effort) || 0)
+                        (
+                            Number(b.effort) ||
+                            0
+                        ) -
+                        (
+                            Number(a.effort) ||
+                            0
+                        )
                 )[0];
 
 
@@ -3898,7 +5013,9 @@ function generateAIResponse(question) {
             return (
                 `Your next major deadline is "${analysis.nextTask.name}" ` +
                 `on ${readableDate(
-                    getTaskDate(analysis.nextTask)
+                    getTaskDate(
+                        analysis.nextTask
+                    )
                 )}.`
             );
 
@@ -4152,7 +5269,8 @@ async function checkSession() {
             data,
             error
         } =
-            await supabaseClient.auth.getSession();
+            await supabaseClient.auth
+                .getSession();
 
 
         if (error) {
@@ -4256,15 +5374,14 @@ document.addEventListener(
 
             closeTaskModal();
 
-            const profilePanel =
-                $("pressureProfilePanel");
-
-
-            if (profilePanel) {
-
-                profilePanel.classList.add(
+            if (
+                profilePage &&
+                !profilePage.classList.contains(
                     "hidden"
-                );
+                )
+            ) {
+
+                closeProfilePage();
 
             }
 

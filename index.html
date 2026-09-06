@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,13 +24,9 @@
     >
 
     <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=League+Spartan:wght@500;600;700&display=swap"
         rel="stylesheet"
     >
-
-    <script
-        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-    ></script>
 
     <link
         rel="stylesheet"
@@ -39,35 +36,77 @@
 
 <body>
 
-    <!-- =====================================================
+    <!-- =================================================
          AUTH SCREEN
-    ====================================================== -->
+    ================================================== -->
 
     <section
         id="authScreen"
         class="auth-screen"
     >
 
+        <div class="auth-glow"></div>
+
         <div class="auth-card">
 
-            <div class="auth-brand">
+            <div class="brand">
                 PRESSURE <span>// OFF</span>
             </div>
 
-            <p class="eyebrow">
-                STUDENT WORKLOAD AWARENESS
-            </p>
+            <div class="auth-tabs">
 
-            <h1 id="authTitle">
-                Welcome Back
-            </h1>
+                <button
+                    id="loginTab"
+                    class="auth-tab active"
+                    type="button"
+                >
+                    Log in
+                </button>
 
-            <p class="auth-description">
-                Understand your workload before it becomes
-                overwhelming.
-            </p>
+                <button
+                    id="signupTab"
+                    class="auth-tab"
+                    type="button"
+                >
+                    Create account
+                </button>
+
+            </div>
+
+            <div class="auth-heading">
+
+                <p class="eyebrow">
+                    STUDENT WORKLOAD AWARENESS
+                </p>
+
+                <h1 id="authTitle">
+                    Welcome back
+                </h1>
+
+                <p id="authSubtitle">
+                    See the pressure before it piles up.
+                </p>
+
+            </div>
 
             <form id="authForm">
+
+                <div
+                    id="nameField"
+                    class="field hidden"
+                >
+
+                    <label for="authName">
+                        Your name
+                    </label>
+
+                    <input
+                        id="authName"
+                        type="text"
+                        placeholder="Alex"
+                    >
+
+                </div>
 
                 <div class="field">
 
@@ -79,7 +118,6 @@
                         id="authUsername"
                         type="text"
                         placeholder="Choose a username"
-                        autocomplete="username"
                         required
                     >
 
@@ -95,38 +133,28 @@
                         id="authPassword"
                         type="password"
                         placeholder="••••••••"
-                        autocomplete="current-password"
                         required
                     >
 
                 </div>
 
                 <p
-                    id="authMessage"
+                    id="authError"
                     class="error-message"
                 ></p>
 
                 <button
-                    id="authSubmit"
+                    id="authButton"
                     class="primary-button"
                     type="submit"
                 >
-                    Login
+                    Log in
                 </button>
 
             </form>
 
-            <button
-                id="authSwitch"
-                class="auth-switch"
-                type="button"
-            >
-                Don't have an account? Sign up
-            </button>
-
             <p class="local-note">
-                Your account and workload are securely connected
-                to your PRESSURE // OFF profile.
+                Your prototype data stays in this browser.
             </p>
 
         </div>
@@ -134,19 +162,518 @@
     </section>
 
 
-    <!-- =====================================================
-         PROFILE PAGE
-    ====================================================== -->
+    <!-- =================================================
+         APPLICATION / HOMEPAGE
+    ================================================== -->
+
+    <main
+        id="app"
+        class="app hidden"
+    >
+
+        <!-- NAVIGATION -->
+
+        <header class="topbar">
+
+            <div class="brand">
+                PRESSURE <span>// OFF</span>
+            </div>
+
+            <div class="top-actions">
+
+                <button
+                    id="notificationButton"
+                    class="icon-button"
+                    title="Enable reminders"
+                    type="button"
+                >
+                    🔔
+                </button>
+
+                <!-- Dynamic profile button -->
+
+                <button
+                    id="profileButton"
+                    class="user-pill profile-button"
+                    type="button"
+                >
+
+                    <div
+                        id="avatar"
+                        class="avatar"
+                    >
+                        A
+                    </div>
+
+                    <span id="username">
+                        Student
+                    </span>
+
+                </button>
+
+                <button
+                    id="logoutButton"
+                    class="ghost-button"
+                    type="button"
+                >
+                    Log out
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div>
+
+                <p class="eyebrow">
+                    WEEKLY WORKLOAD AWARENESS
+                </p>
+
+                <h1>
+                    See the pressure<br>
+                    <span>before it piles up.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Understand where your academic workload
+                    is building before your week gets away from you.
+                </p>
+
+            </div>
+
+            <button
+                id="addTaskTop"
+                class="primary-button add-button"
+                type="button"
+            >
+                <span>+</span>
+                Add Task
+            </button>
+
+        </section>
+
+
+        <!-- =================================================
+             DASHBOARD GRID
+        ================================================== -->
+
+        <section class="dashboard-grid">
+
+
+            <!-- PRESSURE SCORE -->
+
+            <article class="card score-card">
+
+                <div class="card-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            THIS WEEK
+                        </p>
+
+                        <h2>
+                            Weekly Pressure
+                        </h2>
+
+                    </div>
+
+                    <span class="card-icon">
+                        ◉
+                    </span>
+
+                </div>
+
+                <div class="score-layout">
+
+                    <div
+                        id="scoreRing"
+                        class="score-ring"
+                    >
+
+                        <div class="score-inner">
+
+                            <strong id="score">
+                                1
+                            </strong>
+
+                            <span>
+                                / 10
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div>
+
+                        <h3 id="scoreLabel">
+                            Calm week
+                        </h3>
+
+                        <p id="totalHours">
+                            0h planned
+                        </p>
+
+                        <p class="muted">
+                            Based on effort,
+                            task density and
+                            deadline proximity.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRESSURE RADAR -->
+
+            <article class="card radar-card">
+
+                <div class="card-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            WORKLOAD DISTRIBUTION
+                        </p>
+
+                        <h2>
+                            Pressure Radar
+                        </h2>
+
+                    </div>
+
+                </div>
+
+                <div
+                    id="radarBars"
+                    class="radar-bars"
+                ></div>
+
+                <div
+                    id="radarEmpty"
+                    class="radar-empty"
+                >
+                    Add tasks to see your workload
+                    distribution.
+                </div>
+
+            </article>
+
+
+            <!-- ALERT -->
+
+            <article
+                id="alert"
+                class="alert-card hidden"
+            >
+
+                <div class="alert-symbol">
+                    ⚠
+                </div>
+
+                <div>
+
+                    <strong id="alertTitle">
+                        Wednesday looks overloaded.
+                    </strong>
+
+                    <p id="alertText">
+                        Consider starting a project earlier.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- WEEK -->
+
+            <article class="card week-card">
+
+                <div class="card-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            YOUR WEEK
+                        </p>
+
+                        <h2>
+                            Weekly View
+                        </h2>
+
+                    </div>
+
+                    <button
+                        id="addTaskButton"
+                        class="small-add"
+                        type="button"
+                    >
+                        + Add task
+                    </button>
+
+                </div>
+
+                <div
+                    id="weekGrid"
+                    class="week-grid"
+                ></div>
+
+            </article>
+
+
+            <!-- AI ASSISTANT -->
+
+            <article class="card ai-card">
+
+                <div class="ai-header">
+
+                    <div class="ai-orb">
+                        ✦
+                    </div>
+
+                    <div>
+
+                        <p class="eyebrow">
+                            PRESSURE // OFF
+                        </p>
+
+                        <h2>
+                            Workload Assistant
+                        </h2>
+
+                    </div>
+
+                    <span class="ai-status">
+                        PLANNING MODE
+                    </span>
+
+                </div>
+
+                <p class="ai-intro">
+                    Ask about your current workload and
+                    get a planning recommendation.
+                </p>
+
+                <div
+                    id="aiMessages"
+                    class="ai-messages"
+                >
+
+                    <div class="ai-message assistant">
+
+                        <span class="message-icon">
+                            ✦
+                        </span>
+
+                        <p>
+                            I can look at your tasks,
+                            effort and deadlines to help
+                            you decide what deserves
+                            attention first.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="quick-prompts">
+
+                    <button
+                        type="button"
+                        data-prompt="What should I work on today?"
+                    >
+                        What should I work on today?
+                    </button>
+
+                    <button
+                        type="button"
+                        data-prompt="Which day is going to be hardest?"
+                    >
+                        Which day is hardest?
+                    </button>
+
+                    <button
+                        type="button"
+                        data-prompt="How can I reduce my pressure?"
+                    >
+                        How can I reduce pressure?
+                    </button>
+
+                </div>
+
+                <form
+                    id="aiForm"
+                    class="ai-form"
+                >
+
+                    <input
+                        id="aiInput"
+                        type="text"
+                        placeholder="Ask about your workload..."
+                        autocomplete="off"
+                    >
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Ask
+                    </button>
+
+                </form>
+
+                <p class="ai-disclaimer">
+                    Planning recommendations only.
+                    Not professional, academic, medical,
+                    or mental-health advice.
+                </p>
+
+            </article>
+
+
+            <!-- TASKS -->
+
+            <article class="card tasks-card">
+
+                <div class="card-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            YOUR WORKLOAD
+                        </p>
+
+                        <h2>
+                            All Tasks
+                        </h2>
+
+                    </div>
+
+                    <button
+                        class="small-add"
+                        type="button"
+                        onclick="openAddTask()"
+                    >
+                        + Add
+                    </button>
+
+                </div>
+
+                <div
+                    id="taskList"
+                    class="task-list"
+                ></div>
+
+            </article>
+
+
+            <!-- REMINDERS -->
+
+            <article class="card reminders-card">
+
+                <div class="card-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            STAY AHEAD
+                        </p>
+
+                        <h2>
+                            Smart Reminders
+                        </h2>
+
+                    </div>
+
+                    <button
+                        id="notificationButton2"
+                        class="reminder-enable"
+                        type="button"
+                    >
+                        Enable
+                    </button>
+
+                </div>
+
+                <div
+                    id="reminderList"
+                    class="reminder-list"
+                ></div>
+
+            </article>
+
+
+            <!-- SUGGESTIONS -->
+
+            <article class="card suggestions-card">
+
+                <div class="card-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            PLANNING SUPPORT
+                        </p>
+
+                        <h2>
+                            Pressure // OFF Suggestions
+                        </h2>
+
+                    </div>
+
+                </div>
+
+                <div
+                    id="suggestions"
+                    class="suggestions"
+                ></div>
+
+                <p class="disclaimer">
+                    Suggestions are planning recommendations,
+                    not guarantees or professional advice.
+                </p>
+
+            </article>
+
+
+        </section>
+
+
+        <!-- FOOTER -->
+
+        <footer>
+            PRESSURE // OFF — Student Workload Awareness Prototype
+        </footer>
+
+    </main>
+
+
+    <!-- =================================================
+         REAL PROFILE PAGE
+         Still inside index.html
+    ================================================== -->
 
     <section
         id="profilePage"
         class="profile-page hidden"
     >
 
+        <!-- PROFILE NAVIGATION -->
+
         <header class="topbar profile-topbar">
 
             <button
-                id="profileBackButton"
+                id="backToDashboard"
                 class="ghost-button"
                 type="button"
             >
@@ -158,7 +685,7 @@
             </div>
 
             <button
-                id="profileLogoutButton"
+                id="profilePageLogout"
                 class="ghost-button"
                 type="button"
             >
@@ -170,14 +697,17 @@
 
         <main class="profile-container">
 
+
             <!-- PROFILE HERO -->
 
             <section class="profile-hero-card">
 
                 <div class="profile-avatar-large">
+
                     <span id="profileAvatarLetter">
                         S
                     </span>
+
                 </div>
 
                 <div class="profile-main-info">
@@ -214,7 +744,7 @@
             </section>
 
 
-            <!-- PROFILE STATS -->
+            <!-- PROFILE LIVE STATS -->
 
             <section class="profile-stats-grid">
 
@@ -288,11 +818,12 @@
             </section>
 
 
-            <!-- PROFILE CONTENT -->
+            <!-- PROFILE INFORMATION -->
 
             <section class="profile-content-grid">
 
-                <!-- ABOUT -->
+
+                <!-- ACCOUNT -->
 
                 <article class="card profile-about-card">
 
@@ -312,8 +843,8 @@
 
                     </div>
 
-
                     <div class="profile-detail-list">
+
 
                         <div class="profile-detail">
 
@@ -379,6 +910,7 @@
 
                         </div>
 
+
                     </div>
 
                 </article>
@@ -418,6 +950,7 @@
 
                 </article>
 
+
             </section>
 
 
@@ -455,6 +988,7 @@
                     class="profile-recent-tasks"
                 ></div>
 
+
                 <p
                     id="profileTasksEmpty"
                     class="radar-empty"
@@ -469,590 +1003,15 @@
                 PRESSURE // OFF — Student Workload Awareness Prototype
             </footer>
 
+
         </main>
 
     </section>
 
 
-    <!-- =====================================================
-         APPLICATION
-    ====================================================== -->
-
-    <main
-        id="app"
-        class="app hidden"
-    >
-
-        <!-- NAVIGATION -->
-
-        <header class="topbar">
-
-            <div class="brand">
-                PRESSURE <span>// OFF</span>
-            </div>
-
-            <div class="top-actions">
-
-                <button
-                    id="notificationButton"
-                    class="icon-button"
-                    title="Enable reminders"
-                    type="button"
-                >
-                    🔔
-                </button>
-
-
-                <button
-                    id="profileButton"
-                    class="user-pill profile-button"
-                    type="button"
-                >
-
-                    <div
-                        id="avatar"
-                        class="avatar"
-                    >
-                        A
-                    </div>
-
-                    <span id="username">
-                        Student
-                    </span>
-
-                </button>
-
-
-                <button
-                    id="logoutButton"
-                    class="ghost-button"
-                    type="button"
-                >
-                    Log out
-                </button>
-
-            </div>
-
-        </header>
-
-
-        <!-- HERO -->
-
-        <section class="hero">
-
-            <div>
-
-                <p class="eyebrow">
-                    WEEKLY WORKLOAD AWARENESS
-                </p>
-
-                <h1>
-                    See the pressure<br>
-                    <span>before it piles up.</span>
-                </h1>
-
-                <p class="hero-description">
-                    Understand where your academic workload
-                    is building before your week gets away
-                    from you.
-                </p>
-
-            </div>
-
-
-            <button
-                id="addTaskTop"
-                class="primary-button add-button"
-                type="button"
-            >
-                <span>+</span>
-                Add Task
-            </button>
-
-        </section>
-
-
-        <!-- MAIN GRID -->
-
-        <section class="dashboard-grid">
-
-            <!-- PRESSURE SCORE -->
-
-            <article class="card score-card">
-
-                <div class="card-heading">
-
-                    <div>
-
-                        <p class="eyebrow">
-                            PRESSURE SCORE
-                        </p>
-
-                        <h2>
-                            This week
-                        </h2>
-
-                    </div>
-
-                    <div
-                        id="scoreBadge"
-                        class="score-badge"
-                    >
-                        CALM
-                    </div>
-
-                </div>
-
-
-                <div class="score-display">
-
-                    <strong id="pressureScore">
-                        0
-                    </strong>
-
-                    <span>
-                        / 100
-                    </span>
-
-                </div>
-
-
-                <div class="score-meter">
-
-                    <div
-                        id="scoreMeterFill"
-                        class="score-meter-fill"
-                    ></div>
-
-                </div>
-
-
-                <p
-                    id="scoreMessage"
-                    class="score-message"
-                >
-                    Your workload looks manageable.
-                </p>
-
-            </article>
-
-
-            <!-- TOTAL HOURS -->
-
-            <article class="card hours-card">
-
-                <div class="card-heading">
-
-                    <div>
-
-                        <p class="eyebrow">
-                            PLANNED EFFORT
-                        </p>
-
-                        <h2>
-                            Hours this week
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-                <div class="big-number">
-
-                    <strong id="totalHours">
-                        0h
-                    </strong>
-
-                </div>
-
-                <p class="muted">
-                    Based on effort, task density and
-                    deadline proximity.
-                </p>
-
-            </article>
-
-
-            <!-- PRESSURE RADAR -->
-
-            <article class="card radar-card">
-
-                <div class="card-heading">
-
-                    <div>
-
-                        <p class="eyebrow">
-                            WORKLOAD DISTRIBUTION
-                        </p>
-
-                        <h2>
-                            Pressure Radar
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="radarBars"
-                    class="radar-bars"
-                ></div>
-
-
-                <div
-                    id="radarEmpty"
-                    class="radar-empty"
-                >
-                    Add tasks to see your workload
-                    distribution.
-                </div>
-
-            </article>
-
-
-            <!-- ALERT -->
-
-            <article
-                id="alert"
-                class="alert-card hidden"
-            >
-
-                <div class="alert-symbol">
-                    ⚠
-                </div>
-
-                <div>
-
-                    <strong id="alertTitle">
-                        Your week looks overloaded.
-                    </strong>
-
-                    <p id="alertText">
-                        Consider starting a project earlier.
-                    </p>
-
-                </div>
-
-            </article>
-
-
-            <!-- WEEK -->
-
-            <article class="card week-card">
-
-                <div class="card-heading">
-
-                    <div>
-
-                        <p class="eyebrow">
-                            YOUR WEEK
-                        </p>
-
-                        <h2>
-                            Weekly View
-                        </h2>
-
-                    </div>
-
-
-                    <button
-                        id="addTaskButton"
-                        class="small-add"
-                        type="button"
-                    >
-                        + Add task
-                    </button>
-
-                </div>
-
-
-                <div
-                    id="weekGrid"
-                    class="week-grid"
-                ></div>
-
-            </article>
-
-
-            <!-- AI ASSISTANT -->
-
-            <article class="card ai-card">
-
-                <div class="ai-header">
-
-                    <div class="ai-orb">
-                        ✦
-                    </div>
-
-                    <div>
-
-                        <p class="eyebrow">
-                            PRESSURE // OFF
-                        </p>
-
-                        <h2>
-                            Workload Assistant
-                        </h2>
-
-                    </div>
-
-                    <span class="ai-status">
-                        PLANNING MODE
-                    </span>
-
-                </div>
-
-
-                <p class="ai-intro">
-                    Ask about your current workload and
-                    get a planning recommendation.
-                </p>
-
-
-                <div
-                    id="aiMessages"
-                    class="ai-messages"
-                >
-
-                    <div class="ai-message assistant">
-
-                        <span class="message-icon">
-                            ✦
-                        </span>
-
-                        <p>
-                            I can look at your tasks,
-                            effort and deadlines to help
-                            you decide what deserves
-                            attention first.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="quick-prompts">
-
-                    <button
-                        type="button"
-                        data-prompt="What should I work on today?"
-                    >
-                        What should I work on today?
-                    </button>
-
-                    <button
-                        type="button"
-                        data-prompt="Which day is going to be hardest?"
-                    >
-                        Which day is hardest?
-                    </button>
-
-                    <button
-                        type="button"
-                        data-prompt="How can I reduce my pressure?"
-                    >
-                        How can I reduce pressure?
-                    </button>
-
-                </div>
-
-
-                <form
-                    id="aiForm"
-                    class="ai-form"
-                >
-
-                    <input
-                        id="aiInput"
-                        type="text"
-                        placeholder="Ask about your workload..."
-                        autocomplete="off"
-                    >
-
-                    <button
-                        type="submit"
-                        class="primary-button"
-                    >
-                        Ask
-                    </button>
-
-                </form>
-
-
-                <p class="ai-disclaimer">
-                    Planning recommendations only.
-                    Not professional, academic, medical,
-                    or mental-health advice.
-                </p>
-
-            </article>
-
-
-            <!-- TASKS -->
-
-            <article class="card tasks-card">
-
-                <div class="card-heading">
-
-                    <div>
-
-                        <p class="eyebrow">
-                            YOUR WORKLOAD
-                        </p>
-
-                        <h2>
-                            All Tasks
-                        </h2>
-
-                    </div>
-
-
-                    <button
-                        class="small-add"
-                        type="button"
-                        onclick="openAddTask()"
-                    >
-                        + Add
-                    </button>
-
-                </div>
-
-
-                <div
-                    id="taskList"
-                    class="task-list"
-                ></div>
-
-
-                <div
-                    id="taskEmpty"
-                    class="empty-state"
-                >
-                    <div class="empty-icon">
-                        ✓
-                    </div>
-
-                    <h3>
-                        No tasks yet
-                    </h3>
-
-                    <p>
-                        Add your first task to start
-                        understanding your workload.
-                    </p>
-
-                </div>
-
-            </article>
-
-
-            <!-- SMART REMINDERS -->
-
-            <article class="card reminders-card">
-
-                <div class="card-heading">
-
-                    <div>
-
-                        <p class="eyebrow">
-                            SMART REMINDERS
-                        </p>
-
-                        <h2>
-                            Stay ahead
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-                <div class="reminder-box">
-
-                    <div>
-
-                        <strong>
-                            Browser reminders
-                        </strong>
-
-                        <p>
-                            Get notified about upcoming
-                            deadlines.
-                        </p>
-
-                    </div>
-
-                    <button
-                        id="notificationButton2"
-                        class="reminder-enable"
-                        type="button"
-                    >
-                        Enable
-                    </button>
-
-                </div>
-
-
-                <div
-                    id="reminderList"
-                    class="reminder-list"
-                ></div>
-
-            </article>
-
-
-            <!-- SUGGESTIONS -->
-
-            <article class="card suggestions-card">
-
-                <div class="card-heading">
-
-                    <div>
-
-                        <p class="eyebrow">
-                            PLANNING SUPPORT
-                        </p>
-
-                        <h2>
-                            Pressure // OFF Suggestions
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="suggestions"
-                    class="suggestions"
-                ></div>
-
-
-                <p class="disclaimer">
-                    Suggestions are planning recommendations,
-                    not guarantees or professional advice.
-                </p>
-
-            </article>
-
-        </section>
-
-
-        <!-- FOOTER -->
-
-        <footer>
-            PRESSURE // OFF — Student Workload Awareness Prototype
-        </footer>
-
-    </main>
-
-
-    <!-- =====================================================
+    <!-- =================================================
          TASK MODAL
-    ====================================================== -->
+    ================================================== -->
 
     <div
         id="taskModal"
@@ -1075,7 +1034,6 @@
 
                 </div>
 
-
                 <button
                     id="closeModal"
                     class="close-button"
@@ -1089,6 +1047,7 @@
 
             <form id="taskForm">
 
+
                 <div class="field">
 
                     <label for="taskName">
@@ -1098,7 +1057,7 @@
                     <input
                         id="taskName"
                         type="text"
-                        placeholder="e.g. Science project"
+                        placeholder="e.g. Biology Test"
                         required
                     >
 
@@ -1106,6 +1065,7 @@
 
 
                 <div class="form-row">
+
 
                     <div class="field">
 
@@ -1116,15 +1076,15 @@
                         <select id="taskCategory">
 
                             <option>
+                                Test
+                            </option>
+
+                            <option>
                                 Homework
                             </option>
 
                             <option>
                                 Project
-                            </option>
-
-                            <option>
-                                Exam
                             </option>
 
                             <option>
@@ -1161,6 +1121,7 @@
 
                     </div>
 
+
                 </div>
 
 
@@ -1180,6 +1141,7 @@
 
 
                 <div class="modal-actions">
+
 
                     <button
                         id="deleteTask"
@@ -1205,12 +1167,14 @@
                             class="primary-button"
                             type="submit"
                         >
-                            Save task
+                            Add Task
                         </button>
 
                     </div>
 
+
                 </div>
+
 
             </form>
 
@@ -1219,12 +1183,15 @@
     </div>
 
 
-    <!-- =====================================================
-         JAVASCRIPT
-    ====================================================== -->
+    <!-- =================================================
+         SCRIPTS
+    ================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script src="script.js"></script>
 
 </body>
 
 </html>
+```

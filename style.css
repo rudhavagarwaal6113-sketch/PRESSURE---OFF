@@ -1061,3 +1061,38 @@ footer {
     }
 
 }
+
+.task-edit {
+    color: var(--blue-light);
+    background: rgba(91,140,255,.08);
+    border: 1px solid rgba(91,140,255,.15);
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 10px;
+}
+
+.task-edit:hover {
+    background: rgba(91,140,255,.16);
+}
+
+.task-row {
+    transition: .2s;
+}
+
+.task-row:hover {
+    transform: translateY(-1px);
+}
+
+.task-row .effort {
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.task-info small {
+    display: block;
+    margin-top: 3px;
+}
+
+.hidden {
+    display: none !important;
+}

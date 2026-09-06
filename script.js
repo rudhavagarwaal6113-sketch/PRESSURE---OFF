@@ -2981,6 +2981,427 @@ function getAssistantResponse(question) {
 
 }
 /* =========================================================
+   AI ASSISTANT
+========================================================= */
+
+const aiForm =
+    document.getElementById("aiForm");
+
+const aiInput =
+    document.getElementById("aiInput");
+
+const aiMessages =
+    document.getElementById("aiMessages");
+
+
+function addAIMessage(message, type = "assistant") {
+
+    if (!aiMessages)
+        return;
+
+    const messageElement =
+        document.createElement("div");
+
+    messageElement.className =
+        `ai-message ${type}`;
+
+    if (type === "assistant") {
+
+        messageElement.innerHTML = `
+            <span class="message-icon">
+                ✦
+            </span>
+
+            <p>
+                ${escapeHtml(message)}
+            </p>
+        `;
+
+    } else {
+
+        messageElement.innerHTML = `
+            <p>
+                ${escapeHtml(message)}
+            </p>
+        `;
+
+    }
+
+    aiMessages.appendChild(
+        messageElement
+    );
+
+    aiMessages.scrollTop =
+        aiMessages.scrollHeight;
+
+}
+
+
+/* =========================================================
+   ANALYSE WORKLOAD
+========================================================= */
+
+function getWorkloadAnalysis() {
+
+    if (!currentTasks.length) {
+
+        return {
+            totalEffort: 0,
+            busiestDay: null,
+            busiestTasks: [],
+            upcomingTask: null
+        };
+
+    }
+
+    const dayEffort = {};
+
+
+    currentTasks.forEach(
+        task => {
+
+            const date = task.date;
+
+            if (!dayEffort[date]) {
+
+                dayEffort[date] = 0;
+
+            }
+
+            dayEffort[date] +=
+                Number(task.effort) || 0;
+
+        }
+    );
+
+
+    const busiestDate =
+        Object.keys(dayEffort)
+            .sort(
+                (a, b) =>
+                    dayEffort[b] -
+                    dayEffort[a]
+            )[0];
+
+
+    const busiestTasks =
+        currentTasks.filter(
+            task =>
+                task.date === busiestDate
+        );
+
+
+    const upcomingTask =
+        [...currentTasks]
+            .filter(
+                task =>
+                    daysUntil(task.date) >= 0
+            )
+            .sort(
+                (a, b) =>
+                    new Date(a.date) -
+                    new Date(b.date)
+            )[0];
+
+
+    const totalEffort =
+        currentTasks.reduce(
+            (total, task) =>
+                total +
+                (Number(task.effort) || 0),
+            0
+        );
+
+
+    return {
+
+        totalEffort,
+
+        busiestDay:
+            busiestDate,
+
+        busiestTasks,
+
+        upcomingTask
+
+    };
+
+}
+
+
+/* =========================================================
+   GENERATE AI RESPONSE
+========================================================= */
+
+function generateAIResponse(question) {
+
+    const query =
+        question.toLowerCase();
+
+    const analysis =
+        getWorkloadAnalysis();
+
+
+    /* NO TASKS */
+
+    if (!currentTasks.length) {
+
+        return `
+You don't have any tasks yet.
+
+Add your upcoming homework, tests, projects or assignments and I'll analyse your workload and help you decide what to do first.
+        `.trim();
+
+    }
+
+
+    /* WHAT SHOULD I WORK ON */
+
+    if (
+        query.includes("what should") ||
+        query.includes("work on") ||
+        query.includes("today")
+    ) {
+
+        if (analysis.upcomingTask) {
+
+            const task =
+                analysis.upcomingTask;
+
+            return `
+I would start with "${task.name}".
+
+It is due ${readableDate(task.date)} and needs about ${task.effort} hour(s) of effort.
+
+My recommendation: do at least a small part of it today instead of waiting until the deadline.
+            `.trim();
+
+        }
+
+    }
+
+
+    /* HARDEST DAY */
+
+    if (
+        query.includes("hardest") ||
+        query.includes("busiest") ||
+        query.includes("which day")
+    ) {
+
+        if (analysis.busiestDay) {
+
+            const date =
+                readableDate(
+                    analysis.busiestDay
+                );
+
+            const tasks =
+                analysis.busiestTasks
+                    .map(
+                        task =>
+                            task.name
+                    )
+                    .join(", ");
+
+
+            return `
+Your busiest day is ${date}.
+
+Tasks planned for that day: ${tasks}.
+
+I recommend moving some preparation earlier so you don't have to do everything close to the deadline.
+            `.trim();
+
+        }
+
+    }
+
+
+    /* REDUCE PRESSURE */
+
+    if (
+        query.includes("reduce") ||
+        query.includes("pressure") ||
+        query.includes("stress")
+    ) {
+
+        if (
+            analysis.busiestDay &&
+            analysis.busiestTasks.length > 1
+        ) {
+
+            return `
+The best way to reduce your pressure is to start preparing for ${analysis.busiestTasks[0].name} before ${readableDate(analysis.busiestDay)}.
+
+You currently have ${analysis.busiestTasks.length} tasks concentrated around your busiest day.
+
+Try splitting the biggest task into smaller sessions across earlier days.
+            `.trim();
+
+        }
+
+
+        return `
+Your workload is currently manageable.
+
+To keep it that way, avoid leaving large tasks until their due date and start the highest-effort task first.
+        `.trim();
+
+    }
+
+
+    /* DEADLINES */
+
+    if (
+        query.includes("deadline") ||
+        query.includes("due")
+    ) {
+
+        if (analysis.upcomingTask) {
+
+            return `
+Your next upcoming deadline is "${analysis.upcomingTask.name}" on ${readableDate(analysis.upcomingTask.date)}.
+
+It needs approximately ${analysis.upcomingTask.effort} hour(s) of work.
+
+I would prioritise this before tasks with later deadlines.
+            `.trim();
+
+        }
+
+    }
+
+
+    /* DEFAULT SMART RESPONSE */
+
+    const taskCount =
+        currentTasks.length;
+
+
+    return `
+You currently have ${taskCount} task${taskCount === 1 ? "" : "s"} planned, requiring approximately ${analysis.totalEffort} hour(s) of effort in total.
+
+Your busiest day is ${analysis.busiestDay ? readableDate(analysis.busiestDay) : "currently unclear"}.
+
+Try asking me things like:
+
+• What should I work on today?
+• Which day is hardest?
+• What deadline should I prioritise?
+• How can I reduce my workload pressure?
+    `.trim();
+
+}
+
+
+/* =========================================================
+   AI FORM
+========================================================= */
+
+if (aiForm) {
+
+    aiForm.addEventListener(
+        "submit",
+        event => {
+
+            event.preventDefault();
+
+
+            const question =
+                aiInput.value.trim();
+
+
+            if (!question)
+                return;
+
+
+            addAIMessage(
+                question,
+                "user"
+            );
+
+
+            aiInput.value = "";
+
+
+            setTimeout(
+                () => {
+
+                    const response =
+                        generateAIResponse(
+                            question
+                        );
+
+
+                    addAIMessage(
+                        response,
+                        "assistant"
+                    );
+
+                },
+                400
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   QUICK PROMPTS
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".quick-prompts button"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const question =
+                        button.dataset.prompt;
+
+
+                    if (!question)
+                        return;
+
+
+                    addAIMessage(
+                        question,
+                        "user"
+                    );
+
+
+                    setTimeout(
+                        () => {
+
+                            const response =
+                                generateAIResponse(
+                                    question
+                                );
+
+
+                            addAIMessage(
+                                response,
+                                "assistant"
+                            );
+
+                        },
+                        300
+                    );
+
+                }
+            );
+
+        }
+    );
+/* =========================================================
    INITIALIZE
 ========================================================= */
 

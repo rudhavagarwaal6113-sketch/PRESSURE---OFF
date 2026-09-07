@@ -1072,19 +1072,7 @@ async function finishAuthentication() {
     updateNotificationButtons();
 
 }
-
-
-/* =========================================================
-   PROFILE DATA
-========================================================= */
-
-async function loadProfile() {
-
-    if (!currentUser) {
-        return;
-    }
-
-   async function loadTasks() {
+async function loadTasks() {
     if (!currentUser) {
         currentTasks = [];
         return;
@@ -1109,6 +1097,16 @@ async function loadProfile() {
         currentTasks = [];
     }
 }
+
+/* =========================================================
+   PROFILE DATA
+========================================================= */
+
+async function loadProfile() {
+
+    if (!currentUser) {
+        return;
+    }
 
     try {
 

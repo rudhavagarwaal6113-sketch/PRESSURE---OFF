@@ -1084,6 +1084,31 @@ async function loadProfile() {
         return;
     }
 
+   async function loadTasks() {
+    if (!currentUser) {
+        currentTasks = [];
+        return;
+    }
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("tasks")
+            .select("*")
+            .eq("user_id", currentUser.id);
+
+        if (error) {
+            console.error("TASK LOAD ERROR:", error);
+            currentTasks = [];
+            return;
+        }
+
+        currentTasks = data || [];
+
+    } catch (error) {
+        console.error("TASK LOAD CRASH:", error);
+        currentTasks = [];
+    }
+}
 
     try {
 

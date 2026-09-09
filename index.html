@@ -162,7 +162,7 @@
 
 
     <!-- =================================================
-         APPLICATION / HOMEPAGE
+         APPLICATION
     ================================================== -->
 
     <main
@@ -170,7 +170,9 @@
         class="app hidden"
     >
 
-        <!-- NAVIGATION -->
+        <!-- =================================================
+             NAVIGATION
+        ================================================== -->
 
         <header class="topbar">
 
@@ -179,6 +181,8 @@
             </div>
 
             <div class="top-actions">
+
+                <!-- Notifications -->
 
                 <button
                     id="notificationButton"
@@ -189,7 +193,21 @@
                     🔔
                 </button>
 
-                <!-- Dynamic profile button -->
+
+                <!-- ADMIN BUTTON
+                     Hidden automatically for normal users -->
+
+                <button
+                    id="adminButton"
+                    class="ghost-button admin-only"
+                    type="button"
+                    style="display: none;"
+                >
+                    ⚙ Admin
+                </button>
+
+
+                <!-- PROFILE -->
 
                 <button
                     id="profileButton"
@@ -210,6 +228,9 @@
 
                 </button>
 
+
+                <!-- LOGOUT -->
+
                 <button
                     id="logoutButton"
                     class="ghost-button"
@@ -223,7 +244,9 @@
         </header>
 
 
-        <!-- HERO -->
+        <!-- =================================================
+             HERO
+        ================================================== -->
 
         <section class="hero">
 
@@ -264,7 +287,9 @@
         <section class="dashboard-grid">
 
 
-            <!-- PRESSURE SCORE -->
+            <!-- =================================================
+                 PRESSURE SCORE
+            ================================================== -->
 
             <article class="card score-card">
 
@@ -332,7 +357,9 @@
             </article>
 
 
-            <!-- PRESSURE RADAR -->
+            <!-- =================================================
+                 PRESSURE RADAR
+            ================================================== -->
 
             <article class="card radar-card">
 
@@ -368,7 +395,9 @@
             </article>
 
 
-            <!-- ALERT -->
+            <!-- =================================================
+                 ALERT
+            ================================================== -->
 
             <article
                 id="alert"
@@ -394,7 +423,9 @@
             </article>
 
 
-            <!-- WEEK -->
+            <!-- =================================================
+                 WEEK
+            ================================================== -->
 
             <article class="card week-card">
 
@@ -430,7 +461,9 @@
             </article>
 
 
-            <!-- AI ASSISTANT -->
+            <!-- =================================================
+                 AI ASSISTANT
+            ================================================== -->
 
             <article class="card ai-card">
 
@@ -540,7 +573,9 @@
             </article>
 
 
-            <!-- TASKS -->
+            <!-- =================================================
+                 TASKS
+            ================================================== -->
 
             <article class="card tasks-card">
 
@@ -576,7 +611,9 @@
             </article>
 
 
-            <!-- REMINDERS -->
+            <!-- =================================================
+                 REMINDERS
+            ================================================== -->
 
             <article class="card reminders-card">
 
@@ -612,7 +649,9 @@
             </article>
 
 
-            <!-- SUGGESTIONS -->
+            <!-- =================================================
+                 SUGGESTIONS
+            ================================================== -->
 
             <article class="card suggestions-card">
 
@@ -648,7 +687,9 @@
         </section>
 
 
-        <!-- FOOTER -->
+        <!-- =================================================
+             DASHBOARD FOOTER
+        ================================================== -->
 
         <footer>
             PRESSURE // OFF — Student Workload Awareness Prototype
@@ -697,7 +738,9 @@
         <main class="profile-container">
 
 
-            <!-- PROFILE HERO -->
+            <!-- =================================================
+                 PROFILE HERO
+            ================================================== -->
 
             <section class="profile-hero-card">
 
@@ -743,7 +786,9 @@
             </section>
 
 
-            <!-- PROFILE LIVE STATS -->
+            <!-- =================================================
+                 PROFILE LIVE STATS
+            ================================================== -->
 
             <section class="profile-stats-grid">
 
@@ -817,7 +862,9 @@
             </section>
 
 
-            <!-- PROFILE INFORMATION -->
+            <!-- =================================================
+                 PROFILE INFORMATION
+            ================================================== -->
 
             <section class="profile-content-grid">
 
@@ -953,7 +1000,9 @@
             </section>
 
 
-            <!-- RECENT TASKS -->
+            <!-- =================================================
+                 RECENT TASKS
+            ================================================== -->
 
             <article class="card profile-recent-card">
 
@@ -1000,6 +1049,246 @@
 
             <footer>
                 PRESSURE // OFF — Student Workload Awareness Prototype
+            </footer>
+
+
+        </main>
+
+    </section>
+
+
+    <!-- =================================================
+         ADMIN PANEL
+    ================================================== -->
+
+    <section
+        id="adminPage"
+        class="admin-page hidden"
+    >
+
+        <!-- ADMIN NAVIGATION -->
+
+        <header class="topbar profile-topbar">
+
+            <button
+                id="backFromAdmin"
+                class="ghost-button"
+                type="button"
+            >
+                ← Dashboard
+            </button>
+
+            <div class="brand">
+                PRESSURE <span>// OFF</span>
+            </div>
+
+            <button
+                id="adminLogoutButton"
+                class="ghost-button"
+                type="button"
+            >
+                Log out
+            </button>
+
+        </header>
+
+
+        <main class="admin-container">
+
+
+            <!-- =================================================
+                 ADMIN HEADER
+            ================================================== -->
+
+            <section class="admin-page-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        SYSTEM CONTROL
+                    </p>
+
+                    <h1>
+                        Admin Panel
+                    </h1>
+
+                    <p>
+                        Manage PRESSURE // OFF users
+                        and platform activity.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ADMIN STATISTICS
+            ================================================== -->
+
+            <section class="admin-stat-grid">
+
+
+                <article class="admin-stat-card">
+
+                    <span class="profile-detail-label">
+                        TOTAL USERS
+                    </span>
+
+                    <strong id="adminTotalUsers">
+                        0
+                    </strong>
+
+                    <small>
+                        Registered accounts
+                    </small>
+
+                </article>
+
+
+                <article class="admin-stat-card">
+
+                    <span class="profile-detail-label">
+                        ACTIVE ADMINS
+                    </span>
+
+                    <strong id="adminTotalAdmins">
+                        0
+                    </strong>
+
+                    <small>
+                        Administrator accounts
+                    </small>
+
+                </article>
+
+
+                <article class="admin-stat-card">
+
+                    <span class="profile-detail-label">
+                        TOTAL TASKS
+                    </span>
+
+                    <strong id="adminTotalTasks">
+                        0
+                    </strong>
+
+                    <small>
+                        Across all users
+                    </small>
+
+                </article>
+
+
+            </section>
+
+
+            <!-- =================================================
+                 USER MANAGEMENT
+            ================================================== -->
+
+            <article class="card admin-users-card">
+
+                <div class="card-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            USER MANAGEMENT
+                        </p>
+
+                        <h2>
+                            All Users
+                        </h2>
+
+                        <p class="muted">
+                            View and manage registered
+                            PRESSURE // OFF accounts.
+                        </p>
+
+                    </div>
+
+                    <button
+                        id="refreshAdminUsers"
+                        class="small-add"
+                        type="button"
+                    >
+                        ↻ Refresh
+                    </button>
+
+                </div>
+
+
+                <!-- SEARCH -->
+
+                <div class="admin-search">
+
+                    <input
+                        id="adminUserSearch"
+                        type="search"
+                        placeholder="Search users..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <!-- USER LIST -->
+
+                <div
+                    id="adminUsersList"
+                    class="admin-users-list"
+                >
+
+                    <div class="admin-empty-state">
+
+                        <strong>
+                            Loading users...
+                        </strong>
+
+                        <p>
+                            Please wait while the
+                            user list loads.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- =================================================
+                 ADMIN WARNING
+            ================================================== -->
+
+            <article class="admin-warning-card">
+
+                <div class="alert-symbol">
+                    ⚠
+                </div>
+
+                <div>
+
+                    <strong>
+                        Administrator controls
+                    </strong>
+
+                    <p>
+                        Changes made here can permanently
+                        affect user accounts and their data.
+                        Only use these controls when necessary.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- ADMIN FOOTER -->
+
+            <footer>
+                PRESSURE // OFF — Administrator Console
             </footer>
 
 

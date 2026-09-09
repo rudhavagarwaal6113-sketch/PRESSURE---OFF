@@ -6147,6 +6147,95 @@ async function loadAdminUsers() {
         `;
     }
 }
+function renderAdminUsers(users) {
+
+    const list = $("adminUsersList");
+
+    if (!list) return;
+
+    if (!users.length) {
+        list.innerHTML = `
+            <div class="admin-empty-state">
+                <strong>No users found</strong>
+                <p>There are currently no registered users.</p>
+            </div>
+        `;
+        return;
+    }
+
+    list.innerHTML = users.map(user => {
+
+        const initials =
+            (user.name || user.username || "?")
+                .trim()
+                .charAt(0)
+                .toUpperCase();
+
+        const created =
+            user.created_at
+                ? new Date(user.created_at)
+                    .toLocaleDateString()
+                : "Unknown";
+
+        const adminBadge = user.is_admin
+            ? `<span class="admin-badge">ADMIN</span>`
+            : "";
+
+        const deleteButton =
+            user.id === currentUser.id || user.is_admin
+                ? ""
+                : `
+                    <button
+                        class="admin-delete-button"
+                        type="button"
+                        onclick="adminDeleteUser('${user.id}')"
+                    >
+                        Delete
+                    </button>
+                `;
+
+        return `
+            <article
+                class="admin-user-row"
+                data-username="${escapeHtml(
+                    (user.username || "").toLowerCase()
+                )}"
+                data-name="${escapeHtml(
+                    (user.name || "").toLowerCase()
+                )}"
+            >
+
+                <div class="admin-user-avatar">
+                    ${escapeHtml(initials)}
+                </div>
+
+                <div class="admin-user-info">
+                    <strong>
+                        ${escapeHtml(user.name || "Unnamed")}
+                        ${adminBadge}
+                    </strong>
+
+                    <span>
+                        @${escapeHtml(user.username || "unknown")}
+                    </span>
+
+                    <small>
+                        Joined ${escapeHtml(created)}
+                    </small>
+                </div>
+
+                <div class="admin-user-meta">
+                    <span>
+                        ${escapeHtml(user.role || "student")}
+                    </span>
+
+                    ${deleteButton}
+                </div>
+
+            </article>
+        `;
+    }).join("");
+}
 /* =========================================================
    ADMIN — DELETE USER
 ========================================================= */

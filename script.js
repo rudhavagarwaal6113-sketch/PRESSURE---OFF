@@ -1,6 +1,6 @@
 /* =========================================================
    PRESSURE // OFF
-   COMPLETE SCRIPT — PROFILE PAGE VERSION
+   COMPLETE SCRIPT — PROFILE + ADMIN VERSION
 ========================================================= */
 
 
@@ -28,6 +28,8 @@ const supabaseClient =
 let currentUser = null;
 let currentProfile = null;
 let currentTasks = [];
+
+let adminUsers = [];
 
 let authMode = "login";
 let editingTaskId = null;
@@ -142,6 +144,41 @@ const profileTasksEmpty =
 
 const profileAddTaskButton =
     $("profileAddTaskButton");
+
+
+/* =========================================================
+   ADMIN DOM
+========================================================= */
+
+const adminButton =
+    $("adminButton");
+
+const adminPage =
+    $("adminPage");
+
+const backFromAdmin =
+    $("backFromAdmin");
+
+const adminLogoutButton =
+    $("adminLogoutButton");
+
+const adminTotalUsers =
+    $("adminTotalUsers");
+
+const adminTotalAdmins =
+    $("adminTotalAdmins");
+
+const adminTotalTasks =
+    $("adminTotalTasks");
+
+const refreshAdminUsers =
+    $("refreshAdminUsers");
+
+const adminUserSearch =
+    $("adminUserSearch");
+
+const adminUsersList =
+    $("adminUsersList");
 
 
 /* =========================================================
@@ -662,7 +699,6 @@ if (signupTab) {
         () => setAuthMode("signup")
     );
 
-
 }
 
 
@@ -684,6 +720,10 @@ function showApp() {
         profilePage.classList.add("hidden");
     }
 
+    if (adminPage) {
+        adminPage.classList.add("hidden");
+    }
+
 }
 
 
@@ -695,6 +735,10 @@ function showAuth() {
 
     if (profilePage) {
         profilePage.classList.add("hidden");
+    }
+
+    if (adminPage) {
+        adminPage.classList.add("hidden");
     }
 
     if (authScreen) {
@@ -879,11 +923,6 @@ if (authForm) {
                     currentUser =
                         data.user;
 
-
-                    /*
-                       Create profile row if a session
-                       is immediately available.
-                    */
 
                     if (data.session) {
 
@@ -1071,32 +1110,71 @@ async function finishAuthentication() {
 
     updateNotificationButtons();
 
+    updateAdminVisibility();
+
 }
+
+
+/* =========================================================
+   LOAD TASKS
+========================================================= */
+
 async function loadTasks() {
+
     if (!currentUser) {
+
         currentTasks = [];
+
         return;
+
     }
+
 
     try {
-        const { data, error } = await supabaseClient
-            .from("tasks")
-            .select("*")
-            .eq("user_id", currentUser.id);
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("tasks")
+                .select("*")
+                .eq(
+                    "user_id",
+                    currentUser.id
+                );
+
 
         if (error) {
-            console.error("TASK LOAD ERROR:", error);
+
+            console.error(
+                "TASK LOAD ERROR:",
+                error
+            );
+
             currentTasks = [];
+
             return;
+
         }
 
-        currentTasks = data || [];
+
+        currentTasks =
+            data || [];
 
     } catch (error) {
-        console.error("TASK LOAD CRASH:", error);
+
+        console.error(
+            "TASK LOAD CRASH:",
+            error
+        );
+
         currentTasks = [];
+
     }
+
 }
+
 
 /* =========================================================
    PROFILE DATA
@@ -1107,6 +1185,7 @@ async function loadProfile() {
     if (!currentUser) {
         return;
     }
+
 
     try {
 
@@ -1151,11 +1230,6 @@ async function loadProfile() {
 
     }
 
-
-    /*
-       If the profile doesn't exist yet, try to
-       create it from Supabase auth metadata.
-    */
 
     if (!currentProfile) {
 
@@ -1227,6 +1301,8 @@ async function loadProfile() {
 
 
     updateProfileUI();
+
+    updateAdminVisibility();
 
 }
 
@@ -1305,9 +1381,6 @@ function updateProfileUI() {
     const username =
         getUsername();
 
-    const role =
-        getRole();
-
 
     if (usernameDisplay) {
 
@@ -1332,6 +1405,8 @@ function updateProfileUI() {
 
 
     updateRealProfilePage();
+
+    updateAdminVisibility();
 
 }
 
@@ -1887,6 +1962,15 @@ function openProfilePage() {
     }
 
 
+    if (adminPage) {
+
+        adminPage.classList.add(
+            "hidden"
+        );
+
+    }
+
+
     if (profilePage) {
 
         profilePage.classList.remove(
@@ -1997,7 +2081,8 @@ async function performLogout() {
 
     const buttons = [
         logoutButton,
-        profilePageLogout
+        profilePageLogout,
+        adminLogoutButton
     ];
 
 
@@ -2042,6 +2127,8 @@ async function performLogout() {
         currentProfile = null;
 
         currentTasks = [];
+
+        adminUsers = [];
 
         editingTaskId = null;
 
@@ -2090,6 +2177,16 @@ async function performLogout() {
 if (logoutButton) {
 
     logoutButton.addEventListener(
+        "click",
+        performLogout
+    );
+
+}
+
+
+if (adminLogoutButton) {
+
+    adminLogoutButton.addEventListener(
         "click",
         performLogout
     );
@@ -4117,10 +4214,6 @@ if (taskForm) {
 
             try {
 
-                /* =============================================
-                   UPDATE
-                ============================================= */
-
                 if (
                     editingTaskId !== null
                 ) {
@@ -4194,10 +4287,6 @@ if (taskForm) {
                     }
 
                 }
-
-                /* =============================================
-                   CREATE
-                ============================================= */
 
                 else {
 
@@ -4782,10 +4871,6 @@ function generateAIResponse(
     }
 
 
-    /* =====================================================
-       TODAY / NOW
-    ===================================================== */
-
     if (
         q.includes("today") ||
         q.includes("now") ||
@@ -4845,10 +4930,6 @@ function generateAIResponse(
     }
 
 
-    /* =====================================================
-       PRIORITY
-    ===================================================== */
-
     if (
         q.includes("priority") ||
         q.includes("priorit") ||
@@ -4892,10 +4973,6 @@ function generateAIResponse(
     }
 
 
-    /* =====================================================
-       HARDEST / BUSIEST DAY
-    ===================================================== */
-
     if (
         q.includes("hardest") ||
         q.includes("busiest") ||
@@ -4935,10 +5012,6 @@ function generateAIResponse(
 
     }
 
-
-    /* =====================================================
-       PRESSURE / STRESS
-    ===================================================== */
 
     if (
         q.includes("pressure") ||
@@ -4999,10 +5072,6 @@ function generateAIResponse(
     }
 
 
-    /* =====================================================
-       DEADLINES
-    ===================================================== */
-
     if (
         q.includes("deadline") ||
         q.includes("due") ||
@@ -5047,10 +5116,6 @@ function generateAIResponse(
     }
 
 
-    /* =====================================================
-       HOURS / WORKLOAD
-    ===================================================== */
-
     if (
         q.includes("how many hours") ||
         q.includes("hours") ||
@@ -5072,10 +5137,6 @@ function generateAIResponse(
 
     }
 
-
-    /* =====================================================
-       PLAN
-    ===================================================== */
 
     if (
         q.includes("plan") ||
@@ -5115,10 +5176,6 @@ function generateAIResponse(
     }
 
 
-    /* =====================================================
-       OVERDUE
-    ===================================================== */
-
     if (
         q.includes("overdue") ||
         q.includes("late")
@@ -5141,10 +5198,6 @@ function generateAIResponse(
 
     }
 
-
-    /* =====================================================
-       GENERAL
-    ===================================================== */
 
     return (
         `I've analysed your workload:\n\n` +
@@ -5281,6 +5334,953 @@ document
 
 
 /* =========================================================
+   ADMIN — VISIBILITY
+========================================================= */
+
+function isCurrentUserAdmin() {
+
+    return (
+        !!currentUser &&
+        currentProfile?.is_admin === true
+    );
+
+}
+
+
+function updateAdminVisibility() {
+
+    const admin =
+        isCurrentUserAdmin();
+
+
+    if (adminButton) {
+
+        adminButton.style.display =
+            admin
+                ? "inline-flex"
+                : "none";
+
+    }
+
+
+    if (!admin && adminPage) {
+
+        adminPage.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ADMIN — OPEN PAGE
+========================================================= */
+
+async function openAdminPage() {
+
+    if (!currentUser) {
+
+        alert(
+            "You must be logged in."
+        );
+
+        return;
+
+    }
+
+
+    if (!isCurrentUserAdmin()) {
+
+        alert(
+            "Admin access required."
+        );
+
+        return;
+
+    }
+
+
+    if (app) {
+
+        app.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if (profilePage) {
+
+        profilePage.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if (adminPage) {
+
+        adminPage.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    window.scrollTo(
+        0,
+        0
+    );
+
+
+    await loadAdminUsers();
+
+}
+
+
+/* =========================================================
+   ADMIN — CLOSE PAGE
+========================================================= */
+
+function closeAdminPage() {
+
+    if (adminPage) {
+
+        adminPage.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if (app) {
+
+        app.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    window.scrollTo(
+        0,
+        0
+    );
+
+}
+
+
+if (adminButton) {
+
+    adminButton.addEventListener(
+        "click",
+        openAdminPage
+    );
+
+}
+
+
+if (backFromAdmin) {
+
+    backFromAdmin.addEventListener(
+        "click",
+        closeAdminPage
+    );
+
+}
+
+
+/* =========================================================
+   ADMIN — GET SESSION
+========================================================= */
+
+async function getAdminSession() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth.getSession();
+
+
+    if (error) {
+
+        console.error(
+            "ADMIN SESSION ERROR:",
+            error
+        );
+
+        return null;
+
+    }
+
+
+    return data?.session || null;
+
+}
+
+
+/* =========================================================
+   ADMIN — LOAD USERS
+========================================================= */
+
+async function loadAdminUsers() {
+
+    if (!adminUsersList) {
+        return;
+    }
+
+
+    if (!isCurrentUserAdmin()) {
+
+        adminUsersList.innerHTML = `
+
+            <div class="admin-empty-state">
+
+                <strong>
+                    Access denied
+                </strong>
+
+                <p>
+                    Administrator access is required.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    adminUsersList.innerHTML = `
+
+        <div class="admin-empty-state">
+
+            <strong>
+                Loading users...
+            </strong>
+
+            <p>
+                Please wait while the user list loads.
+            </p>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const session =
+            await getAdminSession();
+
+
+        if (!session) {
+
+            throw new Error(
+                "Your login session has expired."
+            );
+
+        }
+
+
+        const response =
+            await fetch(
+                `${SUPABASE_URL}/functions/v1/admin-list-users`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            `Bearer ${session.access_token}`
+                    },
+
+                    body: JSON.stringify({})
+                }
+            );
+
+
+        let result;
+
+
+        try {
+
+            result =
+                await response.json();
+
+        } catch {
+
+            result = {};
+
+        }
+
+
+        if (!response.ok) {
+
+            console.error(
+                "ADMIN LIST ERROR:",
+                result
+            );
+
+            throw new Error(
+                result.error ||
+                "Could not load users."
+            );
+
+        }
+
+
+        adminUsers =
+            Array.isArray(
+                result.users
+            )
+                ? result.users
+                : [];
+
+
+        updateAdminStats();
+
+        renderAdminUsers();
+
+
+    } catch (error) {
+
+        console.error(
+            "ADMIN USERS CRASH:",
+            error
+        );
+
+
+        adminUsers = [];
+
+
+        if (adminTotalUsers) {
+            adminTotalUsers.textContent =
+                "—";
+        }
+
+
+        if (adminTotalAdmins) {
+            adminTotalAdmins.textContent =
+                "—";
+        }
+
+
+        if (adminTotalTasks) {
+            adminTotalTasks.textContent =
+                "—";
+        }
+
+
+        adminUsersList.innerHTML = `
+
+            <div class="admin-empty-state">
+
+                <strong>
+                    Could not load users
+                </strong>
+
+                <p>
+                    ${escapeHtml(
+                        error.message ||
+                        "Something went wrong."
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+window.loadAdminUsers =
+    loadAdminUsers;
+
+
+/* =========================================================
+   ADMIN — STATS
+========================================================= */
+
+function updateAdminStats() {
+
+    const totalUsers =
+        adminUsers.length;
+
+
+    const totalAdmins =
+        adminUsers.filter(
+            user =>
+                user.is_admin === true
+        ).length;
+
+
+    const totalTasks =
+        adminUsers.reduce(
+            (sum, user) =>
+                sum +
+                (
+                    Number(
+                        user.task_count
+                    ) || 0
+                ),
+            0
+        );
+
+
+    if (adminTotalUsers) {
+
+        adminTotalUsers.textContent =
+            totalUsers;
+
+    }
+
+
+    if (adminTotalAdmins) {
+
+        adminTotalAdmins.textContent =
+            totalAdmins;
+
+    }
+
+
+    if (adminTotalTasks) {
+
+        adminTotalTasks.textContent =
+            totalTasks;
+
+    }
+
+}
+
+
+/* =========================================================
+   ADMIN — SEARCH
+========================================================= */
+
+function getFilteredAdminUsers() {
+
+    const search =
+        adminUserSearch
+            ? adminUserSearch.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    if (!search) {
+
+        return [
+            ...adminUsers
+        ];
+
+    }
+
+
+    return adminUsers.filter(
+        user => {
+
+            const username =
+                String(
+                    user.username ||
+                    ""
+                ).toLowerCase();
+
+
+            const name =
+                String(
+                    user.name ||
+                    ""
+                ).toLowerCase();
+
+
+            const email =
+                String(
+                    user.email ||
+                    ""
+                ).toLowerCase();
+
+
+            const role =
+                String(
+                    user.role ||
+                    ""
+                ).toLowerCase();
+
+
+            return (
+                username.includes(search) ||
+                name.includes(search) ||
+                email.includes(search) ||
+                role.includes(search)
+            );
+
+        }
+    );
+
+}
+
+
+if (adminUserSearch) {
+
+    adminUserSearch.addEventListener(
+        "input",
+        renderAdminUsers
+    );
+
+}
+
+
+/* =========================================================
+   ADMIN — RENDER USERS
+========================================================= */
+
+function renderAdminUsers() {
+
+    if (!adminUsersList) {
+        return;
+    }
+
+
+    const users =
+        getFilteredAdminUsers();
+
+
+    if (!users.length) {
+
+        adminUsersList.innerHTML = `
+
+            <div class="admin-empty-state">
+
+                <strong>
+                    ${
+                        adminUsers.length
+                            ? "No users found"
+                            : "No users yet"
+                    }
+                </strong>
+
+                <p>
+                    ${
+                        adminUsers.length
+                            ? "Try a different search."
+                            : "There are no registered accounts to display."
+                    }
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    adminUsersList.innerHTML =
+        "";
+
+
+    users.forEach(
+        user => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "admin-user-row";
+
+
+            const isSelf =
+                String(user.id) ===
+                String(currentUser?.id);
+
+
+            const isAdmin =
+                user.is_admin === true;
+
+
+            const name =
+                user.name ||
+                user.username ||
+                "Unknown";
+
+
+            const username =
+                user.username ||
+                "unknown";
+
+
+            const initial =
+                name
+                    .charAt(0)
+                    .toUpperCase() ||
+                "?";
+
+
+            const taskCount =
+                Number(
+                    user.task_count
+                ) || 0;
+
+
+            let actionHTML;
+
+
+            if (isSelf) {
+
+                actionHTML = `
+
+                    <span class="admin-current-user">
+                        YOU
+                    </span>
+
+                `;
+
+            } else if (isAdmin) {
+
+                actionHTML = `
+
+                    <span class="admin-current-user">
+                        PROTECTED
+                    </span>
+
+                `;
+
+            } else {
+
+                actionHTML = `
+
+                    <button
+                        type="button"
+                        class="admin-delete-button"
+                        data-admin-user-id="${escapeHtml(
+                            user.id
+                        )}"
+                    >
+                        Delete
+                    </button>
+
+                `;
+
+            }
+
+
+            row.innerHTML = `
+
+                <div class="admin-user-avatar">
+                    ${escapeHtml(initial)}
+                </div>
+
+                <div class="admin-user-info">
+
+                    <strong>
+                        ${escapeHtml(name)}
+                    </strong>
+
+                    <span>
+                        @${escapeHtml(username)}
+                        ${
+                            user.email
+                                ? ` · ${escapeHtml(user.email)}`
+                                : ""
+                        }
+                    </span>
+
+                </div>
+
+                <div class="admin-user-meta">
+
+                    <span class="admin-user-tasks">
+                        ${taskCount}
+                        ${taskCount === 1 ? "task" : "tasks"}
+                    </span>
+
+                    <span
+                        class="
+                            admin-role-badge
+                            ${isAdmin ? "admin" : ""}
+                        "
+                    >
+                        ${
+                            isAdmin
+                                ? "ADMIN"
+                                : String(
+                                    user.role ||
+                                    "STUDENT"
+                                ).toUpperCase()
+                        }
+                    </span>
+
+                    ${actionHTML}
+
+                </div>
+
+            `;
+
+
+            const deleteButton =
+                row.querySelector(
+                    ".admin-delete-button"
+                );
+
+
+            if (deleteButton) {
+
+                deleteButton.addEventListener(
+                    "click",
+                    async event => {
+
+                        event.stopPropagation();
+
+
+                        const userId =
+                            deleteButton.dataset
+                                .adminUserId;
+
+
+                        await adminDeleteUser(
+                            userId
+                        );
+
+                    }
+                );
+
+            }
+
+
+            adminUsersList.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ADMIN — DELETE USER
+========================================================= */
+
+async function adminDeleteUser(userId) {
+
+    if (!currentUser) {
+
+        alert(
+            "You must be logged in."
+        );
+
+        return;
+
+    }
+
+
+    if (!isCurrentUserAdmin()) {
+
+        alert(
+            "Admin access required."
+        );
+
+        return;
+
+    }
+
+
+    if (!userId) {
+
+        alert(
+            "No user selected."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        String(userId) ===
+        String(currentUser.id)
+    ) {
+
+        alert(
+            "You cannot delete your own admin account."
+        );
+
+        return;
+
+    }
+
+
+    const targetUser =
+        adminUsers.find(
+            user =>
+                String(user.id) ===
+                String(userId)
+        );
+
+
+    if (
+        targetUser &&
+        targetUser.is_admin === true
+    ) {
+
+        alert(
+            "Admin accounts are protected and cannot be deleted."
+        );
+
+        return;
+
+    }
+
+
+    const targetName =
+        targetUser?.name ||
+        targetUser?.username ||
+        "this user";
+
+
+    const confirmed =
+        confirm(
+            `Permanently delete "${targetName}"?\n\nThis will remove their account and associated data.`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        console.log(
+            "ADMIN DELETE:",
+            userId
+        );
+
+
+        const session =
+            await getAdminSession();
+
+
+        if (!session) {
+
+            alert(
+                "Your login session has expired."
+            );
+
+            return;
+
+        }
+
+
+        const response =
+            await fetch(
+                `${SUPABASE_URL}/functions/v1/admin-delete-user`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            `Bearer ${session.access_token}`
+                    },
+
+                    body: JSON.stringify({
+
+                        user_id:
+                            userId
+
+                    })
+
+                }
+            );
+
+
+        let result;
+
+
+        try {
+
+            result =
+                await response.json();
+
+        } catch {
+
+            result = {};
+
+        }
+
+
+        if (!response.ok) {
+
+            console.error(
+                "ADMIN DELETE ERROR:",
+                result
+            );
+
+
+            alert(
+                result.error ||
+                "Could not delete user."
+            );
+
+
+            return;
+
+        }
+
+
+        console.log(
+            "USER DELETED:",
+            result
+        );
+
+
+        alert(
+            "User deleted successfully."
+        );
+
+
+        await loadAdminUsers();
+
+
+    } catch (error) {
+
+        console.error(
+            "ADMIN DELETE CRASH:",
+            error
+        );
+
+
+        alert(
+            "Something went wrong while deleting the user."
+        );
+
+    }
+
+}
+
+
+window.adminDeleteUser =
+    adminDeleteUser;
+
+
+/* =========================================================
    SESSION
 ========================================================= */
 
@@ -5362,6 +6362,10 @@ supabaseClient.auth.onAuthStateChange(
 
             currentTasks = [];
 
+            adminUsers = [];
+
+            updateAdminVisibility();
+
             showAuth();
 
         }
@@ -5397,6 +6401,7 @@ document.addEventListener(
 
             closeTaskModal();
 
+
             if (
                 profilePage &&
                 !profilePage.classList.contains(
@@ -5408,123 +6413,24 @@ document.addEventListener(
 
             }
 
+
+            if (
+                adminPage &&
+                !adminPage.classList.contains(
+                    "hidden"
+                )
+            ) {
+
+                closeAdminPage();
+
+            }
+
         }
 
     }
 );
 
-/* =========================================================
-   ADMIN — DELETE USER
-========================================================= */
 
-async function adminDeleteUser(userId) {
-
-    if (!currentUser) {
-        alert("You must be logged in.");
-        return;
-    }
-
-    if (!currentProfile?.is_admin) {
-        alert("Admin access required.");
-        return;
-    }
-
-    if (!userId) {
-        alert("No user selected.");
-        return;
-    }
-
-    if (userId === currentUser.id) {
-        alert("You cannot delete your own admin account.");
-        return;
-    }
-
-    const confirmed = confirm(
-        "Are you sure you want to permanently delete this user?"
-    );
-
-    if (!confirmed) {
-        return;
-    }
-
-    try {
-
-        console.log("ADMIN DELETE:", userId);
-
-        const {
-            data: {
-                session
-            },
-            error: sessionError
-        } = await supabaseClient.auth.getSession();
-
-        if (sessionError || !session) {
-            alert("Your login session has expired.");
-            return;
-        }
-
-        const response =
-            await fetch(
-                `${SUPABASE_URL}/functions/v1/admin-delete-user`,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization":
-                            `Bearer ${session.access_token}`
-                    },
-
-                    body: JSON.stringify({
-                        user_id: userId
-                    })
-                }
-            );
-
-        const result =
-            await response.json();
-
-        if (!response.ok) {
-
-            console.error(
-                "ADMIN DELETE ERROR:",
-                result
-            );
-
-            alert(
-                result.error ||
-                "Could not delete user."
-            );
-
-            return;
-        }
-
-        console.log(
-            "USER DELETED:",
-            result
-        );
-
-        alert("User deleted successfully.");
-
-        // Refresh the admin user list if your page has one.
-        if (typeof loadAdminUsers === "function") {
-            await loadAdminUsers();
-        }
-
-    } catch (error) {
-
-        console.error(
-            "ADMIN DELETE CRASH:",
-            error
-        );
-
-        alert(
-            "Something went wrong while deleting the user."
-        );
-    }
-}
-
-window.adminDeleteUser = adminDeleteUser;
 /* =========================================================
    INITIALIZE
 ========================================================= */
@@ -5534,5 +6440,7 @@ injectExtraStyles();
 setAuthMode("login");
 
 updateNotificationButtons();
+
+updateAdminVisibility();
 
 checkSession();

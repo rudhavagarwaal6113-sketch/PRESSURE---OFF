@@ -1641,3 +1641,502 @@ footer {
     }
 
 }
+/* =========================================================
+   PRESSURE // OFF
+   ADMIN PANEL
+========================================================= */
+
+.admin-page.hidden {
+    display: none;
+}
+
+.admin-page {
+    min-height: 100vh;
+    background: var(--bg, #0b0d12);
+}
+
+/* =========================================================
+   ADMIN CONTAINER
+========================================================= */
+
+.admin-container {
+    width: min(1180px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 42px 0 60px;
+}
+
+/* =========================================================
+   ADMIN HEADER
+========================================================= */
+
+.admin-page-header {
+    margin-bottom: 28px;
+}
+
+.admin-page-header h1 {
+    margin: 6px 0 8px;
+    font-size: clamp(34px, 5vw, 52px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+
+.admin-page-header p:not(.eyebrow) {
+    margin: 0;
+    color: rgba(255,255,255,.55);
+    font-size: 14px;
+}
+
+/* =========================================================
+   ADMIN STAT CARDS
+========================================================= */
+
+.admin-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.admin-stat-card {
+    padding: 23px;
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 18px;
+    background: rgba(255,255,255,.035);
+    box-shadow: 0 15px 45px rgba(0,0,0,.12);
+    transition: .2s ease;
+}
+
+.admin-stat-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(91,140,255,.20);
+    background: rgba(255,255,255,.045);
+}
+
+.admin-stat-card strong {
+    display: block;
+    margin: 7px 0 4px;
+    font-size: 34px;
+    line-height: 1;
+}
+
+.admin-stat-card small {
+    display: block;
+    color: rgba(255,255,255,.45);
+    font-size: 11px;
+}
+
+/* =========================================================
+   ADMIN USERS CARD
+========================================================= */
+
+.admin-users-card {
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.admin-users-card .card-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.admin-users-card .card-heading h2 {
+    margin: 4px 0 5px;
+}
+
+.admin-users-card .card-heading .muted {
+    margin: 0;
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.admin-search {
+    margin: 22px 0 18px;
+}
+
+.admin-search input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 15px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px;
+    outline: none;
+
+    background: rgba(255,255,255,.035);
+    color: inherit;
+
+    font: inherit;
+    font-size: 13px;
+
+    transition: .18s ease;
+}
+
+.admin-search input::placeholder {
+    color: rgba(255,255,255,.35);
+}
+
+.admin-search input:focus {
+    border-color: rgba(91,140,255,.45);
+    background: rgba(255,255,255,.05);
+    box-shadow: 0 0 0 3px rgba(91,140,255,.08);
+}
+
+/* =========================================================
+   USER LIST
+========================================================= */
+
+.admin-users-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+/* =========================================================
+   USER ROW
+========================================================= */
+
+.admin-user-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 14px 15px;
+
+    border: 1px solid rgba(255,255,255,.055);
+    border-radius: 14px;
+
+    background: rgba(255,255,255,.025);
+
+    transition: .18s ease;
+}
+
+.admin-user-row:hover {
+    background: rgba(255,255,255,.045);
+    border-color: rgba(255,255,255,.09);
+}
+
+/* =========================================================
+   USER AVATAR
+========================================================= */
+
+.admin-user-avatar {
+    width: 43px;
+    height: 43px;
+    min-width: 43px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(91,140,255,.25),
+            rgba(91,140,255,.06)
+        );
+
+    border: 1px solid rgba(91,140,255,.20);
+
+    font-size: 16px;
+    font-weight: 800;
+}
+
+/* =========================================================
+   USER INFO
+========================================================= */
+
+.admin-user-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.admin-user-info strong {
+    display: block;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 14px;
+}
+
+.admin-user-info span {
+    display: block;
+
+    margin-top: 3px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    color: rgba(255,255,255,.42);
+    font-size: 11px;
+}
+
+/* =========================================================
+   USER META
+========================================================= */
+
+.admin-user-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    flex-shrink: 0;
+}
+
+.admin-role-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 9px;
+
+    border-radius: 999px;
+
+    background: rgba(255,255,255,.055);
+    border: 1px solid rgba(255,255,255,.07);
+
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .08em;
+}
+
+.admin-role-badge.admin {
+    color: #5b8cff;
+    border-color: rgba(91,140,255,.22);
+    background: rgba(91,140,255,.08);
+}
+
+/* =========================================================
+   USER TASK COUNT
+========================================================= */
+
+.admin-user-tasks {
+    min-width: 55px;
+
+    text-align: center;
+
+    color: rgba(255,255,255,.50);
+    font-size: 11px;
+}
+
+/* =========================================================
+   DELETE BUTTON
+========================================================= */
+
+.admin-delete-button {
+    border: 1px solid rgba(255,105,117,.15);
+
+    background: rgba(255,105,117,.055);
+    color: #ff6975;
+
+    border-radius: 9px;
+
+    padding: 8px 11px;
+
+    cursor: pointer;
+
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+
+    transition: .18s ease;
+}
+
+.admin-delete-button:hover {
+    background: rgba(255,105,117,.12);
+    border-color: rgba(255,105,117,.30);
+}
+
+.admin-delete-button:disabled {
+    opacity: .35;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   CURRENT ADMIN BADGE
+========================================================= */
+
+.admin-current-user {
+    color: rgba(255,255,255,.35);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .05em;
+}
+
+/* =========================================================
+   EMPTY / LOADING STATE
+========================================================= */
+
+.admin-empty-state {
+    padding: 45px 20px;
+
+    text-align: center;
+
+    border: 1px dashed rgba(255,255,255,.08);
+    border-radius: 15px;
+
+    background: rgba(255,255,255,.018);
+}
+
+.admin-empty-state strong {
+    display: block;
+    font-size: 14px;
+}
+
+.admin-empty-state p {
+    margin: 7px 0 0;
+
+    color: rgba(255,255,255,.40);
+    font-size: 12px;
+}
+
+/* =========================================================
+   WARNING
+========================================================= */
+
+.admin-warning-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+
+    padding: 18px 20px;
+
+    margin-bottom: 25px;
+
+    border: 1px solid rgba(255,190,80,.12);
+    border-radius: 15px;
+
+    background: rgba(255,190,80,.035);
+}
+
+.admin-warning-card .alert-symbol {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 10px;
+
+    background: rgba(255,190,80,.08);
+
+    font-size: 14px;
+}
+
+.admin-warning-card strong {
+    display: block;
+    margin-bottom: 4px;
+
+    font-size: 13px;
+}
+
+.admin-warning-card p {
+    margin: 0;
+
+    color: rgba(255,255,255,.45);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   ADMIN BUTTON IN TOPBAR
+========================================================= */
+
+.admin-only {
+    border-color: rgba(91,140,255,.18);
+    background: rgba(91,140,255,.06);
+}
+
+.admin-only:hover {
+    border-color: rgba(91,140,255,.35);
+    background: rgba(91,140,255,.11);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .admin-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-user-meta {
+        gap: 5px;
+    }
+
+    .admin-user-tasks {
+        display: none;
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .admin-container {
+        width: min(100% - 24px, 1180px);
+        padding-top: 25px;
+    }
+
+    .admin-users-card {
+        padding: 18px;
+    }
+
+    .admin-users-card .card-heading {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-user-row {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .admin-user-info {
+        max-width: calc(100% - 60px);
+    }
+
+    .admin-user-meta {
+        width: 100%;
+        margin-left: 57px;
+    }
+
+    .admin-delete-button {
+        margin-left: auto;
+    }
+
+}
+
+@media (max-width: 450px) {
+
+    .admin-page-header h1 {
+        font-size: 36px;
+    }
+
+    .admin-stat-card {
+        padding: 18px;
+    }
+
+    .admin-stat-card strong {
+        font-size: 29px;
+    }
+
+    .admin-user-row {
+        padding: 12px;
+    }
+
+    .admin-user-avatar {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+    }
+
+}

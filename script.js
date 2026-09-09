@@ -5413,7 +5413,118 @@ document.addEventListener(
     }
 );
 
+/* =========================================================
+   ADMIN — DELETE USER
+========================================================= */
 
+async function adminDeleteUser(userId) {
+
+    if (!currentUser) {
+        alert("You must be logged in.");
+        return;
+    }
+
+    if (!currentProfile?.is_admin) {
+        alert("Admin access required.");
+        return;
+    }
+
+    if (!userId) {
+        alert("No user selected.");
+        return;
+    }
+
+    if (userId === currentUser.id) {
+        alert("You cannot delete your own admin account.");
+        return;
+    }
+
+    const confirmed = confirm(
+        "Are you sure you want to permanently delete this user?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+
+        console.log("ADMIN DELETE:", userId);
+
+        const {
+            data: {
+                session
+            },
+            error: sessionError
+        } = await supabaseClient.auth.getSession();
+
+        if (sessionError || !session) {
+            alert("Your login session has expired.");
+            return;
+        }
+
+        const response =
+            await fetch(
+                `${SUPABASE_URL}/functions/v1/admin-delete-user`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization":
+                            `Bearer ${session.access_token}`
+                    },
+
+                    body: JSON.stringify({
+                        user_id: userId
+                    })
+                }
+            );
+
+        const result =
+            await response.json();
+
+        if (!response.ok) {
+
+            console.error(
+                "ADMIN DELETE ERROR:",
+                result
+            );
+
+            alert(
+                result.error ||
+                "Could not delete user."
+            );
+
+            return;
+        }
+
+        console.log(
+            "USER DELETED:",
+            result
+        );
+
+        alert("User deleted successfully.");
+
+        // Refresh the admin user list if your page has one.
+        if (typeof loadAdminUsers === "function") {
+            await loadAdminUsers();
+        }
+
+    } catch (error) {
+
+        console.error(
+            "ADMIN DELETE CRASH:",
+            error
+        );
+
+        alert(
+            "Something went wrong while deleting the user."
+        );
+    }
+}
+
+window.adminDeleteUser = adminDeleteUser;
 /* =========================================================
    INITIALIZE
 ========================================================= */

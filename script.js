@@ -6070,7 +6070,83 @@ function renderAdminUsers() {
 
 }
 
+async function loadAdminUsers() {
+    const list = $("adminUsersList");
 
+    if (!list) return;
+
+    list.innerHTML = `
+        <div class="admin-empty-state">
+            <strong>Loading users...</strong>
+            <p>Please wait.</p>
+        </div>
+    `;
+
+    try {
+        if (!currentUser || !currentProfile?.is_admin) {
+            list.innerHTML = `
+                <div class="admin-empty-state">
+                    <strong>Access denied</strong>
+                    <p>Administrator access is required.</p>
+                </div>
+            `;
+            return;
+        }
+
+        const {
+            data: { session },
+            error: sessionError
+        } = await supabaseClient.auth.getSession();
+
+        if (sessionError || !session) {
+            throw new Error("Your session has expired.");
+        }
+
+        const response = await fetch(
+            `${SUPABASE_URL}/functions/v1/admin-list-users`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization":
+                        `Bearer ${session.access_token}`
+                }
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.error || "Could not load users."
+            );
+        }
+
+        renderAdminUsers(result.users || []);
+
+        if ($("adminTotalUsers")) {
+            $("adminTotalUsers").textContent =
+                result.total || 0;
+        }
+
+        if ($("adminTotalAdmins")) {
+            $("adminTotalAdmins").textContent =
+                (result.users || []).filter(
+                    user => user.is_admin
+                ).length;
+        }
+
+    } catch (error) {
+        console.error("ADMIN USERS ERROR:", error);
+
+        list.innerHTML = `
+            <div class="admin-empty-state">
+                <strong>Could not load users</strong>
+                <p>${escapeHtml(error.message)}</p>
+            </div>
+        `;
+    }
+}
 /* =========================================================
    ADMIN — DELETE USER
 ========================================================= */

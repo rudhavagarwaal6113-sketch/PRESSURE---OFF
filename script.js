@@ -5491,7 +5491,24 @@ if (backFromAdmin) {
 
 }
 
+if (adminLogoutButton) {
 
+    adminLogoutButton.addEventListener(
+        "click",
+        performLogout
+    );
+
+}
+
+
+if (refreshAdminUsers) {
+
+    refreshAdminUsers.addEventListener(
+        "click",
+        loadAdminUsers
+    );
+
+}
 /* =========================================================
    ADMIN — GET SESSION
 ========================================================= */

@@ -6626,3 +6626,271 @@ updateNotificationButtons();
 updateAdminVisibility();
 
 checkSession();
+
+
+/* PRESSURE SOCIAL SETTINGS UPGRADE v1 */
+(() => {
+    const P = {
+        friends: [],
+        requests: [],
+        selectedFriend: null,
+        messages: [],
+        realtime: null,
+        presence: null,
+        preferences: {
+            theme: "midnight",
+            accent: "#5B8CFF",
+            density: "comfortable",
+            reducedMotion: false,
+            pressureAnimations: true,
+            notifications: true
+        }
+    };
+
+    const esc = (v) => String(v ?? "").replace(/[&<>\"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    const q = (s) => document.querySelector(s);
+    const me = () => window.currentUser || currentUser;
+    const profile = () => window.currentProfile || currentProfile;
+
+    function ensureUI() {
+        if (document.getElementById("pressureSocialModal")) return;
+        const modal = document.createElement("div");
+        modal.id = "pressureSocialModal";
+        modal.className = "pressure-social-modal hidden";
+        modal.innerHTML = `
+          <div class="pressure-social-backdrop" data-close-pressure></div>
+          <section class="pressure-social-panel" role="dialog" aria-modal="true">
+            <header class="pressure-social-head">
+              <div><span class="pressure-kicker">YOUR SPACE</span><h2>Profile & Social</h2><p>Personalize Pressure // Off, connect with friends, and chat live.</p></div>
+              <button class="pressure-icon-btn" data-close-pressure aria-label="Close">×</button>
+            </header>
+            <nav class="pressure-social-tabs">
+              <button class="pressure-social-tab active" data-tab="appearance">⚙ Appearance</button>
+              <button class="pressure-social-tab" data-tab="friends">👥 Friends <b id="pressureFriendBadge"></b></button>
+              <button class="pressure-social-tab" data-tab="chat">💬 Chat <b id="pressureChatBadge"></b></button>
+              <button class="pressure-social-tab" data-tab="account">🔐 Account</button>
+            </nav>
+            <div class="pressure-social-body">
+              <div class="pressure-social-view active" data-view="appearance">
+                <div class="pressure-setting-grid">
+                  <label><span>Theme</span><select id="pressureTheme"><option value="midnight">Midnight</option><option value="light">Light</option></select></label>
+                  <label><span>Accent</span><input id="pressureAccent" type="color"></label>
+                  <label><span>Dashboard density</span><select id="pressureDensity"><option value="compact">Compact</option><option value="comfortable">Comfortable</option><option value="cozy">Cozy</option></select></label>
+                  <label class="pressure-switch"><span>Reduced motion</span><input id="pressureReducedMotion" type="checkbox"><i></i></label>
+                  <label class="pressure-switch"><span>Pressure animations</span><input id="pressurePressureAnimations" type="checkbox"><i></i></label>
+                  <label class="pressure-switch"><span>Notifications</span><input id="pressureNotifications" type="checkbox"><i></i></label>
+                </div>
+                <div class="pressure-save-row"><span id="pressurePrefStatus">Changes save to your profile.</span><button class="pressure-primary" id="pressureSavePrefs">Save preferences</button></div>
+              </div>
+              <div class="pressure-social-view" data-view="friends">
+                <div class="pressure-search-row"><input id="pressurePeopleSearch" placeholder="Search username..." autocomplete="off"><button class="pressure-primary" id="pressurePeopleSearchBtn">Search</button></div>
+                <div id="pressurePeopleResults" class="pressure-list"></div>
+                <div class="pressure-section-title">Friend requests</div><div id="pressureRequests" class="pressure-list"></div>
+                <div class="pressure-section-title">Your friends</div><div id="pressureFriends" class="pressure-list"></div>
+              </div>
+              <div class="pressure-social-view" data-view="chat">
+                <div class="pressure-chat-layout"><aside id="pressureChatFriends" class="pressure-chat-friends"></aside><div class="pressure-chat-main"><div id="pressureChatTitle" class="pressure-chat-title">Select a friend</div><div id="pressureMessages" class="pressure-messages"><div class="pressure-empty">Choose a friend to start chatting.</div></div><form id="pressureMessageForm" class="pressure-message-form"><input id="pressureMessageInput" maxlength="2000" placeholder="Write a message..." autocomplete="off"><button class="pressure-primary">Send</button></form></div></div>
+              </div>
+              <div class="pressure-social-view" data-view="account">
+                <div class="pressure-account-card"><div><span>Display name</span><input id="pressureDisplayName" maxlength="80"></div><button class="pressure-primary" id="pressureSaveName">Save name</button></div>
+                <div class="pressure-danger-card"><div><strong>Delete my account</strong><p>This permanently deletes your profile, tasks, friendships and messages.</p></div><button class="pressure-danger" id="pressureDeleteAccount">Delete account</button></div>
+              </div>
+            </div>
+          </section>`;
+        document.body.appendChild(modal);
+
+        const addButton = document.createElement("button");
+        addButton.id = "pressureProfileToolsButton";
+        addButton.type = "button";
+        addButton.className = "ghost-button pressure-profile-tools-button";
+        addButton.textContent = "⚙ Appearance & Social";
+        addButton.addEventListener("click", () => openPressurePanel("appearance"));
+        const topbar = document.querySelector("#profilePage .profile-topbar");
+        if (topbar) topbar.appendChild(addButton);
+
+        modal.querySelectorAll("[data-close-pressure]").forEach(x => x.addEventListener("click", closePressurePanel));
+        modal.querySelectorAll(".pressure-social-tab").forEach(x => x.addEventListener("click", () => openPressurePanel(x.dataset.tab)));
+        document.getElementById("pressureSavePrefs").addEventListener("click", savePreferences);
+        document.getElementById("pressurePeopleSearchBtn").addEventListener("click", searchPeople);
+        document.getElementById("pressurePeopleSearch").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); searchPeople(); } });
+        document.getElementById("pressureMessageForm").addEventListener("submit", sendMessage);
+        document.getElementById("pressureSaveName").addEventListener("click", saveDisplayName);
+        document.getElementById("pressureDeleteAccount").addEventListener("click", deleteOwnAccount);
+    }
+
+    function applyPreferences() {
+        const p = P.preferences;
+        document.documentElement.style.setProperty("--blue", p.accent || "#5B8CFF");
+        document.body.dataset.pressureTheme = p.theme || "midnight";
+        document.body.dataset.pressureDensity = p.density || "comfortable";
+        document.body.classList.toggle("pressure-reduced-motion", !!p.reducedMotion);
+        document.body.classList.toggle("pressure-no-animations", !p.pressureAnimations);
+    }
+
+    async function loadPreferences() {
+        const p = profile();
+        P.preferences = { ...P.preferences, ...(p?.preferences || {}) };
+        const t = document.getElementById("pressureTheme"); if (t) t.value = P.preferences.theme;
+        const a = document.getElementById("pressureAccent"); if (a) a.value = P.preferences.accent;
+        const d = document.getElementById("pressureDensity"); if (d) d.value = P.preferences.density;
+        const r = document.getElementById("pressureReducedMotion"); if (r) r.checked = !!P.preferences.reducedMotion;
+        const pa = document.getElementById("pressurePressureAnimations"); if (pa) pa.checked = P.preferences.pressureAnimations !== false;
+        const n = document.getElementById("pressureNotifications"); if (n) n.checked = P.preferences.notifications !== false;
+        const dn = document.getElementById("pressureDisplayName"); if (dn) dn.value = p?.name || "";
+        applyPreferences();
+    }
+
+    async function savePreferences() {
+        const next = {
+            theme: document.getElementById("pressureTheme").value,
+            accent: document.getElementById("pressureAccent").value,
+            density: document.getElementById("pressureDensity").value,
+            reducedMotion: document.getElementById("pressureReducedMotion").checked,
+            pressureAnimations: document.getElementById("pressurePressureAnimations").checked,
+            notifications: document.getElementById("pressureNotifications").checked
+        };
+        const { error } = await supabaseClient.from("profiles").update({ preferences: next }).eq("id", me().id);
+        if (error) return alert(error.message);
+        P.preferences = next; if (currentProfile) currentProfile.preferences = next; applyPreferences();
+        document.getElementById("pressurePrefStatus").textContent = "Saved ✓";
+        setTimeout(() => document.getElementById("pressurePrefStatus").textContent = "Changes save to your profile.", 1800);
+    }
+
+    function openPressurePanel(tab = "appearance") {
+        ensureUI();
+        const modal = document.getElementById("pressureSocialModal");
+        modal.classList.remove("hidden");
+        modal.querySelectorAll(".pressure-social-tab").forEach(x => x.classList.toggle("active", x.dataset.tab === tab));
+        modal.querySelectorAll(".pressure-social-view").forEach(x => x.classList.toggle("active", x.dataset.view === tab));
+        if (tab === "friends") loadSocial();
+        if (tab === "chat") { loadSocial(); renderChatFriends(); }
+        loadPreferences();
+    }
+    function closePressurePanel() { document.getElementById("pressureSocialModal")?.classList.add("hidden"); }
+
+    async function loadSocial() {
+        if (!me()) return;
+        const [f, r] = await Promise.all([
+            supabaseClient.from("friendships").select("id,requester_id,addressee_id,status,created_at,updated_at").or(`requester_id.eq.${me().id},addressee_id.eq.${me().id}`).order("updated_at", { ascending: false }),
+            supabaseClient.from("friendships").select("id,requester_id,addressee_id,status,created_at").eq("addressee_id", me().id).eq("status", "pending")
+        ]);
+        if (!f.error) {
+            const ids = [...new Set(f.data.flatMap(x => [x.requester_id, x.addressee_id]).filter(x => x !== me().id))];
+            let people = [];
+            if (ids.length) { const res = await supabaseClient.from("profiles").select("id,username,name,role").in("id", ids); people = res.data || []; }
+            const map = new Map(people.map(x => [x.id, x]));
+            P.friends = f.data.filter(x => x.status === "accepted").map(x => ({ ...x, person: map.get(x.requester_id === me().id ? x.addressee_id : x.requester_id) })).filter(x => x.person);
+            P.requests = r.data.map(x => ({ ...x, person: map.get(x.requester_id) })).filter(x => x.person);
+        }
+        renderFriends(); renderRequests(); updateBadges(); renderChatFriends();
+    }
+
+    async function searchPeople() {
+        const term = document.getElementById("pressurePeopleSearch").value.trim().toLowerCase();
+        const box = document.getElementById("pressurePeopleResults");
+        if (term.length < 2) { box.innerHTML = '<div class="pressure-empty">Type at least 2 characters.</div>'; return; }
+        const { data, error } = await supabaseClient.from("profiles").select("id,username,name,role").ilike("username", `%${term}%`).neq("id", me().id).limit(12);
+        if (error) { box.innerHTML = `<div class="pressure-empty">${esc(error.message)}</div>`; return; }
+        const existing = new Set(P.friends.map(x => x.person.id));
+        box.innerHTML = data?.length ? data.map(person => {
+            const pending = P.requests.some(x => x.person.id === person.id) || P.pendingSent?.some(x => x.person.id === person.id);
+            return `<div class="pressure-person"><div class="pressure-person-avatar">${esc((person.name || person.username || "?")[0].toUpperCase())}</div><div><strong>${esc(person.name || person.username)}</strong><span>@${esc(person.username)}${person.role === "admin" ? " · admin" : ""}</span></div>${existing.has(person.id) ? '<span class="pressure-pill">Friends</span>' : pending ? '<span class="pressure-pill">Pending</span>' : `<button class="pressure-primary pressure-small" data-add-friend="${person.id}">Add</button>`}</div>`;
+        }).join("") : '<div class="pressure-empty">No users found.</div>';
+        box.querySelectorAll("[data-add-friend]").forEach(b => b.addEventListener("click", () => sendFriendRequest(b.dataset.addFriend)));
+    }
+
+    async function sendFriendRequest(id) {
+        const { error } = await supabaseClient.from("friendships").insert({ requester_id: me().id, addressee_id: id, status: "pending" });
+        if (error) return alert(error.code === "23505" ? "A request already exists." : error.message);
+        await loadSocial(); searchPeople();
+    }
+
+    function renderRequests() {
+        const box = document.getElementById("pressureRequests");
+        box.innerHTML = P.requests.length ? P.requests.map(x => `<div class="pressure-person"><div class="pressure-person-avatar">${esc((x.person.name || x.person.username || "?")[0].toUpperCase())}</div><div><strong>${esc(x.person.name || x.person.username)}</strong><span>@${esc(x.person.username)}</span></div><div class="pressure-actions"><button class="pressure-primary pressure-small" data-accept="${x.id}">Accept</button><button class="pressure-secondary pressure-small" data-decline="${x.id}">Decline</button></div></div>`).join("") : '<div class="pressure-empty">No pending requests.</div>';
+        box.querySelectorAll("[data-accept]").forEach(b => b.addEventListener("click", () => updateFriendRequest(b.dataset.accept, "accepted")));
+        box.querySelectorAll("[data-decline]").forEach(b => b.addEventListener("click", () => updateFriendRequest(b.dataset.decline, "declined")));
+    }
+
+    async function updateFriendRequest(id, status) { const { error } = await supabaseClient.from("friendships").update({ status, updated_at: new Date().toISOString() }).eq("id", id); if (error) return alert(error.message); loadSocial(); }
+
+    function renderFriends() {
+        const box = document.getElementById("pressureFriends");
+        box.innerHTML = P.friends.length ? P.friends.map(x => `<div class="pressure-person pressure-clickable" data-chat-friend="${x.person.id}"><div class="pressure-person-avatar">${esc((x.person.name || x.person.username || "?")[0].toUpperCase())}</div><div><strong>${esc(x.person.name || x.person.username)}</strong><span>@${esc(x.person.username)}</span></div><span class="pressure-online-dot"></span></div>`).join("") : '<div class="pressure-empty">No friends yet. Search a username above.</div>';
+        box.querySelectorAll("[data-chat-friend]").forEach(b => b.addEventListener("click", () => { openPressurePanel("chat"); selectFriend(b.dataset.chatFriend); }));
+    }
+
+    function renderChatFriends() {
+        const box = document.getElementById("pressureChatFriends"); if (!box) return;
+        box.innerHTML = P.friends.length ? P.friends.map(x => `<button class="pressure-chat-friend ${P.selectedFriend?.id === x.person.id ? "active" : ""}" data-chat-friend="${x.person.id}"><span class="pressure-person-avatar">${esc((x.person.name || x.person.username || "?")[0].toUpperCase())}</span><span><strong>${esc(x.person.name || x.person.username)}</strong><small>@${esc(x.person.username)}</small></span></button>`).join("") : '<div class="pressure-empty">Add a friend first.</div>';
+        box.querySelectorAll("[data-chat-friend]").forEach(b => b.addEventListener("click", () => selectFriend(b.dataset.chatFriend)));
+    }
+
+    async function selectFriend(id) {
+        const found = P.friends.find(x => x.person.id === id)?.person;
+        if (!found) return;
+        P.selectedFriend = found; renderChatFriends();
+        document.getElementById("pressureChatTitle").textContent = `${found.name || found.username}  ·  @${found.username}`;
+        const { data, error } = await supabaseClient.from("messages").select("id,sender_id,receiver_id,body,created_at,read_at").or(`and(sender_id.eq.${me().id},receiver_id.eq.${id}),and(sender_id.eq.${id},receiver_id.eq.${me().id})`).order("created_at", { ascending: true }).limit(200);
+        if (error) return alert(error.message);
+        P.messages = data || []; renderMessages();
+        await supabaseClient.from("messages").update({ read_at: new Date().toISOString() }).eq("receiver_id", me().id).eq("sender_id", id).is("read_at", null);
+    }
+
+    function renderMessages() {
+        const box = document.getElementById("pressureMessages");
+        if (!P.messages.length) { box.innerHTML = '<div class="pressure-empty">No messages yet. Say hi 👋</div>'; return; }
+        box.innerHTML = P.messages.map(m => `<div class="pressure-message ${m.sender_id === me().id ? "mine" : "theirs"}"><div>${esc(m.body)}</div><small>${new Date(m.created_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</small></div>`).join("");
+        box.scrollTop = box.scrollHeight;
+    }
+
+    async function sendMessage(e) {
+        e.preventDefault(); const input = document.getElementById("pressureMessageInput"); const body = input.value.trim();
+        if (!body || !P.selectedFriend) return;
+        const { error } = await supabaseClient.from("messages").insert({ sender_id: me().id, receiver_id: P.selectedFriend.id, body });
+        if (error) return alert(error.message); input.value = "";
+    }
+
+    async function saveDisplayName() {
+        const name = document.getElementById("pressureDisplayName").value.trim();
+        const { error } = await supabaseClient.from("profiles").update({ name }).eq("id", me().id);
+        if (error) return alert(error.message); if (currentProfile) currentProfile.name = name; if (typeof updateProfileUI === "function") updateProfileUI(); alert("Name saved.");
+    }
+
+    async function deleteOwnAccount() {
+        if (!confirm("Permanently delete your account and all associated data? This cannot be undone.")) return;
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) return alert("Your session has expired.");
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/delete-my-account`, { method: "POST", headers: { "Authorization": `Bearer ${session.access_token}`, "Content-Type": "application/json" } });
+        const result = await res.json().catch(() => ({}));
+        if (!res.ok) return alert(result.error || "Could not delete your account.");
+        await supabaseClient.auth.signOut(); location.reload();
+    }
+
+    function updateBadges() {
+        const f = document.getElementById("pressureFriendBadge"), c = document.getElementById("pressureChatBadge");
+        if (f) f.textContent = P.requests.length ? P.requests.length : "";
+        if (c) c.textContent = "";
+    }
+
+    function subscribeRealtime() {
+        if (!me() || P.realtime) return;
+        P.realtime = supabaseClient.channel("pressure-social-" + me().id)
+          .on("postgres_changes", { event: "*", schema: "public", table: "friendships" }, () => loadSocial())
+          .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, payload => {
+              const m = payload.new;
+              if (m.sender_id === me().id || m.receiver_id === me().id) {
+                  if (P.selectedFriend && (m.sender_id === P.selectedFriend.id || m.receiver_id === P.selectedFriend.id)) { P.messages.push(m); renderMessages(); }
+                  updateBadges();
+              }
+          }).subscribe();
+    }
+
+    window.openPressurePanel = openPressurePanel;
+    window.pressureSocialInit = () => { ensureUI(); subscribeRealtime(); loadPreferences(); };
+    document.addEventListener("DOMContentLoaded", () => setTimeout(() => window.pressureSocialInit(), 350));
+    const originalFinish = window.finishAuthentication;
+    if (typeof originalFinish === "function") {
+        window.finishAuthentication = async function(...args) { const r = await originalFinish.apply(this, args); setTimeout(() => window.pressureSocialInit(), 150); return r; };
+    }
+})();

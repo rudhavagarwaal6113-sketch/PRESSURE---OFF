@@ -2158,3 +2158,14 @@ footer {
 .po-tour-icon{width:70px;height:70px;display:grid;place-items:center;margin:22px auto;font-size:30px;border-radius:22px;background:rgba(91,140,255,.10);border:1px solid rgba(91,140,255,.16)}
 .po-tour-card{text-align:left}
 @media(max-width:650px){.profile-nav-spacer{width:18px;flex-basis:18px}.po-profile-tools{justify-content:stretch}.po-profile-tools button{flex:1}}
+
+
+/* PRESSURE // OFF — PROFILE / TUTORIAL REFINEMENT */
+.profile-nav-spacer{width:34px;flex:0 0 34px;}
+.po-profile-tools{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin:4px 0 22px;}
+.po-profile-tools button{min-width:130px;}
+.po-profile-bottom-logout{display:flex!important;width:100%;justify-content:center;box-sizing:border-box;margin-top:34px;padding:13px 20px;border:1px solid rgba(255,105,117,.16);border-radius:14px;background:rgba(255,105,117,.035);color:#ff6975;}
+.po-profile-bottom-logout:hover{background:rgba(255,105,117,.08);}
+.po-tour-icon{width:70px;height:70px;display:grid;place-items:center;margin:22px auto;font-size:30px;border-radius:22px;background:rgba(91,140,255,.10);border:1px solid rgba(91,140,255,.16);}
+.po-tour-card{text-align:left;}
+@media(max-width:650px){.profile-nav-spacer{width:18px;flex-basis:18px}.po-profile-tools{justify-content:stretch}.po-profile-tools button{flex:1;min-width:0}}

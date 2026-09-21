@@ -6934,7 +6934,58 @@ $("poObBack").onclick=()=>{X.onboard.step=Math.max(0,i-1);saveP({onboarding:{com
 $("poObNext").onclick=()=>i===steps.length-1?finishOnboard():(X.onboard.step=i+1,saveP({onboarding:{completed:false,step:X.onboard.step}}),drawOnboard());
 $("poObSkip").onclick=finishOnboard
 }
-async function finishOnboard(){await saveP({onboarding:{completed:true,step:7,skipped:false}});$("poOnboard")?.remove()}
+async function finishOnboard(){await saveP({onboarding:{completed:true,step:11,skipped:false}});$("poOnboard")?.remove()}
 function init(){nav();pages();appearance();if(currentUser&&currentProfile){onboard();data();realtime()}}
 document.addEventListener("DOMContentLoaded",()=>setTimeout(init,500));setTimeout(init,900);
-window.PRESSURE_OFF_GUIDED_SOCIAL_V3=X})();
+window.PRESSURE_OFF_GUIDED_SOCIAL_V3=X; window.poOpenSettings=settings; window.poSocial=()=>{pages();hide();$("poSocialPage").classList.remove("hidden");X.tab="discover";data().then(()=>renderSocial());scrollTo(0,0)}; window.poRenderSocial=renderSocial; window.poData=data;})();
+
+
+/* PO_PROFILE_HUB_V2 */
+(()=>{
+function poProfileHub(){
+    const page=$("profilePage");
+    if(!page||!currentUser)return;
+
+    const container=page.querySelector(".profile-container")||page;
+
+    let tools=$("poProfileTools");
+    if(!tools){
+        tools=document.createElement("div");
+        tools.id="poProfileTools";
+        tools.className="po-profile-tools";
+        tools.innerHTML=
+            '<button type="button" class="ghost-button" id="poProfileSocial">👥 Social</button>'+
+            '<button type="button" class="ghost-button" id="poProfileSettings">⚙ Settings</button>';
+        container.appendChild(tools);
+
+        $("poProfileSocial").onclick=()=>{
+            if(typeof window.poSocial==="function")window.poSocial();
+            else if(typeof window.openPressurePanel==="function")window.openPressurePanel("friends");
+        };
+
+        $("poProfileSettings").onclick=()=>{
+            if(typeof window.poOpenSettings==="function")window.poOpenSettings();
+            else alert("Settings are still loading. Please try again.");
+        };
+    }
+
+    const logout=$("profilePageLogout");
+    if(logout){
+        logout.classList.add("po-profile-bottom-logout");
+        if(logout.parentElement!==container||container.lastElementChild!==logout){
+            container.appendChild(logout);
+        }
+    }
+}
+const oldUpdate=window.updateProfileUI;
+if(typeof oldUpdate==="function"){
+    window.updateProfileUI=async function(...args){
+        const result=await oldUpdate.apply(this,args);
+        poProfileHub();
+        return result;
+    };
+}
+document.addEventListener("DOMContentLoaded",()=>setTimeout(poProfileHub,700));
+setTimeout(poProfileHub,1200);
+window.poProfileHub=poProfileHub;
+})();

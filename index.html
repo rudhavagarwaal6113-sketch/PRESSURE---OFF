@@ -45,7 +45,7 @@
 
     <link
         rel="stylesheet"
-        href="style.css?v=20260922"
+        href="style.css?v=20260928"
     >
     <script type="application/ld+json">
     {
@@ -1507,7 +1507,52 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="script.js?v=20260922"></script>
+    <script src="script.js?v=20260928"></script>
+
+
+    <script>
+        (() => {
+            const banner = document.getElementById("poInstallBanner");
+            const installButton = document.getElementById("poInstallAccept");
+            const dismissButton = document.getElementById("poInstallDismiss");
+            if (!banner || !installButton || !dismissButton) return;
+
+            let deferredPrompt = null;
+            const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+            const wasDismissed = sessionStorage.getItem("pressure-off-install-dismissed") === "1";
+
+            const hide = () => { banner.hidden = true; };
+            const show = () => { if (!isStandalone && !wasDismissed) banner.hidden = false; };
+
+            window.addEventListener("beforeinstallprompt", event => {
+                event.preventDefault();
+                deferredPrompt = event;
+                show();
+            });
+
+            installButton.addEventListener("click", async () => {
+                if (!deferredPrompt) {
+                    hide();
+                    return;
+                }
+                deferredPrompt.prompt();
+                await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                hide();
+            });
+
+            dismissButton.addEventListener("click", () => {
+                sessionStorage.setItem("pressure-off-install-dismissed", "1");
+                hide();
+            });
+
+            window.addEventListener("appinstalled", hide);
+
+            if (new URLSearchParams(window.location.search).get("action") === "add-task") {
+                window.addEventListener("load", () => document.getElementById("addTaskTop")?.click(), { once: true });
+            }
+        })();
+    </script>
 
     <script>
         if ("serviceWorker" in navigator && location.protocol === "https:") {

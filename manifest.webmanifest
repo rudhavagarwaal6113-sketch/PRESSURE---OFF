@@ -1,0 +1,24 @@
+{
+  "id": "/",
+  "name": "PRESSURE // OFF",
+  "short_name": "Pressure Off",
+  "description": "A free student workload awareness and planning app.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#10131d",
+  "theme_color": "#10131d",
+  "categories": [
+    "education",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -20,5 +20,28 @@
       "type": "image/svg+xml",
       "purpose": "any"
     }
+  ],
+  "lang": "en",
+  "dir": "ltr",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui",
+    "browser"
+  ],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Add a task",
+      "short_name": "Add task",
+      "url": "/?action=add-task",
+      "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
   ]
 }

@@ -1,5 +1,5 @@
-const CACHE = "pressure-off-shell-v1";
-const SHELL = ["/", "/index.html", "/style.css?v=20260922", "/script.js?v=20260922", "/manifest.webmanifest", "/icon.svg"];
+const CACHE = "pressure-off-shell-v2";
+const SHELL = ["/", "/index.html", "/style.css?v=20260928", "/script.js?v=20260928", "/manifest.webmanifest", "/icon.svg"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
 });

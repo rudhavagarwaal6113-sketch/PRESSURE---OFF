@@ -9,7 +9,22 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>PRESSURE // OFF</title>
+    <title>PRESSURE // OFF | Student Workload Planner</title>
+    <meta name="description" content="Understand your school workload before it piles up. PRESSURE // OFF helps students organize tasks, track weekly pressure, and plan ahead — free to use.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="theme-color" content="#10131d">
+    <meta name="application-name" content="PRESSURE // OFF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="PRESSURE // OFF">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="canonical" href="https://pressure-off.vercel.app/">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="icon" type="image/svg+xml" href="/icon.svg">
+    <link rel="apple-touch-icon" href="/icon.svg">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="PRESSURE // OFF | Student Workload Planner">
+    <meta property="og:description" content="See the pressure before it piles up. Organize school tasks and plan your week — free.">
+    <meta property="og:url" content="https://pressure-off.vercel.app/">
 
     <link
         rel="preconnect"
@@ -1479,6 +1494,13 @@
 
     <script src="script.js?v=20260922"></script>
 
+    <script>
+        if ("serviceWorker" in navigator && location.protocol === "https:") {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("/sw.js").catch(() => {});
+            });
+        }
+    </script>
 </body>
 
 </html>

@@ -2212,13 +2212,9 @@ button,input,select,textarea{font:inherit}
 
 #poProfileSocial { display:none !important; }
 
-/* Navigation repair */
-.profile-nav-spacer { display:none !important; }
-.profile-topbar { margin-bottom:32px; }
-
-
-/* FINAL NAVIGATION VISIBILITY REPAIR */
-.profile-topbar .ghost-button {
+/* Keep the original Profile header layout while exposing its controls. */
+#profilePage #backToDashboard,
+#profilePage #profileAppearanceButton {
     display: inline-flex !important;
     visibility: visible !important;
     opacity: 1 !important;
@@ -2227,27 +2223,4 @@ button,input,select,textarea{font:inherit}
     display: inline-flex !important;
     visibility: visible !important;
     opacity: 1 !important;
-}
-.profile-topbar {
-    gap: 12px;
-    flex-wrap: wrap;
-}
-.profile-topbar .brand {
-    margin-inline: auto;
-}
-
-
-/* Profile navigation controls must remain visible on every viewport. */
-#profilePage #backToDashboard,
-#profilePage #profileAppearanceButton {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    visibility: visible !important;
-    opacity: 1 !important;
-    position: relative;
-    flex: 0 0 auto;
-    min-height: 44px;
-    padding: 10px 16px;
-    white-space: nowrap;
 }

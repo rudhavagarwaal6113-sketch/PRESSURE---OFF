@@ -7122,16 +7122,20 @@ window.poProfileHub=poProfileHub;
 })();
 
 
-/* Single authoritative Social navigation handler. */
+/* One authoritative route for both Appearance and Social controls. */
 document.addEventListener("click", function(event) {
-    const button = event.target.closest("#socialButton");
-    if (!button) return;
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target) return;
+    const appearanceButton = target.closest("#profileAppearanceButton");
+    const socialButton = target.closest("#socialButton");
+    if (!appearanceButton && !socialButton) return;
+
     event.preventDefault();
     event.stopImmediatePropagation();
+
     if (typeof window.openPressurePanel === "function") {
-        window.openPressurePanel("friends");
-    } else if (typeof window.pressureSocialInit === "function") {
-        window.pressureSocialInit();
-        window.openPressurePanel?.("friends");
+        window.openPressurePanel(appearanceButton ? "appearance" : "friends");
+    } else {
+        console.error("The Appearance and Social panel did not initialize.");
     }
 }, true);

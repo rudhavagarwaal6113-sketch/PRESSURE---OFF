@@ -7106,7 +7106,8 @@ window.poProfileHub=poProfileHub;
     function bind() {
         const button = document.getElementById("socialButton");
         if (!button) return;
-        button.onclick = function () {
+        button.onclick = function (event) {
+            event.preventDefault();
             if (typeof window.openPressurePanel === "function") {
                 window.openPressurePanel("friends");
             } else if (typeof window.poSocial === "function") {

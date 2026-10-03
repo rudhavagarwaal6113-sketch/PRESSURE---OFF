@@ -2215,3 +2215,23 @@ button,input,select,textarea{font:inherit}
 /* Navigation repair */
 .profile-nav-spacer { display:none !important; }
 .profile-topbar { margin-bottom:32px; }
+
+
+/* FINAL NAVIGATION VISIBILITY REPAIR */
+.profile-topbar .ghost-button {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+#socialButton {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+.profile-topbar {
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.profile-topbar .brand {
+    margin-inline: auto;
+}

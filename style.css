@@ -2160,7 +2160,7 @@ footer {
 @media(max-width:650px){.profile-nav-spacer{width:18px;flex-basis:18px}.po-profile-tools{justify-content:stretch}.po-profile-tools button{flex:1}}
 
 
-/* PRESSURE // OFF — PROFILE / TUTORIAL REFINEMENT */
+/* PRESSURE // OFF â PROFILE / TUTORIAL REFINEMENT */
 .profile-nav-spacer{width:34px;flex:0 0 34px;}
 .po-profile-tools{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin:4px 0 22px;}
 .po-profile-tools button{min-width:130px;}
@@ -2171,7 +2171,7 @@ footer {
 @media(max-width:650px){.profile-nav-spacer{width:18px;flex-basis:18px}.po-profile-tools{justify-content:stretch}.po-profile-tools button{flex:1;min-width:0}}
 
 
-/* PRESSURE // OFF — MOBILE APP EXPERIENCE */
+/* PRESSURE // OFF â MOBILE APP EXPERIENCE */
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{overflow-x:hidden;overscroll-behavior-y:none}
 button,input,select,textarea{font:inherit}
@@ -2210,4 +2210,8 @@ button,input,select,textarea{font:inherit}
 
 #poProfileSocial { display:none !important; }
 
-#pressureProfileToolsButton, #poProfileSocial { display:none !important; }
+#poProfileSocial { display:none !important; }
+
+/* Navigation repair */
+.profile-nav-spacer { display:none !important; }
+.profile-topbar { margin-bottom:32px; }

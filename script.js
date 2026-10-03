@@ -1,6 +1,6 @@
 /* =========================================================
    PRESSURE // OFF
-   COMPLETE SCRIPT â PROFILE + ADMIN VERSION
+   COMPLETE SCRIPT Ã¢ÂÂ PROFILE + ADMIN VERSION
 ========================================================= */
 
 
@@ -52,9 +52,9 @@ function getChatAccess() {
         score, mode, allTasksComplete,
         allowed: mode !== "locked" && allTasksComplete,
         message: !allTasksComplete ? "Complete every task first to unlock chat." :
-            mode === "locked" ? "Chat is paused at pressure 8–10. Finish tasks and bring your pressure down." :
-            mode === "limited" ? "Limited chat is available while pressure is 4–7." :
-            "Full chat is available while pressure is 1–3."
+            mode === "locked" ? "Chat is paused at pressure 8â10. Finish tasks and bring your pressure down." :
+            mode === "limited" ? "Limited chat is available while pressure is 4â7." :
+            "Full chat is available while pressure is 1â3."
     };
 }
 window.pressureChatAccess = getChatAccess;
@@ -643,7 +643,7 @@ function injectExtraStyles() {
 
 
 /* =========================================================
-   USERNAME â INTERNAL EMAIL
+   USERNAME Ã¢ÂÂ INTERNAL EMAIL
 ========================================================= */
 
 function usernameToEmail(username) {
@@ -1457,7 +1457,7 @@ function updateProfileUI() {
 
 
     document.title =
-        `PRESSURE // OFF â ${name}`;
+        `PRESSURE // OFF Ã¢ÂÂ ${name}`;
 
 
     updateRealProfilePage();
@@ -1563,7 +1563,7 @@ function updateRealProfilePage() {
     if (profileDetailEmail) {
 
         profileDetailEmail.textContent =
-            currentUser.email || "â";
+            currentUser.email || "Ã¢ÂÂ";
 
     }
 
@@ -1575,7 +1575,7 @@ function updateRealProfilePage() {
                 ? readableDateFromTimestamp(
                     joined
                 )
-                : "â";
+                : "Ã¢ÂÂ";
 
     }
 
@@ -1681,7 +1681,7 @@ function renderProfileStats() {
         } else {
 
             profileNextDeadline.textContent =
-                "â";
+                "Ã¢ÂÂ";
 
         }
 
@@ -1957,7 +1957,7 @@ function renderProfileRecentTasks() {
                             task.category ||
                             "Other"
                         )}
-                        Â·
+                        ÃÂ·
                         ${escapeHtml(
                             deadline
                         )}
@@ -3294,14 +3294,14 @@ function getCategoryIcon(
         Project: "P",
         Assignment: "A",
         Tuition: "U",
-        Other: "â¢"
+        Other: "Ã¢ÂÂ¢"
 
     };
 
 
     return (
         icons[category] ||
-        "â¢"
+        "Ã¢ÂÂ¢"
     );
 
 }
@@ -3440,7 +3440,7 @@ function renderTasks() {
                             task.category ||
                             "Other"
                         )}
-                        Â·
+                        ÃÂ·
                         ${deadlineText}
                     </small>
 
@@ -3886,12 +3886,12 @@ function renderReminders() {
                 } else if (days === 0) {
 
                     description =
-                        "Due today â consider working on it now.";
+                        "Due today Ã¢ÂÂ consider working on it now.";
 
                 } else if (days === 1) {
 
                     description =
-                        "Due tomorrow â don't leave it until the last minute.";
+                        "Due tomorrow Ã¢ÂÂ don't leave it until the last minute.";
 
                 } else {
 
@@ -3904,7 +3904,7 @@ function renderReminders() {
                 element.innerHTML = `
 
                     <span class="reminder-icon">
-                        ð
+                        Ã°ÂÂÂ
                     </span>
 
                     <div>
@@ -4788,7 +4788,7 @@ function addAIMessage(
         element.innerHTML = `
 
             <span class="message-icon">
-                â¦
+                Ã¢ÂÂ¦
             </span>
 
             <p>
@@ -4936,10 +4936,10 @@ function generateAIResponse(
 
 
     if (q.includes("quiz") || q.includes("test me")) {
-        return "Study coach mode: choose one topic, answer one question without notes, then check your work. Tell me the subject and topic and I’ll make a short practice quiz.";
+        return "Study coach mode: choose one topic, answer one question without notes, then check your work. Tell me the subject and topic and Iâll make a short practice quiz.";
     }
     if (q.includes("explain") || q.includes("teach") || q.includes("understand")) {
-        return "Study coach mode: tell me the exact subject and topic. I’ll break it into a simple explanation, a worked example, and one practice question.";
+        return "Study coach mode: tell me the exact subject and topic. Iâll break it into a simple explanation, a worked example, and one practice question.";
     }
     if (q.includes("how do i study") || q.includes("study plan")) {
         return "Use a 25-minute focus block: review the idea, practise from memory, check mistakes, then write one sentence about what you still need to revisit.";
@@ -5276,7 +5276,7 @@ if (!currentTasks.length) {
 
 
         return (
-            "Good news â you don't currently have any overdue tasks."
+            "Good news Ã¢ÂÂ you don't currently have any overdue tasks."
         );
 
     }
@@ -5284,13 +5284,13 @@ if (!currentTasks.length) {
 
     return (
         `I've analysed your workload:\n\n` +
-        `â¢ ${currentTasks.length} task(s)\n` +
-        `â¢ ${formatHours(
+        `Ã¢ÂÂ¢ ${currentTasks.length} task(s)\n` +
+        `Ã¢ÂÂ¢ ${formatHours(
             analysis.totalHours
         )} planned\n` +
-        `â¢ ${analysis.urgent.length} urgent task(s)\n` +
-        `â¢ ${analysis.overdue.length} overdue task(s)\n` +
-        `â¢ Busiest day: ${
+        `Ã¢ÂÂ¢ ${analysis.urgent.length} urgent task(s)\n` +
+        `Ã¢ÂÂ¢ ${analysis.overdue.length} overdue task(s)\n` +
+        `Ã¢ÂÂ¢ Busiest day: ${
             analysis.busiestDay
                 ? getDayName(
                     analysis.busiestDay.date
@@ -5417,7 +5417,7 @@ document
 
 
 /* =========================================================
-   ADMIN â VISIBILITY
+   ADMIN Ã¢ÂÂ VISIBILITY
 ========================================================= */
 
 function isCurrentUserAdmin() {
@@ -5458,7 +5458,7 @@ function updateAdminVisibility() {
 
 
 /* =========================================================
-   ADMIN â OPEN PAGE
+   ADMIN Ã¢ÂÂ OPEN PAGE
 ========================================================= */
 
 async function openAdminPage() {
@@ -5524,7 +5524,7 @@ async function openAdminPage() {
 
 
 /* =========================================================
-   ADMIN â CLOSE PAGE
+   ADMIN Ã¢ÂÂ CLOSE PAGE
 ========================================================= */
 
 function closeAdminPage() {
@@ -5593,7 +5593,7 @@ if (refreshAdminUsers) {
 
 }
 /* =========================================================
-   ADMIN â GET SESSION
+   ADMIN Ã¢ÂÂ GET SESSION
 ========================================================= */
 
 async function getAdminSession() {
@@ -5623,7 +5623,7 @@ async function getAdminSession() {
 
 
 /* =========================================================
-   ADMIN â LOAD USERS
+   ADMIN Ã¢ÂÂ LOAD USERS
 ========================================================= */
 
 async function loadAdminUsers() {
@@ -5763,19 +5763,19 @@ async function loadAdminUsers() {
 
         if (adminTotalUsers) {
             adminTotalUsers.textContent =
-                "â";
+                "Ã¢ÂÂ";
         }
 
 
         if (adminTotalAdmins) {
             adminTotalAdmins.textContent =
-                "â";
+                "Ã¢ÂÂ";
         }
 
 
         if (adminTotalTasks) {
             adminTotalTasks.textContent =
-                "â";
+                "Ã¢ÂÂ";
         }
 
 
@@ -5808,7 +5808,7 @@ window.loadAdminUsers =
 
 
 /* =========================================================
-   ADMIN â STATS
+   ADMIN Ã¢ÂÂ STATS
 ========================================================= */
 
 function updateAdminStats() {
@@ -5864,7 +5864,7 @@ function updateAdminStats() {
 
 
 /* =========================================================
-   ADMIN â SEARCH
+   ADMIN Ã¢ÂÂ SEARCH
 ========================================================= */
 
 function getFilteredAdminUsers() {
@@ -5941,7 +5941,7 @@ if (adminUserSearch) {
 
 
 /* =========================================================
-   ADMIN â RENDER USERS
+   ADMIN Ã¢ÂÂ RENDER USERS
 ========================================================= */
 
 function renderAdminUsers() {
@@ -6094,7 +6094,7 @@ function renderAdminUsers() {
                         @${escapeHtml(username)}
                         ${
                             user.email
-                                ? ` Â· ${escapeHtml(user.email)}`
+                                ? ` ÃÂ· ${escapeHtml(user.email)}`
                                 : ""
                         }
                     </span>
@@ -6337,7 +6337,7 @@ function renderAdminUsers(users) {
     }).join("");
 }
 /* =========================================================
-   ADMIN â DELETE USER
+   ADMIN Ã¢ÂÂ DELETE USER
 ========================================================= */
 
 async function adminDeleteUser(userId) {
@@ -6745,7 +6745,7 @@ checkSession();
           <section class="pressure-social-panel" role="dialog" aria-modal="true">
             <header class="pressure-social-head">
               <div><span class="pressure-kicker">YOUR SPACE</span><h2>Profile & Social</h2><p>Personalize Pressure // Off, connect with friends, and chat live.</p></div>
-              <button class="pressure-icon-btn" data-close-pressure aria-label="Close">Ã</button>
+              <button class="pressure-icon-btn" data-close-pressure aria-label="Close">ÃÂ</button>
             </header>
             <nav class="pressure-social-tabs">
               <button class="pressure-social-tab active" data-tab="appearance">Appearance</button>
@@ -6835,7 +6835,7 @@ checkSession();
         const { error } = await supabaseClient.from("profiles").update({ preferences: next }).eq("id", me().id);
         if (error) return alert(error.message);
         P.preferences = next; if (currentProfile) currentProfile.preferences = next; applyPreferences();
-        document.getElementById("pressurePrefStatus").textContent = "Saved â";
+        document.getElementById("pressurePrefStatus").textContent = "Saved Ã¢ÂÂ";
         setTimeout(() => document.getElementById("pressurePrefStatus").textContent = "Changes save to your profile.", 1800);
     }
 
@@ -6850,7 +6850,7 @@ checkSession();
         }
         if (send) send.disabled = !access.allowed;
         const title = document.getElementById("pressureChatTitle");
-        if (title && !access.allowed) title.textContent = "Chat locked · " + access.message;
+        if (title && !access.allowed) title.textContent = "Chat locked Â· " + access.message;
     }
     function openPressurePanel(tab = "appearance") {
         ensureUI();
@@ -6891,7 +6891,7 @@ checkSession();
         const existing = new Set(P.friends.map(x => x.person.id));
         box.innerHTML = data?.length ? data.map(person => {
             const pending = P.requests.some(x => x.person.id === person.id) || P.pendingSent?.some(x => x.person.id === person.id);
-            return `<div class="pressure-person"><div class="pressure-person-avatar">${esc((person.name || person.username || "?")[0].toUpperCase())}</div><div><strong>${esc(person.name || person.username)}</strong><span>@${esc(person.username)}${person.role === "admin" ? " Â· admin" : ""}</span></div>${existing.has(person.id) ? '<span class="pressure-pill">Friends</span>' : pending ? '<span class="pressure-pill">Pending</span>' : `<button class="pressure-primary pressure-small" data-add-friend="${person.id}">Add</button>`}</div>`;
+            return `<div class="pressure-person"><div class="pressure-person-avatar">${esc((person.name || person.username || "?")[0].toUpperCase())}</div><div><strong>${esc(person.name || person.username)}</strong><span>@${esc(person.username)}${person.role === "admin" ? " ÃÂ· admin" : ""}</span></div>${existing.has(person.id) ? '<span class="pressure-pill">Friends</span>' : pending ? '<span class="pressure-pill">Pending</span>' : `<button class="pressure-primary pressure-small" data-add-friend="${person.id}">Add</button>`}</div>`;
         }).join("") : '<div class="pressure-empty">No users found.</div>';
         box.querySelectorAll("[data-add-friend]").forEach(b => b.addEventListener("click", () => sendFriendRequest(b.dataset.addFriend)));
     }
@@ -6927,7 +6927,7 @@ checkSession();
         const found = P.friends.find(x => x.person.id === id)?.person;
         if (!found) return;
         P.selectedFriend = found; renderChatFriends();
-        document.getElementById("pressureChatTitle").textContent = `${found.name || found.username}  Â·  @${found.username}`;
+        document.getElementById("pressureChatTitle").textContent = `${found.name || found.username}  ÃÂ·  @${found.username}`;
         const { data, error } = await supabaseClient.from("messages").select("id,sender_id,receiver_id,body,created_at,read_at").or(`and(sender_id.eq.${me().id},receiver_id.eq.${id}),and(sender_id.eq.${id},receiver_id.eq.${me().id})`).order("created_at", { ascending: true }).limit(200);
         if (error) return alert(error.message);
         P.messages = data || []; renderMessages();
@@ -6936,7 +6936,7 @@ checkSession();
 
     function renderMessages() {
         const box = document.getElementById("pressureMessages");
-        if (!P.messages.length) { box.innerHTML = '<div class="pressure-empty">No messages yet. Say hi ð</div>'; return; }
+        if (!P.messages.length) { box.innerHTML = '<div class="pressure-empty">No messages yet. Say hi Ã°ÂÂÂ</div>'; return; }
         box.innerHTML = P.messages.map(m => `<div class="pressure-message ${m.sender_id === me().id ? "mine" : "theirs"}"><div>${esc(m.body)}</div><small>${new Date(m.created_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</small></div>`).join("");
         box.scrollTop = box.scrollHeight;
     }
@@ -7004,18 +7004,18 @@ checkSession();
 const E=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 const P=()=>currentProfile?.preferences&&typeof currentProfile.preferences==="object"?currentProfile.preferences:{};
 async function saveP(patch){const preferences={...P(),...patch};const{error}=await supabaseClient.from("profiles").update({preferences}).eq("id",currentUser.id);if(!error)currentProfile={...currentProfile,preferences};return !error}
-function page(id,title,kicker,desc){let e=$(id);if(e)return e;e=document.createElement("section");e.id=id;e.className="po-page hidden";e.innerHTML=`<div class="po-shell"><header class="po-head"><div><p class="eyebrow">${kicker}</p><h1>${title}</h1><p>${desc}</p></div><button class="ghost-button" data-po-close>â Dashboard</button></header><div id="${id}Content"></div></div>`;document.body.appendChild(e);e.querySelector("[data-po-close]").onclick=()=>{e.classList.add("hidden");app?.classList.remove("hidden")};return e}
+function page(id,title,kicker,desc){let e=$(id);if(e)return e;e=document.createElement("section");e.id=id;e.className="po-page hidden";e.innerHTML=`<div class="po-shell"><header class="po-head"><div><p class="eyebrow">${kicker}</p><h1>${title}</h1><p>${desc}</p></div><button class="ghost-button" data-po-close>Ã¢ÂÂ Dashboard</button></header><div id="${id}Content"></div></div>`;document.body.appendChild(e);e.querySelector("[data-po-close]").onclick=()=>{e.classList.add("hidden");app?.classList.remove("hidden")};return e}
 function nav(){const a=document.querySelector(".top-actions");if(!a)return;const oldS=$("poSocialNav");const oldG=$("poSettingsNav");oldS?.remove();oldG?.remove();const n=$("notificationButton");if(n){n.title="Notifications";n.onclick=()=>notifications()}}
 async function search(q){const out=$("poResults");if(!q){out.innerHTML='<div class="po-empty">Enter a username.</div>';return}out.innerHTML='<div class="po-empty">Searching...</div>';const{data,error}=await supabaseClient.from("profiles").select("id,username,name,role,is_admin").ilike("username",`%${q.replace(/[%_]/g,"")}%`).neq("id",currentUser.id).limit(20);if(error){out.innerHTML='<div class="po-empty">Search failed.</div>';return}out.innerHTML=data?.length?data.map(p=>{const st=status(p.id);const a=st==="accepted"?'<span class="po-status">Friends</span>':st==="sent"?'<span class="po-status">Request sent</span>':st==="incoming"?'<span class="po-status">Incoming request</span>':`<button class="pressure-primary pressure-small" data-add="${p.id}">Add friend</button>`;return person(p,a)}).join(""):'<div class="po-empty">No users found.</div>';out.querySelectorAll("[data-add]").forEach(x=>x.onclick=async()=>{const{error}=await supabaseClient.from("friendships").insert({requester_id:currentUser.id,addressee_id:x.dataset.add,status:"pending"});if(error)alert(error.message);else{await data();search(q)}})}
 async function requests(id,rows,incoming){const box=$(id);if(!rows.length){box.innerHTML='<div class="po-empty">Nothing here.</div>';return}const ids=rows.map(f=>incoming?f.requester_id:f.addressee_id);const{data}=await supabaseClient.from("profiles").select("id,username,name").in("id",ids);const m=new Map((data||[]).map(p=>[p.id,p]));box.innerHTML=rows.map(f=>{const p=m.get(incoming?f.requester_id:f.addressee_id)||{};const a=incoming?`<button class="pressure-primary pressure-small" data-ok="${f.id}">Accept</button><button class="pressure-secondary pressure-small" data-no="${f.id}">Decline</button>`:`<button class="pressure-secondary pressure-small" data-no="${f.id}">Cancel</button>`;return person(p,a)}).join("");box.querySelectorAll("[data-ok]").forEach(x=>x.onclick=()=>respond(x.dataset.ok,"accepted"));box.querySelectorAll("[data-no]").forEach(x=>x.onclick=()=>respond(x.dataset.no,incoming?"declined":"delete"))}
 async function respond(id,st){if(st==="delete"){await supabaseClient.from("friendships").delete().eq("id",id)}else await supabaseClient.from("friendships").update({status:st,updated_at:new Date().toISOString()}).eq("id",id);await data();renderSocial()}
-async function chat(id){const p=X.friends.find(x=>x.id===id);if(!p)return;$("poChatTitle").textContent=`${p.name||p.username} Â· @${p.username}`;const input=$("poMsg"),form=$("poMsgForm");input.disabled=false;form.querySelector("button").disabled=false;const{data,error}=await supabaseClient.from("messages").select("*").or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${id}),and(sender_id.eq.${id},receiver_id.eq.${currentUser.id})`).order("created_at",{ascending:true}).limit(200);if(error)return;X.messages=data||[];renderMsgs();await supabaseClient.from("messages").update({read_at:new Date().toISOString()}).eq("receiver_id",currentUser.id).eq("sender_id",id).is("read_at",null);form.onsubmit=async e=>{e.preventDefault();const body=input.value.trim();if(!body)return;const r=await supabaseClient.from("messages").insert({sender_id:currentUser.id,receiver_id:id,body});if(r.error)alert(r.error.message);else{input.value="";await chat(id)}}}
-function renderMsgs(){const b=$("poMsgs");b.innerHTML=X.messages?.length?X.messages.map(m=>`<div class="po-msg ${m.sender_id===currentUser.id?"mine":"theirs"}">${E(m.body)}<small>${new Date(m.created_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</small></div>`).join(""):'<div class="po-empty">No messages yet. Say hello ð</div>';b.scrollTop=b.scrollHeight}
+async function chat(id){const p=X.friends.find(x=>x.id===id);if(!p)return;$("poChatTitle").textContent=`${p.name||p.username} ÃÂ· @${p.username}`;const input=$("poMsg"),form=$("poMsgForm");input.disabled=false;form.querySelector("button").disabled=false;const{data,error}=await supabaseClient.from("messages").select("*").or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${id}),and(sender_id.eq.${id},receiver_id.eq.${currentUser.id})`).order("created_at",{ascending:true}).limit(200);if(error)return;X.messages=data||[];renderMsgs();await supabaseClient.from("messages").update({read_at:new Date().toISOString()}).eq("receiver_id",currentUser.id).eq("sender_id",id).is("read_at",null);form.onsubmit=async e=>{e.preventDefault();const body=input.value.trim();if(!body)return;const r=await supabaseClient.from("messages").insert({sender_id:currentUser.id,receiver_id:id,body});if(r.error)alert(r.error.message);else{input.value="";await chat(id)}}}
+function renderMsgs(){const b=$("poMsgs");b.innerHTML=X.messages?.length?X.messages.map(m=>`<div class="po-msg ${m.sender_id===currentUser.id?"mine":"theirs"}">${E(m.body)}<small>${new Date(m.created_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</small></div>`).join(""):'<div class="po-empty">No messages yet. Say hello Ã°ÂÂÂ</div>';b.scrollTop=b.scrollHeight}
 function realtime(){if(X.channel||!currentUser)return;X.channel=supabaseClient.channel("po-social-"+currentUser.id).on("postgres_changes",{event:"*",schema:"public",table:"friendships"},async()=>{if(!$("poSocialPage")?.classList.contains("hidden")){await data();renderSocial()}}).on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},async p=>{const m=p.new;if(m.sender_id!==currentUser.id&&m.receiver_id!==currentUser.id)return;if(X.friend&&(m.sender_id===X.friend||m.receiver_id===X.friend)){X.messages=X.messages||[];if(!X.messages.some(x=>x.id===m.id)){X.messages.push(m);renderMsgs()}}}).subscribe()}
 async function settings(){if(!currentUser)return;pages();hide();$("poSettingsPage").classList.remove("hidden");renderSettings();scrollTo(0,0)}
 function renderSettings(){const p=P();$("poSettingsPageContent").innerHTML=`<div class="po-two"><div class="po-card"><p class="eyebrow">APPEARANCE</p><h2>Customize homepage</h2><div class="po-grid"><label>Theme<select id="poTheme"><option value="midnight">Midnight</option><option value="dusk">Dusk</option><option value="light">Light</option></select></label><label>Accent<input id="poAccent" type="color"></label><label>Density<select id="poDensity"><option>comfortable</option><option>compact</option><option>spacious</option></select></label></div><label class="po-switch"><span><strong>Reduced motion</strong><small>Less animation.</small></span><input id="poMotion" type="checkbox"></label><label class="po-switch"><span><strong>Pressure animations</strong><small>Keep visual pressure feedback.</small></span><input id="poAnim" type="checkbox"></label><label class="po-switch"><span><strong>Notifications</strong><small>Allow reminder notifications.</small></span><input id="poNoti" type="checkbox"></label><button id="poSaveSet" class="pressure-primary">Save appearance</button></div><div class="po-card"><p class="eyebrow">ACCOUNT</p><h2>Profile & setup</h2><label>Display name<input id="poName" maxlength="60"></label><button id="poSaveName" class="pressure-primary">Save name</button><button id="poTour" class="pressure-secondary">Take the guided tour again</button><div class="po-danger"><div><strong>Delete my account</strong><p>This permanently deletes your account and data.</p></div><button id="poDelete" class="pressure-danger">Delete account</button></div></div></div>`;$("poTheme").value=p.theme||"midnight";$("poAccent").value=/^#[0-9a-f]{6}$/i.test(p.accent||"")?p.accent:"#5B8CFF";$("poDensity").value=p.density||"comfortable";$("poMotion").checked=!!p.reducedMotion;$("poAnim").checked=p.pressureAnimations!==false;$("poNoti").checked=p.notifications!==false;$("poName").value=currentProfile.name||"";$("poSaveSet").onclick=async()=>{await saveP({theme:$("poTheme").value,accent:$("poAccent").value,density:$("poDensity").value,reducedMotion:$("poMotion").checked,pressureAnimations:$("poAnim").checked,notifications:$("poNoti").checked});appearance();alert("Appearance saved.")};$("poSaveName").onclick=async()=>{const name=$("poName").value.trim();const{error}=await supabaseClient.from("profiles").update({name}).eq("id",currentUser.id);if(!error){currentProfile.name=name;updateProfileUI();alert("Name saved.")}};$("poTour").onclick=()=>onboard(true);$("poDelete").onclick=deleteAccount}
 function appearance(){const p=P();document.documentElement.style.setProperty("--po-accent",p.accent||"#5B8CFF");document.body.dataset.poTheme=p.theme||"midnight";document.body.dataset.poDensity=p.density||"comfortable";document.body.classList.toggle("po-reduced",!!p.reducedMotion)}
-async function notifications(){if(!currentUser)return;pages();hide();$("poNotificationsPage").classList.remove("hidden");const[f,m]=await Promise.all([supabaseClient.from("friendships").select("id,requester_id").eq("addressee_id",currentUser.id).eq("status","pending"),supabaseClient.from("messages").select("id,sender_id,body,created_at").eq("receiver_id",currentUser.id).is("read_at",null).order("created_at",{ascending:false}).limit(20)]);const ids=[...(f.data||[]).map(x=>x.requester_id),...(m.data||[]).map(x=>x.sender_id)];let ps=[];if(ids.length){const r=await supabaseClient.from("profiles").select("id,username,name").in("id",[...new Set(ids)]);ps=r.data||[]}const map=new Map(ps.map(p=>[p.id,p]));$("poNotificationsPageContent").innerHTML=`<div class="po-two"><div class="po-card"><p class="eyebrow">FRIENDS</p><h2>${f.data?.length||0} requests</h2><p class="po-muted">${f.data?.length?"Open Social â Requests to respond.":"No pending friend requests."}</p></div><div class="po-card"><p class="eyebrow">MESSAGES</p><h2>${m.data?.length||0} unread</h2><div class="po-list">${(m.data||[]).map(x=>person(map.get(x.sender_id)||{},`<button class="pressure-primary pressure-small" data-nc="${x.sender_id}">Open chat</button>`)).join("")||'<div class="po-empty">No unread messages.</div>'}</div></div></div><div class="po-card"><p class="eyebrow">WORKLOAD</p><h2>Dashboard reminders</h2><p class="po-muted">Your existing Smart Reminders and workload alerts remain on the dashboard.</p></div>`;$("poNotificationsPageContent").querySelectorAll("[data-nc]").forEach(b=>b.onclick=()=>{X.friend=b.dataset.nc;window.poSocial?.();X.tab="chat";renderSocial()})}
+async function notifications(){if(!currentUser)return;pages();hide();$("poNotificationsPage").classList.remove("hidden");const[f,m]=await Promise.all([supabaseClient.from("friendships").select("id,requester_id").eq("addressee_id",currentUser.id).eq("status","pending"),supabaseClient.from("messages").select("id,sender_id,body,created_at").eq("receiver_id",currentUser.id).is("read_at",null).order("created_at",{ascending:false}).limit(20)]);const ids=[...(f.data||[]).map(x=>x.requester_id),...(m.data||[]).map(x=>x.sender_id)];let ps=[];if(ids.length){const r=await supabaseClient.from("profiles").select("id,username,name").in("id",[...new Set(ids)]);ps=r.data||[]}const map=new Map(ps.map(p=>[p.id,p]));$("poNotificationsPageContent").innerHTML=`<div class="po-two"><div class="po-card"><p class="eyebrow">FRIENDS</p><h2>${f.data?.length||0} requests</h2><p class="po-muted">${f.data?.length?"Open Social Ã¢ÂÂ Requests to respond.":"No pending friend requests."}</p></div><div class="po-card"><p class="eyebrow">MESSAGES</p><h2>${m.data?.length||0} unread</h2><div class="po-list">${(m.data||[]).map(x=>person(map.get(x.sender_id)||{},`<button class="pressure-primary pressure-small" data-nc="${x.sender_id}">Open chat</button>`)).join("")||'<div class="po-empty">No unread messages.</div>'}</div></div></div><div class="po-card"><p class="eyebrow">WORKLOAD</p><h2>Dashboard reminders</h2><p class="po-muted">Your existing Smart Reminders and workload alerts remain on the dashboard.</p></div>`;$("poNotificationsPageContent").querySelectorAll("[data-nc]").forEach(b=>b.onclick=()=>{X.friend=b.dataset.nc;window.poSocial?.();X.tab="chat";renderSocial()})}
 async function deleteAccount(){if(!confirm("Permanently delete your account? This cannot be undone."))return;const{data:{session}}=await supabaseClient.auth.getSession();if(!session)return alert("Your session expired.");const r=await fetch(`${SUPABASE_URL}/functions/v1/delete-my-account`,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${session.access_token}`}}),j=await r.json().catch(()=>({}));if(!r.ok)return alert(j.error||"Could not delete account.");await supabaseClient.auth.signOut();location.reload()}
 function onboard(force=false){if(!currentUser||!currentProfile)return;const p=P(),created=new Date(currentProfile.created_at||0).getTime(),fresh=created&&Date.now()-created<86400000;if(!force&&p.onboarding?.completed)return;if(!force&&!p.onboarding&&!fresh)return;X.onboard={step:Number(p.onboarding?.step||0)};drawOnboard()}
 function drawOnboard(){let m=$("poOnboard");if(!m){m=document.createElement("div");m.id="poOnboard";m.className="po-onboard";document.body.appendChild(m)}
@@ -7023,17 +7023,17 @@ const steps=[
 ["Welcome to PRESSURE // OFF","A quick guided tour will show you what every important part of the app does."],
 ["Your Profile","Your Profile is your personal control center: stats, personal information, appearance, social tools and account controls."],
 ["Add Tasks","Use + Add Task to enter school work, choose a category, effort and due date. Your tasks power the rest of the dashboard."],
-["Weekly Pressure","Your 1â10 score summarizes workload using effort, task density and deadline proximity. It is a planning signal, not a judgment."],
+["Weekly Pressure","Your 1Ã¢ÂÂ10 score summarizes workload using effort, task density and deadline proximity. It is a planning signal, not a judgment."],
 ["Pressure Radar & Weekly View","Radar shows workload distribution. Weekly View lets you see where tasks are building up across the week."],
 ["Workload Assistant","Ask what to work on today, which day is hardest, or how to reduce pressure. It uses your current tasks."],
 ["Smart Reminders","Reminders help you notice deadlines and overloaded days. You can enable browser notifications when you want them."],
 ["Suggestions","Suggestions turn your workload into practical planning ideas so you can act before things pile up."],
 ["Friends & Chat","Social now has its own top-navigation tab next to Admin. Chat access follows your pressure score and completed tasks."],
 ["Settings & Appearance","Profile keeps your personal details and Settings for theme, accent, density, motion, notifications and your display name."],
-["You're Ready","That's the tour. You can replay it any time from Profile â Settings â Guided tour."]
+["You're Ready","That's the tour. You can replay it any time from Profile Ã¢ÂÂ Settings Ã¢ÂÂ Guided tour."]
 ];
 const i=Math.min(steps.length-1,Math.max(0,X.onboard.step));
-m.innerHTML=`<div class="po-ob-back"></div><div class="po-ob-card po-tour-card"><div class="po-ob-bar"><i style="width:${((i+1)/steps.length)*100}%"></i></div><p class="eyebrow">PRESSURE // OFF TOUR Â· ${i+1}/${steps.length}</p><h2>${steps[i][0]}</h2><p>${steps[i][1]}</p><div class="po-tour-icon">${["â","ð¤","ï¼","â","â¦","â¦","ð","â","ð¥","â","â"][i]}</div><div class="po-ob-note">You can skip the tour, and replay it later from your Profile settings.</div><footer><button id="poObSkip" class="pressure-secondary">${i===steps.length-1?"Close tour":"Skip tour"}</button><div><button id="poObBack" class="pressure-secondary" ${i===0?"disabled":""}>Back</button><button id="poObNext" class="pressure-primary">${i===steps.length-1?"Finish":"Next"}</button></div></footer></div>`;
+m.innerHTML=`<div class="po-ob-back"></div><div class="po-ob-card po-tour-card"><div class="po-ob-bar"><i style="width:${((i+1)/steps.length)*100}%"></i></div><p class="eyebrow">PRESSURE // OFF TOUR ÃÂ· ${i+1}/${steps.length}</p><h2>${steps[i][0]}</h2><p>${steps[i][1]}</p><div class="po-tour-icon">${["Ã¢ÂÂ","Ã°ÂÂÂ¤","Ã¯Â¼Â","Ã¢ÂÂ","Ã¢ÂÂ¦","Ã¢ÂÂ¦","Ã°ÂÂÂ","Ã¢ÂÂ","Ã°ÂÂÂ¥","Ã¢ÂÂ","Ã¢ÂÂ"][i]}</div><div class="po-ob-note">You can skip the tour, and replay it later from your Profile settings.</div><footer><button id="poObSkip" class="pressure-secondary">${i===steps.length-1?"Close tour":"Skip tour"}</button><div><button id="poObBack" class="pressure-secondary" ${i===0?"disabled":""}>Back</button><button id="poObNext" class="pressure-primary">${i===steps.length-1?"Finish":"Next"}</button></div></footer></div>`;
 $("poObBack").onclick=()=>{X.onboard.step=Math.max(0,i-1);saveP({onboarding:{completed:false,step:X.onboard.step}});drawOnboard()};
 $("poObNext").onclick=()=>i===steps.length-1?finishOnboard():(X.onboard.step=i+1,saveP({onboarding:{completed:false,step:X.onboard.step}}),drawOnboard());
 $("poObSkip").onclick=finishOnboard
@@ -7063,10 +7063,7 @@ function poProfileHub(){
         tools=document.createElement("div");
         tools.id="poProfileTools";
         tools.className="po-profile-tools";
-        tools.innerHTML=
-            '<button type="button" class="ghost-button" id="poProfileSocial">ð¥ Social</button>'+
-            '<button type="button" class="ghost-button" id="poProfileSettings">â Settings</button>';
-        container.appendChild(tools);
+        tools.innerHTML = '<button type="button" class="ghost-button" id="poProfileSettings">Settings</button>'; container.appendChild(tools);
 
 
         $("poProfileSettings").onclick=()=>{
@@ -7094,4 +7091,23 @@ if(typeof oldUpdate==="function"){
 document.addEventListener("DOMContentLoaded",()=>setTimeout(poProfileHub,700));
 setTimeout(poProfileHub,1200);
 window.poProfileHub=poProfileHub;
+})();
+
+/* PRESSURE_OFF_SOCIAL_NAV_REPAIR */
+(function bindPressureSocialNav() {
+    function bind() {
+        const button = document.getElementById("socialButton");
+        if (!button) return;
+        button.onclick = function () {
+            if (typeof window.openPressurePanel === "function") {
+                window.openPressurePanel("friends");
+            } else if (typeof window.poSocial === "function") {
+                window.poSocial();
+            }
+        };
+    }
+    document.addEventListener("DOMContentLoaded", bind);
+    window.addEventListener("load", bind);
+    setTimeout(bind, 500);
+    setTimeout(bind, 1400);
 })();

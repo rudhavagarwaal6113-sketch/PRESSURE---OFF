@@ -7084,6 +7084,23 @@ setTimeout(poProfileHub,1200);
 window.poProfileHub=poProfileHub;
 })();
 
+/* PROFILE_APPEARANCE_NAV_REPAIR */
+(function bindProfileAppearanceNav() {
+    function bind() {
+        const button = document.getElementById("profileAppearanceButton");
+        if (!button) return;
+        button.onclick = function () {
+            if (typeof window.openPressurePanel === "function") {
+                window.openPressurePanel("appearance");
+            }
+        };
+    }
+    document.addEventListener("DOMContentLoaded", bind);
+    window.addEventListener("load", bind);
+    setTimeout(bind, 500);
+    setTimeout(bind, 1400);
+})();
+
 /* PRESSURE_OFF_SOCIAL_NAV_REPAIR */
 (function bindPressureSocialNav() {
     function bind() {

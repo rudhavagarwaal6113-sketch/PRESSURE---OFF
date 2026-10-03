@@ -2235,3 +2235,19 @@ button,input,select,textarea{font:inherit}
 .profile-topbar .brand {
     margin-inline: auto;
 }
+
+
+/* Profile navigation controls must remain visible on every viewport. */
+#profilePage #backToDashboard,
+#profilePage #profileAppearanceButton {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative;
+    flex: 0 0 auto;
+    min-height: 44px;
+    padding: 10px 16px;
+    white-space: nowrap;
+}

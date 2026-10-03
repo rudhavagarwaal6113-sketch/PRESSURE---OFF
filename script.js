@@ -7120,3 +7120,17 @@ window.poProfileHub=poProfileHub;
     setTimeout(bind, 500);
     setTimeout(bind, 1400);
 })();
+
+
+/* Single authoritative Social navigation handler. */
+document.addEventListener("click", function(event) {
+    const button = event.target.closest("#socialButton");
+    if (!button) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (typeof window.poSocial === "function") {
+        window.poSocial();
+    } else if (typeof window.openPressurePanel === "function") {
+        window.openPressurePanel("friends");
+    }
+}, true);

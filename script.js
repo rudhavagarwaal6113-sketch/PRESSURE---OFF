@@ -1,6 +1,6 @@
 /* =========================================================
    PRESSURE // OFF
-   COMPLETE SCRIPT Ã¢ÂÂ PROFILE + ADMIN VERSION
+   COMPLETE SCRIPT - PROFILE + ADMIN VERSION
 ========================================================= */
 
 
@@ -52,9 +52,9 @@ function getChatAccess() {
         score, mode, allTasksComplete,
         allowed: mode !== "locked" && allTasksComplete,
         message: !allTasksComplete ? "Complete every task first to unlock chat." :
-            mode === "locked" ? "Chat is paused at pressure 8â10. Finish tasks and bring your pressure down." :
-            mode === "limited" ? "Limited chat is available while pressure is 4â7." :
-            "Full chat is available while pressure is 1â3."
+            mode === "locked" ? "Chat is paused at pressure 8-10. Finish tasks and bring your pressure down." :
+            mode === "limited" ? "Limited chat is available while pressure is 4-7." :
+            "Full chat is available while pressure is 1-3."
     };
 }
 window.pressureChatAccess = getChatAccess;
@@ -1457,7 +1457,7 @@ function updateProfileUI() {
 
 
     document.title =
-        `PRESSURE // OFF Ã¢ÂÂ ${name}`;
+        `PRESSURE // OFF - ${name}`;
 
 
     updateRealProfilePage();
@@ -1563,7 +1563,7 @@ function updateRealProfilePage() {
     if (profileDetailEmail) {
 
         profileDetailEmail.textContent =
-            currentUser.email || "Ã¢ÂÂ";
+            currentUser.email || "-";
 
     }
 
@@ -1575,7 +1575,7 @@ function updateRealProfilePage() {
                 ? readableDateFromTimestamp(
                     joined
                 )
-                : "Ã¢ÂÂ";
+                : "-";
 
     }
 
@@ -1681,7 +1681,7 @@ function renderProfileStats() {
         } else {
 
             profileNextDeadline.textContent =
-                "Ã¢ÂÂ";
+                "-";
 
         }
 
@@ -1957,7 +1957,7 @@ function renderProfileRecentTasks() {
                             task.category ||
                             "Other"
                         )}
-                        ÃÂ·
+                        -
                         ${escapeHtml(
                             deadline
                         )}
@@ -3294,14 +3294,14 @@ function getCategoryIcon(
         Project: "P",
         Assignment: "A",
         Tuition: "U",
-        Other: "Ã¢ÂÂ¢"
+        Other: "-"
 
     };
 
 
     return (
         icons[category] ||
-        "Ã¢ÂÂ¢"
+        "-"
     );
 
 }
@@ -3440,7 +3440,7 @@ function renderTasks() {
                             task.category ||
                             "Other"
                         )}
-                        ÃÂ·
+                        -
                         ${deadlineText}
                     </small>
 
@@ -3886,12 +3886,12 @@ function renderReminders() {
                 } else if (days === 0) {
 
                     description =
-                        "Due today Ã¢ÂÂ consider working on it now.";
+                        "Due today - consider working on it now.";
 
                 } else if (days === 1) {
 
                     description =
-                        "Due tomorrow Ã¢ÂÂ don't leave it until the last minute.";
+                        "Due tomorrow - don't leave it until the last minute.";
 
                 } else {
 
@@ -3904,7 +3904,7 @@ function renderReminders() {
                 element.innerHTML = `
 
                     <span class="reminder-icon">
-                        Ã°ÂÂÂ
+                        !
                     </span>
 
                     <div>
@@ -4788,7 +4788,7 @@ function addAIMessage(
         element.innerHTML = `
 
             <span class="message-icon">
-                Ã¢ÂÂ¦
+                *
             </span>
 
             <p>
@@ -4936,10 +4936,10 @@ function generateAIResponse(
 
 
     if (q.includes("quiz") || q.includes("test me")) {
-        return "Study coach mode: choose one topic, answer one question without notes, then check your work. Tell me the subject and topic and Iâll make a short practice quiz.";
+        return "Study coach mode: choose one topic, answer one question without notes, then check your work. Tell me the subject and topic and I'll make a short practice quiz.";
     }
     if (q.includes("explain") || q.includes("teach") || q.includes("understand")) {
-        return "Study coach mode: tell me the exact subject and topic. Iâll break it into a simple explanation, a worked example, and one practice question.";
+        return "Study coach mode: tell me the exact subject and topic. I'll break it into a simple explanation, a worked example, and one practice question.";
     }
     if (q.includes("how do i study") || q.includes("study plan")) {
         return "Use a 25-minute focus block: review the idea, practise from memory, check mistakes, then write one sentence about what you still need to revisit.";
@@ -5276,7 +5276,7 @@ if (!currentTasks.length) {
 
 
         return (
-            "Good news Ã¢ÂÂ you don't currently have any overdue tasks."
+            "Good news - you don't currently have any overdue tasks."
         );
 
     }
@@ -5284,13 +5284,13 @@ if (!currentTasks.length) {
 
     return (
         `I've analysed your workload:\n\n` +
-        `Ã¢ÂÂ¢ ${currentTasks.length} task(s)\n` +
-        `Ã¢ÂÂ¢ ${formatHours(
+        `- ${currentTasks.length} task(s)\n` +
+        `- ${formatHours(
             analysis.totalHours
         )} planned\n` +
-        `Ã¢ÂÂ¢ ${analysis.urgent.length} urgent task(s)\n` +
-        `Ã¢ÂÂ¢ ${analysis.overdue.length} overdue task(s)\n` +
-        `Ã¢ÂÂ¢ Busiest day: ${
+        `- ${analysis.urgent.length} urgent task(s)\n` +
+        `- ${analysis.overdue.length} overdue task(s)\n` +
+        `- Busiest day: ${
             analysis.busiestDay
                 ? getDayName(
                     analysis.busiestDay.date
@@ -5417,7 +5417,7 @@ document
 
 
 /* =========================================================
-   ADMIN Ã¢ÂÂ VISIBILITY
+   ADMIN - VISIBILITY
 ========================================================= */
 
 function isCurrentUserAdmin() {
@@ -5458,7 +5458,7 @@ function updateAdminVisibility() {
 
 
 /* =========================================================
-   ADMIN Ã¢ÂÂ OPEN PAGE
+   ADMIN - OPEN PAGE
 ========================================================= */
 
 async function openAdminPage() {
@@ -5524,7 +5524,7 @@ async function openAdminPage() {
 
 
 /* =========================================================
-   ADMIN Ã¢ÂÂ CLOSE PAGE
+   ADMIN - CLOSE PAGE
 ========================================================= */
 
 function closeAdminPage() {
@@ -5593,7 +5593,7 @@ if (refreshAdminUsers) {
 
 }
 /* =========================================================
-   ADMIN Ã¢ÂÂ GET SESSION
+   ADMIN - GET SESSION
 ========================================================= */
 
 async function getAdminSession() {
@@ -5623,7 +5623,7 @@ async function getAdminSession() {
 
 
 /* =========================================================
-   ADMIN Ã¢ÂÂ LOAD USERS
+   ADMIN - LOAD USERS
 ========================================================= */
 
 async function loadAdminUsers() {
@@ -5763,19 +5763,19 @@ async function loadAdminUsers() {
 
         if (adminTotalUsers) {
             adminTotalUsers.textContent =
-                "Ã¢ÂÂ";
+                "-";
         }
 
 
         if (adminTotalAdmins) {
             adminTotalAdmins.textContent =
-                "Ã¢ÂÂ";
+                "-";
         }
 
 
         if (adminTotalTasks) {
             adminTotalTasks.textContent =
-                "Ã¢ÂÂ";
+                "-";
         }
 
 
@@ -5808,7 +5808,7 @@ window.loadAdminUsers =
 
 
 /* =========================================================
-   ADMIN Ã¢ÂÂ STATS
+   ADMIN - STATS
 ========================================================= */
 
 function updateAdminStats() {
@@ -5864,7 +5864,7 @@ function updateAdminStats() {
 
 
 /* =========================================================
-   ADMIN Ã¢ÂÂ SEARCH
+   ADMIN - SEARCH
 ========================================================= */
 
 function getFilteredAdminUsers() {
@@ -5941,7 +5941,7 @@ if (adminUserSearch) {
 
 
 /* =========================================================
-   ADMIN Ã¢ÂÂ RENDER USERS
+   ADMIN - RENDER USERS
 ========================================================= */
 
 function renderAdminUsers() {
@@ -6094,7 +6094,7 @@ function renderAdminUsers() {
                         @${escapeHtml(username)}
                         ${
                             user.email
-                                ? ` ÃÂ· ${escapeHtml(user.email)}`
+                                ? ` - ${escapeHtml(user.email)}`
                                 : ""
                         }
                     </span>
@@ -6337,7 +6337,7 @@ function renderAdminUsers(users) {
     }).join("");
 }
 /* =========================================================
-   ADMIN Ã¢ÂÂ DELETE USER
+   ADMIN - DELETE USER
 ========================================================= */
 
 async function adminDeleteUser(userId) {
@@ -6745,7 +6745,7 @@ checkSession();
           <section class="pressure-social-panel" role="dialog" aria-modal="true">
             <header class="pressure-social-head">
               <div><span class="pressure-kicker">YOUR SPACE</span><h2>Profile & Social</h2><p>Personalize Pressure // Off, connect with friends, and chat live.</p></div>
-              <button class="pressure-icon-btn" data-close-pressure aria-label="Close">ÃÂ</button>
+              <button class="pressure-icon-btn" data-close-pressure aria-label="Close">x</button>
             </header>
             <nav class="pressure-social-tabs">
               <button class="pressure-social-tab active" data-tab="appearance">Appearance</button>
@@ -6891,7 +6891,7 @@ checkSession();
         const existing = new Set(P.friends.map(x => x.person.id));
         box.innerHTML = data?.length ? data.map(person => {
             const pending = P.requests.some(x => x.person.id === person.id) || P.pendingSent?.some(x => x.person.id === person.id);
-            return `<div class="pressure-person"><div class="pressure-person-avatar">${esc((person.name || person.username || "?")[0].toUpperCase())}</div><div><strong>${esc(person.name || person.username)}</strong><span>@${esc(person.username)}${person.role === "admin" ? " ÃÂ· admin" : ""}</span></div>${existing.has(person.id) ? '<span class="pressure-pill">Friends</span>' : pending ? '<span class="pressure-pill">Pending</span>' : `<button class="pressure-primary pressure-small" data-add-friend="${person.id}">Add</button>`}</div>`;
+            return `<div class="pressure-person"><div class="pressure-person-avatar">${esc((person.name || person.username || "?")[0].toUpperCase())}</div><div><strong>${esc(person.name || person.username)}</strong><span>@${esc(person.username)}${person.role === "admin" ? " - admin" : ""}</span></div>${existing.has(person.id) ? '<span class="pressure-pill">Friends</span>' : pending ? '<span class="pressure-pill">Pending</span>' : `<button class="pressure-primary pressure-small" data-add-friend="${person.id}">Add</button>`}</div>`;
         }).join("") : '<div class="pressure-empty">No users found.</div>';
         box.querySelectorAll("[data-add-friend]").forEach(b => b.addEventListener("click", () => sendFriendRequest(b.dataset.addFriend)));
     }
@@ -6927,7 +6927,7 @@ checkSession();
         const found = P.friends.find(x => x.person.id === id)?.person;
         if (!found) return;
         P.selectedFriend = found; renderChatFriends();
-        document.getElementById("pressureChatTitle").textContent = `${found.name || found.username}  ÃÂ·  @${found.username}`;
+        document.getElementById("pressureChatTitle").textContent = `${found.name || found.username}  -  @${found.username}`;
         const { data, error } = await supabaseClient.from("messages").select("id,sender_id,receiver_id,body,created_at,read_at").or(`and(sender_id.eq.${me().id},receiver_id.eq.${id}),and(sender_id.eq.${id},receiver_id.eq.${me().id})`).order("created_at", { ascending: true }).limit(200);
         if (error) return alert(error.message);
         P.messages = data || []; renderMessages();
@@ -7004,12 +7004,12 @@ checkSession();
 const E=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 const P=()=>currentProfile?.preferences&&typeof currentProfile.preferences==="object"?currentProfile.preferences:{};
 async function saveP(patch){const preferences={...P(),...patch};const{error}=await supabaseClient.from("profiles").update({preferences}).eq("id",currentUser.id);if(!error)currentProfile={...currentProfile,preferences};return !error}
-function page(id,title,kicker,desc){let e=$(id);if(e)return e;e=document.createElement("section");e.id=id;e.className="po-page hidden";e.innerHTML=`<div class="po-shell"><header class="po-head"><div><p class="eyebrow">${kicker}</p><h1>${title}</h1><p>${desc}</p></div><button class="ghost-button" data-po-close>Ã¢ÂÂ Dashboard</button></header><div id="${id}Content"></div></div>`;document.body.appendChild(e);e.querySelector("[data-po-close]").onclick=()=>{e.classList.add("hidden");app?.classList.remove("hidden")};return e}
+function page(id,title,kicker,desc){let e=$(id);if(e)return e;e=document.createElement("section");e.id=id;e.className="po-page hidden";e.innerHTML=`<div class="po-shell"><header class="po-head"><div><p class="eyebrow">${kicker}</p><h1>${title}</h1><p>${desc}</p></div><button class="ghost-button" data-po-close><- Dashboard</button></header><div id="${id}Content"></div></div>`;document.body.appendChild(e);e.querySelector("[data-po-close]").onclick=()=>{e.classList.add("hidden");app?.classList.remove("hidden")};return e}
 function nav(){const a=document.querySelector(".top-actions");if(!a)return;const oldS=$("poSocialNav");const oldG=$("poSettingsNav");oldS?.remove();oldG?.remove();const n=$("notificationButton");if(n){n.title="Notifications";n.onclick=()=>notifications()}}
 async function search(q){const out=$("poResults");if(!q){out.innerHTML='<div class="po-empty">Enter a username.</div>';return}out.innerHTML='<div class="po-empty">Searching...</div>';const{data,error}=await supabaseClient.from("profiles").select("id,username,name,role,is_admin").ilike("username",`%${q.replace(/[%_]/g,"")}%`).neq("id",currentUser.id).limit(20);if(error){out.innerHTML='<div class="po-empty">Search failed.</div>';return}out.innerHTML=data?.length?data.map(p=>{const st=status(p.id);const a=st==="accepted"?'<span class="po-status">Friends</span>':st==="sent"?'<span class="po-status">Request sent</span>':st==="incoming"?'<span class="po-status">Incoming request</span>':`<button class="pressure-primary pressure-small" data-add="${p.id}">Add friend</button>`;return person(p,a)}).join(""):'<div class="po-empty">No users found.</div>';out.querySelectorAll("[data-add]").forEach(x=>x.onclick=async()=>{const{error}=await supabaseClient.from("friendships").insert({requester_id:currentUser.id,addressee_id:x.dataset.add,status:"pending"});if(error)alert(error.message);else{await data();search(q)}})}
 async function requests(id,rows,incoming){const box=$(id);if(!rows.length){box.innerHTML='<div class="po-empty">Nothing here.</div>';return}const ids=rows.map(f=>incoming?f.requester_id:f.addressee_id);const{data}=await supabaseClient.from("profiles").select("id,username,name").in("id",ids);const m=new Map((data||[]).map(p=>[p.id,p]));box.innerHTML=rows.map(f=>{const p=m.get(incoming?f.requester_id:f.addressee_id)||{};const a=incoming?`<button class="pressure-primary pressure-small" data-ok="${f.id}">Accept</button><button class="pressure-secondary pressure-small" data-no="${f.id}">Decline</button>`:`<button class="pressure-secondary pressure-small" data-no="${f.id}">Cancel</button>`;return person(p,a)}).join("");box.querySelectorAll("[data-ok]").forEach(x=>x.onclick=()=>respond(x.dataset.ok,"accepted"));box.querySelectorAll("[data-no]").forEach(x=>x.onclick=()=>respond(x.dataset.no,incoming?"declined":"delete"))}
 async function respond(id,st){if(st==="delete"){await supabaseClient.from("friendships").delete().eq("id",id)}else await supabaseClient.from("friendships").update({status:st,updated_at:new Date().toISOString()}).eq("id",id);await data();renderSocial()}
-async function chat(id){const p=X.friends.find(x=>x.id===id);if(!p)return;$("poChatTitle").textContent=`${p.name||p.username} ÃÂ· @${p.username}`;const input=$("poMsg"),form=$("poMsgForm");input.disabled=false;form.querySelector("button").disabled=false;const{data,error}=await supabaseClient.from("messages").select("*").or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${id}),and(sender_id.eq.${id},receiver_id.eq.${currentUser.id})`).order("created_at",{ascending:true}).limit(200);if(error)return;X.messages=data||[];renderMsgs();await supabaseClient.from("messages").update({read_at:new Date().toISOString()}).eq("receiver_id",currentUser.id).eq("sender_id",id).is("read_at",null);form.onsubmit=async e=>{e.preventDefault();const body=input.value.trim();if(!body)return;const r=await supabaseClient.from("messages").insert({sender_id:currentUser.id,receiver_id:id,body});if(r.error)alert(r.error.message);else{input.value="";await chat(id)}}}
+async function chat(id){const p=X.friends.find(x=>x.id===id);if(!p)return;$("poChatTitle").textContent=`${p.name||p.username} - @${p.username}`;const input=$("poMsg"),form=$("poMsgForm");input.disabled=false;form.querySelector("button").disabled=false;const{data,error}=await supabaseClient.from("messages").select("*").or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${id}),and(sender_id.eq.${id},receiver_id.eq.${currentUser.id})`).order("created_at",{ascending:true}).limit(200);if(error)return;X.messages=data||[];renderMsgs();await supabaseClient.from("messages").update({read_at:new Date().toISOString()}).eq("receiver_id",currentUser.id).eq("sender_id",id).is("read_at",null);form.onsubmit=async e=>{e.preventDefault();const body=input.value.trim();if(!body)return;const r=await supabaseClient.from("messages").insert({sender_id:currentUser.id,receiver_id:id,body});if(r.error)alert(r.error.message);else{input.value="";await chat(id)}}}
 function renderMsgs(){const b=$("poMsgs");b.innerHTML=X.messages?.length?X.messages.map(m=>`<div class="po-msg ${m.sender_id===currentUser.id?"mine":"theirs"}">${E(m.body)}<small>${new Date(m.created_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</small></div>`).join(""):'<div class="po-empty">No messages yet. Say hello Ã°ÂÂÂ</div>';b.scrollTop=b.scrollHeight}
 function realtime(){if(X.channel||!currentUser)return;X.channel=supabaseClient.channel("po-social-"+currentUser.id).on("postgres_changes",{event:"*",schema:"public",table:"friendships"},async()=>{if(!$("poSocialPage")?.classList.contains("hidden")){await data();renderSocial()}}).on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},async p=>{const m=p.new;if(m.sender_id!==currentUser.id&&m.receiver_id!==currentUser.id)return;if(X.friend&&(m.sender_id===X.friend||m.receiver_id===X.friend)){X.messages=X.messages||[];if(!X.messages.some(x=>x.id===m.id)){X.messages.push(m);renderMsgs()}}}).subscribe()}
 async function settings(){if(!currentUser)return;pages();hide();$("poSettingsPage").classList.remove("hidden");renderSettings();scrollTo(0,0)}
@@ -7033,7 +7033,7 @@ const steps=[
 ["You're Ready","That's the tour. You can replay it any time from Profile Ã¢ÂÂ Settings Ã¢ÂÂ Guided tour."]
 ];
 const i=Math.min(steps.length-1,Math.max(0,X.onboard.step));
-m.innerHTML=`<div class="po-ob-back"></div><div class="po-ob-card po-tour-card"><div class="po-ob-bar"><i style="width:${((i+1)/steps.length)*100}%"></i></div><p class="eyebrow">PRESSURE // OFF TOUR ÃÂ· ${i+1}/${steps.length}</p><h2>${steps[i][0]}</h2><p>${steps[i][1]}</p><div class="po-tour-icon">${["Ã¢ÂÂ","Ã°ÂÂÂ¤","Ã¯Â¼Â","Ã¢ÂÂ","Ã¢ÂÂ¦","Ã¢ÂÂ¦","Ã°ÂÂÂ","Ã¢ÂÂ","Ã°ÂÂÂ¥","Ã¢ÂÂ","Ã¢ÂÂ"][i]}</div><div class="po-ob-note">You can skip the tour, and replay it later from your Profile settings.</div><footer><button id="poObSkip" class="pressure-secondary">${i===steps.length-1?"Close tour":"Skip tour"}</button><div><button id="poObBack" class="pressure-secondary" ${i===0?"disabled":""}>Back</button><button id="poObNext" class="pressure-primary">${i===steps.length-1?"Finish":"Next"}</button></div></footer></div>`;
+m.innerHTML=`<div class="po-ob-back"></div><div class="po-ob-card po-tour-card"><div class="po-ob-bar"><i style="width:${((i+1)/steps.length)*100}%"></i></div><p class="eyebrow">PRESSURE // OFF TOUR - ${i+1}/${steps.length}</p><h2>${steps[i][0]}</h2><p>${steps[i][1]}</p><div class="po-tour-icon">${["O","Ã°ÂÂÂ¤","Ã¯Â¼Â","O","Ã¢ÂÂ¦","*","!","Ã¢ÂÂ","Ã°ÂÂÂ¥","Ã¢ÂÂ","Ã¢ÂÂ"][i]}</div><div class="po-ob-note">You can skip the tour, and replay it later from your Profile settings.</div><footer><button id="poObSkip" class="pressure-secondary">${i===steps.length-1?"Close tour":"Skip tour"}</button><div><button id="poObBack" class="pressure-secondary" ${i===0?"disabled":""}>Back</button><button id="poObNext" class="pressure-primary">${i===steps.length-1?"Finish":"Next"}</button></div></footer></div>`;
 $("poObBack").onclick=()=>{X.onboard.step=Math.max(0,i-1);saveP({onboarding:{completed:false,step:X.onboard.step}});drawOnboard()};
 $("poObNext").onclick=()=>i===steps.length-1?finishOnboard():(X.onboard.step=i+1,saveP({onboarding:{completed:false,step:X.onboard.step}}),drawOnboard());
 $("poObSkip").onclick=finishOnboard

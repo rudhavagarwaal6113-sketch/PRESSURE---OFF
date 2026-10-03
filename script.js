@@ -7128,9 +7128,10 @@ document.addEventListener("click", function(event) {
     if (!button) return;
     event.preventDefault();
     event.stopImmediatePropagation();
-    if (typeof window.poSocial === "function") {
-        window.poSocial();
-    } else if (typeof window.openPressurePanel === "function") {
+    if (typeof window.openPressurePanel === "function") {
         window.openPressurePanel("friends");
+    } else if (typeof window.pressureSocialInit === "function") {
+        window.pressureSocialInit();
+        window.openPressurePanel?.("friends");
     }
 }, true);

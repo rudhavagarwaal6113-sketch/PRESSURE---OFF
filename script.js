@@ -6748,10 +6748,10 @@ checkSession();
               <button class="pressure-icon-btn" data-close-pressure aria-label="Close">Ã</button>
             </header>
             <nav class="pressure-social-tabs">
-              <button class="pressure-social-tab active" data-tab="appearance">â Appearance</button>
-              <button class="pressure-social-tab" data-tab="friends">ð¥ Friends <b id="pressureFriendBadge"></b></button>
-              <button class="pressure-social-tab" data-tab="chat">ð¬ Chat <b id="pressureChatBadge"></b></button>
-              <button class="pressure-social-tab" data-tab="account">ð Account</button>
+              <button class="pressure-social-tab active" data-tab="appearance">Appearance</button>
+              <button class="pressure-social-tab" data-tab="friends">Friends</button>
+              <button class="pressure-social-tab" data-tab="chat">Chat</button>
+              <button class="pressure-social-tab" data-tab="account">Account</button>
             </nav>
             <div class="pressure-social-body">
               <div class="pressure-social-view active" data-view="appearance">
@@ -6786,7 +6786,7 @@ checkSession();
         addButton.id = "pressureProfileToolsButton";
         addButton.type = "button";
         addButton.className = "ghost-button pressure-profile-tools-button";
-        addButton.textContent = "â Appearance & Social";
+        addButton.textContent = "Appearance & Social";
         addButton.addEventListener("click", () => openPressurePanel("appearance"));
         const topbar = document.querySelector("#profilePage .profile-topbar");
         if (topbar) topbar.appendChild(addButton);

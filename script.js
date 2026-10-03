@@ -6782,15 +6782,6 @@ checkSession();
           </section>`;
         document.body.appendChild(modal);
 
-        const addButton = document.createElement("button");
-        addButton.id = "pressureProfileToolsButton";
-        addButton.type = "button";
-        addButton.className = "ghost-button pressure-profile-tools-button";
-        addButton.textContent = "Appearance & Social";
-        addButton.addEventListener("click", () => openPressurePanel("appearance"));
-        const topbar = document.querySelector("#profilePage .profile-topbar");
-        if (topbar) topbar.appendChild(addButton);
-
         modal.querySelectorAll("[data-close-pressure]").forEach(x => x.addEventListener("click", closePressurePanel));
         modal.querySelectorAll(".pressure-social-tab").forEach(x => x.addEventListener("click", () => openPressurePanel(x.dataset.tab)));
         document.getElementById("pressureSavePrefs").addEventListener("click", savePreferences);

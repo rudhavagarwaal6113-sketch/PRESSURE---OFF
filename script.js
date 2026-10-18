@@ -7084,58 +7084,36 @@ setTimeout(poProfileHub,1200);
 window.poProfileHub=poProfileHub;
 })();
 
-/* PROFILE_APPEARANCE_NAV_REPAIR */
-(function bindProfileAppearanceNav() {
-    function bind() {
-        const button = document.getElementById("profileAppearanceButton");
-        if (!button) return;
-        button.onclick = function () {
-            if (typeof window.openPressurePanel === "function") {
-                window.openPressurePanel("appearance");
+/* PRESSURE_OFF_PROFILE_SOCIAL_ROUTE_FIX */
+(function bindProfileAndSocialRoutes() {
+    function route(event) {
+        const target = event.target instanceof Element ? event.target : null;
+        if (!target) return;
+
+        const appearanceButton = target.closest("#profileAppearanceButton");
+        const socialButton = target.closest("#socialButton");
+        if (!appearanceButton && !socialButton) return;
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        if (appearanceButton) {
+            if (typeof window.poOpenSettings === "function") {
+                window.poOpenSettings();
+            } else {
+                console.error("PRESSURE // OFF settings page is not ready.");
+                alert("Settings are still loading. Please try again in a moment.");
             }
-        };
+            return;
+        }
+
+        if (typeof window.poSocial === "function") {
+            window.poSocial();
+        } else {
+            console.error("PRESSURE // OFF social page is not ready.");
+            alert("Social is still loading. Please try again in a moment.");
+        }
     }
-    document.addEventListener("DOMContentLoaded", bind);
-    window.addEventListener("load", bind);
-    setTimeout(bind, 500);
-    setTimeout(bind, 1400);
+
+    document.addEventListener("click", route, true);
 })();
-
-/* PRESSURE_OFF_SOCIAL_NAV_REPAIR */
-(function bindPressureSocialNav() {
-    function bind() {
-        const button = document.getElementById("socialButton");
-        if (!button) return;
-        button.onclick = function (event) {
-            event.preventDefault();
-            if (typeof window.openPressurePanel === "function") {
-                window.openPressurePanel("friends");
-            } else if (typeof window.poSocial === "function") {
-                window.poSocial();
-            }
-        };
-    }
-    document.addEventListener("DOMContentLoaded", bind);
-    window.addEventListener("load", bind);
-    setTimeout(bind, 500);
-    setTimeout(bind, 1400);
-})();
-
-
-/* One authoritative route for both Appearance and Social controls. */
-document.addEventListener("click", function(event) {
-    const target = event.target instanceof Element ? event.target : null;
-    if (!target) return;
-    const appearanceButton = target.closest("#profileAppearanceButton");
-    const socialButton = target.closest("#socialButton");
-    if (!appearanceButton && !socialButton) return;
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-
-    if (typeof window.openPressurePanel === "function") {
-        window.openPressurePanel(appearanceButton ? "appearance" : "friends");
-    } else {
-        console.error("The Appearance and Social panel did not initialize.");
-    }
-}, true);

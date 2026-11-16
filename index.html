@@ -2,77 +2,54 @@
 <html lang="en">
 
 <head>
-    <meta name="google-site-verification" content="bc9wX2x1Em6cYK9pm3FYRT8Pno35jF-ARTVxCBekVTo" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Pressure Off - Student Workload Planner</title>
-    <meta name="description" content="Pressure Off is a free student workload planner that helps you organize school tasks, see weekly pressure, and plan ahead.">
-    <meta name="robots" content="index, follow, max-image-preview:large">
-    <meta name="theme-color" content="#10131d">
-    <meta name="application-name" content="Pressure Off">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="PRESSURE // OFF">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="canonical" href="https://pressure-off.vercel.app/">
-    <link rel="manifest" href="/manifest.webmanifest">
-    <link rel="icon" type="image/svg+xml" href="/icon.svg">
-    <link rel="apple-touch-icon" href="/icon.svg">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=League+Spartan:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=20260928">
+    <title>PRESSURE // OFF</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
     <!-- AUTH SCREEN -->
-    <section id="authScreen" class="auth-screen">
-        <div class="auth-glow"></div>
+    <div id="authScreen" class="auth-screen">
         <div class="auth-card">
             <div class="brand">PRESSURE <span>// OFF</span></div>
             <div class="auth-tabs">
                 <button id="loginTab" class="auth-tab active" type="button">Log in</button>
-                <button id="signupTab" class="auth-tab" type="button">Create account</button>
+                <button id="signupTab" class="auth-tab" type="button">Sign up</button>
             </div>
-            <div class="auth-heading">
-                <p class="eyebrow">STUDENT WORKLOAD AWARENESS</p>
-                <h1 id="authTitle">Welcome back</h1>
-                <p id="authSubtitle">See the pressure before it piles up.</p>
-            </div>
+            <h1 id="authTitle">Welcome back</h1>
+            <p id="authSubtitle">See the pressure before it piles up.</p>
             <form id="authForm">
                 <div id="nameField" class="field hidden">
-                    <label for="authName">Your name</label>
-                    <input id="authName" type="text" placeholder="Alex">
+                    <label for="authName">Name</label>
+                    <input id="authName" type="text" placeholder="Your name">
                 </div>
                 <div class="field">
                     <label for="authUsername">Username</label>
-                    <input id="authUsername" type="text" placeholder="Choose a username" required>
+                    <input id="authUsername" type="text" placeholder="Username" required>
                 </div>
                 <div class="field">
                     <label for="authPassword">Password</label>
-                    <input id="authPassword" type="password" placeholder="--------" required>
+                    <input id="authPassword" type="password" placeholder="Password" required>
                 </div>
                 <p id="authError" class="error-message"></p>
                 <button id="authButton" class="primary-button" type="submit">Log in</button>
             </form>
-            <p class="local-note">Your prototype data stays securely connected via Supabase.</p>
         </div>
-    </section>
+    </div>
 
-    <!-- APPLICATION DASHBOARD -->
-    <main id="app" class="app hidden">
+    <!-- MAIN APP -->
+    <div id="app" class="app hidden">
         <header class="topbar">
             <div class="brand">PRESSURE <span>// OFF</span></div>
             <div class="top-actions">
-                <button id="notificationButton" class="icon-button" type="button" aria-label="Notifications">&#128276;</button>
-                <button id="adminButton" class="ghost-button admin-only" type="button" style="display: none;">Admin</button>
-                <button id="socialButton" class="ghost-button social-nav-button" type="button">Social</button>
-                <button id="profileButton" class="user-pill profile-button" type="button">
-                    <div id="avatar" class="avatar">A</div>
-                    <span id="username">Student</span>
+                <button id="notificationButton" class="icon-button" type="button">🔔</button>
+                <button id="adminButton" class="ghost-button" type="button" style="display:none;">Admin</button>
+                <button id="profileButton" class="user-pill" type="button">
+                    <div id="avatar" class="avatar">U</div>
+                    <span id="username">User</span>
                 </button>
                 <button id="logoutButton" class="ghost-button" type="button">Log out</button>
             </div>
@@ -80,341 +57,115 @@
 
         <section class="hero">
             <div>
-                <p class="eyebrow">WEEKLY WORKLOAD AWARENESS</p>
+                <p class="eyebrow">WORKLOAD AWARENESS</p>
                 <h1>See the pressure<br><span>before it piles up.</span></h1>
-                <p class="hero-description">Understand where your academic workload is building before your week gets away from you.</p>
             </div>
-            <button id="addTaskTop" class="primary-button add-button" type="button">
-                <span>+</span> Add Task
-            </button>
+            <button id="addTaskTop" class="primary-button" type="button">+ Add Task</button>
         </section>
 
         <section class="dashboard-grid">
-            <!-- PRESSURE SCORE -->
-            <article class="card score-card">
-                <div class="card-heading">
-                    <div>
-                        <p class="eyebrow">THIS WEEK</p>
-                        <h2>Weekly Pressure</h2>
+            <div class="card score-card">
+                <h2>Weekly Pressure</h2>
+                <div id="scoreRing" class="score-ring">
+                    <div class="score-inner">
+                        <strong id="score">1</strong><span>/10</span>
                     </div>
                 </div>
-                <div class="score-layout">
-                    <div id="scoreRing" class="score-ring">
-                        <div class="score-inner">
-                            <strong id="score">1</strong>
-                            <span>/ 10</span>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 id="scoreLabel">Calm week</h3>
-                        <p id="totalHours">0h planned</p>
-                        <p class="muted">Based on effort, task density and deadline proximity.</p>
-                    </div>
-                </div>
-            </article>
+                <h3 id="scoreLabel">Calm week</h3>
+                <p id="totalHours">0h planned</p>
+            </div>
 
-            <!-- PRESSURE RADAR -->
-            <article class="card radar-card">
-                <div class="card-heading">
-                    <div>
-                        <p class="eyebrow">WORKLOAD DISTRIBUTION</p>
-                        <h2>Pressure Radar</h2>
-                    </div>
-                </div>
+            <div class="card radar-card">
+                <h2>Pressure Radar</h2>
                 <div id="radarBars" class="radar-bars"></div>
-                <div id="radarEmpty" class="radar-empty">Add tasks to see your workload distribution.</div>
-            </article>
+                <div id="radarEmpty" class="radar-empty">No tasks added yet.</div>
+            </div>
 
-            <!-- ALERT -->
-            <article id="alert" class="alert-card hidden">
-                <div class="alert-symbol">!</div>
-                <div>
-                    <strong id="alertTitle">Wednesday looks overloaded.</strong>
-                    <p id="alertText">Consider starting a project earlier.</p>
-                </div>
-            </article>
+            <div id="alert" class="alert-card hidden">
+                <strong>Alert</strong>
+                <p id="alertText">Overloaded day detected.</p>
+            </div>
 
-            <!-- WEEK -->
-            <article class="card week-card">
+            <div class="card week-card">
                 <div class="card-heading">
-                    <div>
-                        <p class="eyebrow">YOUR WEEK</p>
-                        <h2>Weekly View</h2>
-                    </div>
+                    <h2>Weekly View</h2>
                     <button id="addTaskButton" class="small-add" type="button">+ Add task</button>
                 </div>
                 <div id="weekGrid" class="week-grid"></div>
-            </article>
+            </div>
 
-            <!-- AI ASSISTANT -->
-            <article class="card ai-card">
-                <div class="ai-header">
-                    <div class="ai-orb">*</div>
-                    <div>
-                        <p class="eyebrow">PRESSURE // OFF</p>
-                        <h2>Study Coach</h2>
-                    </div>
-                    <span class="ai-status">PLANNING MODE</span>
-                </div>
-                <p class="ai-intro">Ask for a study explanation, quiz, or workload recommendation.</p>
+            <div class="card ai-card">
+                <h2>Study Coach</h2>
                 <div id="aiMessages" class="ai-messages">
-                    <div class="ai-message assistant">
-                        <span class="message-icon">*</span>
-                        <p>I can look at your tasks, effort and deadlines to help you decide what deserves attention first.</p>
-                    </div>
+                    <div class="ai-message assistant">Ask me anything about your workload.</div>
                 </div>
                 <div class="quick-prompts">
                     <button type="button" data-prompt="What should I work on today?">What should I work on today?</button>
-                    <button type="button" data-prompt="Which day is going to be hardest?">Which day is hardest?</button>
                     <button type="button" data-prompt="How can I reduce my pressure?">How can I reduce pressure?</button>
                 </div>
                 <form id="aiForm" class="ai-form">
-                    <input id="aiInput" type="text" placeholder="Ask your study coach..." autocomplete="off">
-                    <button type="submit" class="primary-button">Ask</button>
+                    <input id="aiInput" type="text" placeholder="Ask study coach..." autocomplete="off">
+                    <button type="submit" class="primary-button">Send</button>
                 </form>
-                <p class="ai-disclaimer">Planning recommendations only.</p>
-            </article>
+            </div>
 
-            <!-- TASKS -->
-            <article class="card tasks-card">
-                <div class="card-heading">
-                    <div>
-                        <p class="eyebrow">YOUR WORKLOAD</p>
-                        <h2>All Tasks</h2>
-                    </div>
-                    <button class="small-add" type="button" onclick="openAddTask()">+ Add</button>
-                </div>
+            <div class="card tasks-card">
+                <h2>All Tasks</h2>
                 <div id="taskList" class="task-list"></div>
-            </article>
+            </div>
 
-            <!-- REMINDERS -->
-            <article class="card reminders-card">
-                <div class="card-heading">
-                    <div>
-                        <p class="eyebrow">STAY AHEAD</p>
-                        <h2>Smart Reminders</h2>
-                    </div>
-                    <button id="notificationButton2" class="reminder-enable" type="button">Enable</button>
-                </div>
+            <div class="card reminders-card">
+                <h2>Smart Reminders</h2>
                 <div id="reminderList" class="reminder-list"></div>
-            </article>
+            </div>
 
-            <!-- SUGGESTIONS -->
-            <article class="card suggestions-card">
-                <div class="card-heading">
-                    <div>
-                        <p class="eyebrow">PLANNING SUPPORT</p>
-                        <h2>Pressure // OFF Suggestions</h2>
-                    </div>
-                </div>
+            <div class="card suggestions-card">
+                <h2>Suggestions</h2>
                 <div id="suggestions" class="suggestions"></div>
-            </article>
+            </div>
         </section>
-
-        <footer>PRESSURE // OFF - Student Workload Awareness Prototype</footer>
-    </main>
-
-    <!-- PROFILE PAGE -->
-    <section id="profilePage" class="profile-page hidden">
-        <header class="topbar profile-topbar">
-            <button id="backToDashboard" class="ghost-button profile-nav-action" type="button">&larr;- Dashboard</button>
-            <button id="profileAppearanceButton" class="ghost-button profile-nav-action" type="button">Appearance</button>
-            <div class="brand">PRESSURE <span>// OFF</span></div>
-            <button id="profilePageLogout" class="ghost-button" type="button">Log out</button>
-        </header>
-
-        <main class="profile-container">
-            <section class="profile-hero-card">
-                <div class="profile-avatar-large">
-                    <span id="profileAvatarLetter">S</span>
-                </div>
-                <div class="profile-main-info">
-                    <p class="eyebrow">YOUR PROFILE</p>
-                    <h1 id="profileName">Student</h1>
-                    <p id="profileUsername" class="profile-username">@student</p>
-                    <div class="profile-tags">
-                        <span id="profileRole">STUDENT</span>
-                        <span id="profileMemberSince">MEMBER</span>
-                    </div>
-                </div>
-            </section>
-
-            <section class="profile-stats-grid">
-                <article class="profile-stat-card">
-                    <p class="eyebrow">TASKS</p>
-                    <strong id="profileTaskCount">0</strong>
-                    <span>Total tasks</span>
-                </article>
-                <article class="profile-stat-card">
-                    <p class="eyebrow">EFFORT</p>
-                    <strong id="profileHours">0h</strong>
-                    <span>Planned workload</span>
-                </article>
-                <article class="profile-stat-card">
-                    <p class="eyebrow">NEXT DEADLINE</p>
-                    <strong id="profileNextDeadline">-</strong>
-                    <span>Upcoming task</span>
-                </article>
-                <article class="profile-stat-card">
-                    <p class="eyebrow">STATUS</p>
-                    <strong id="profilePressureStatus">CALM</strong>
-                    <span>Current workload</span>
-                </article>
-            </section>
-
-            <section class="profile-content-grid">
-                <article class="card profile-about-card">
-                    <div class="card-heading">
-                        <div>
-                            <p class="eyebrow">ACCOUNT</p>
-                            <h2>About you</h2>
-                        </div>
-                    </div>
-                    <div class="profile-detail-list">
-                        <div class="profile-detail"><span>Username</span><strong id="profileDetailUsername">-</strong></div>
-                        <div class="profile-detail"><span>Name</span><strong id="profileDetailName">-</strong></div>
-                        <div class="profile-detail"><span>Role</span><strong id="profileDetailRole">Student</strong></div>
-                        <div class="profile-detail"><span>Email</span><strong id="profileDetailEmail">-</strong></div>
-                        <div class="profile-detail"><span>Joined</span><strong id="profileDetailJoined">-</strong></div>
-                    </div>
-                </article>
-
-                <article class="card profile-category-card">
-                    <div class="card-heading">
-                        <div>
-                            <p class="eyebrow">WORKLOAD</p>
-                            <h2>Task Breakdown</h2>
-                        </div>
-                    </div>
-                    <div id="profileCategoryBars" class="profile-category-bars"></div>
-                    <p id="profileCategoryEmpty" class="radar-empty">Add tasks to see your workload breakdown.</p>
-                </article>
-            </section>
-
-            <article class="card profile-recent-card">
-                <div class="card-heading">
-                    <div>
-                        <p class="eyebrow">YOUR WORKLOAD</p>
-                        <h2>Recent Tasks</h2>
-                    </div>
-                    <button id="profileAddTaskButton" class="small-add" type="button">+ Add task</button>
-                </div>
-                <div id="profileRecentTasks" class="profile-recent-tasks"></div>
-                <p id="profileTasksEmpty" class="radar-empty">You haven't added any tasks yet.</p>
-            </article>
-
-            <footer>PRESSURE // OFF - Student Workload Awareness Prototype</footer>
-        </main>
-    </section>
-
-    <!-- ADMIN PANEL -->
-    <section id="adminPage" class="admin-page hidden">
-        <header class="topbar profile-topbar">
-            <button id="backFromAdmin" class="ghost-button" type="button">&larr;- Dashboard</button>
-            <div class="brand">PRESSURE <span>// OFF</span></div>
-            <button id="adminLogoutButton" class="ghost-button" type="button">Log out</button>
-        </header>
-
-        <main class="admin-container">
-            <section class="admin-page-header">
-                <div>
-                    <p class="eyebrow">SYSTEM CONTROL</p>
-                    <h1>Admin Panel</h1>
-                    <p>Manage PRESSURE // OFF users and platform activity.</p>
-                </div>
-            </section>
-
-            <section class="admin-stat-grid">
-                <article class="admin-stat-card">
-                    <span class="profile-detail-label">TOTAL USERS</span>
-                    <strong id="adminTotalUsers">0</strong>
-                    <small>Registered accounts</small>
-                </article>
-                <article class="admin-stat-card">
-                    <span class="profile-detail-label">ACTIVE ADMINS</span>
-                    <strong id="adminTotalAdmins">0</strong>
-                    <small>Administrator accounts</small>
-                </article>
-                <article class="admin-stat-card">
-                    <span class="profile-detail-label">TOTAL TASKS</span>
-                    <strong id="adminTotalTasks">0</strong>
-                    <small>Across all users</small>
-                </article>
-            </section>
-
-            <article class="card admin-users-card">
-                <div class="card-heading">
-                    <div>
-                        <p class="eyebrow">USER MANAGEMENT</p>
-                        <h2>All Users</h2>
-                        <p class="muted">View and manage registered accounts.</p>
-                    </div>
-                    <button id="refreshAdminUsers" class="small-add" type="button">Refresh</button>
-                </div>
-                <div class="admin-search">
-                    <input id="adminUserSearch" type="search" placeholder="Search users..." autocomplete="off">
-                </div>
-                <div id="adminUsersList" class="admin-users-list">
-                    <div class="admin-empty-state">
-                        <strong>Loading users...</strong>
-                        <p>Please wait while the user list loads.</p>
-                    </div>
-                </div>
-            </article>
-            <footer>PRESSURE // OFF - Administrator Console</footer>
-        </main>
-    </section>
+    </div>
 
     <!-- TASK MODAL -->
     <div id="taskModal" class="modal hidden">
         <div class="modal-card">
-            <div class="modal-header">
-                <div>
-                    <p class="eyebrow">WORKLOAD</p>
-                    <h2 id="modalTitle">Add a task</h2>
-                </div>
-                <button id="closeModal" class="close-button" type="button">x</button>
-            </div>
+            <h2 id="modalTitle">Add a task</h2>
             <form id="taskForm">
                 <div class="field">
-                    <label for="taskName">Task name</label>
-                    <input id="taskName" type="text" placeholder="e.g. Biology Test" required>
-                </div>
-                <div class="form-row">
-                    <div class="field">
-                        <label for="taskCategory">Category</label>
-                        <select id="taskCategory">
-                            <option>Test</option>
-                            <option>Homework</option>
-                            <option>Project</option>
-                            <option>Assignment</option>
-                            <option>Tuition</option>
-                            <option>Other</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label for="taskEffort">Estimated effort</label>
-                        <input id="taskEffort" type="number" min="0.5" step="0.5" value="1" required>
-                    </div>
+                    <label>Task name</label>
+                    <input id="taskName" type="text" required>
                 </div>
                 <div class="field">
-                    <label for="taskDate">Due date</label>
+                    <label>Category</label>
+                    <select id="taskCategory">
+                        <option>Homework</option>
+                        <option>Test</option>
+                        <option>Project</option>
+                        <option>Assignment</option>
+                        <option>Tuition</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Effort (hours)</label>
+                    <input id="taskEffort" type="number" min="0.5" step="0.5" value="1" required>
+                </div>
+                <div class="field">
+                    <label>Date</label>
                     <input id="taskDate" type="date" required>
                 </div>
                 <div class="modal-actions">
                     <button id="deleteTask" class="danger-button hidden" type="button">Delete</button>
-                    <div class="modal-right-actions">
-                        <button id="cancelModal" class="ghost-button" type="button">Cancel</button>
-                        <button id="saveTask" class="primary-button" type="submit">Add Task</button>
-                    </div>
+                    <button id="cancelModal" class="ghost-button" type="button">Cancel</button>
+                    <button id="saveTask" class="primary-button" type="submit">Save</button>
                 </div>
             </form>
+            <button id="closeModal" class="close-button" type="button">×</button>
         </div>
     </div>
 
-    <!-- SCRIPTS -->
+    <!-- SUPABASE & SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js?v=20260928"></script>
+    <script src="script.js"></script>
 </body>
-
 </html>

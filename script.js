@@ -171,70 +171,35 @@ const profileHours = $("profileHours");
 const profileNextDeadline = $("profileNextDeadline");
 const profilePressureStatus = $("profilePressureStatus");
 
-const profileDetailUsername =
-    $("profileDetailUsername");
+const profileDetailUsername = $("profileDetailUsername");
+const profileDetailName = $("profileDetailName");
+const profileDetailRole = $("profileDetailRole");
+const profileDetailEmail = $("profileDetailEmail");
+const profileDetailJoined = $("profileDetailJoined");
 
-const profileDetailName =
-    $("profileDetailName");
-
-const profileDetailRole =
-    $("profileDetailRole");
-
-const profileDetailEmail =
-    $("profileDetailEmail");
-
-const profileDetailJoined =
-    $("profileDetailJoined");
-
-const profileCategoryBars =
-    $("profileCategoryBars");
-
-const profileCategoryEmpty =
-    $("profileCategoryEmpty");
-
-const profileRecentTasks =
-    $("profileRecentTasks");
-
-const profileTasksEmpty =
-    $("profileTasksEmpty");
-
-const profileAddTaskButton =
-    $("profileAddTaskButton");
+const profileCategoryBars = $("profileCategoryBars");
+const profileCategoryEmpty = $("profileCategoryEmpty");
+const profileRecentTasks = $("profileRecentTasks");
+const profileTasksEmpty = $("profileTasksEmpty");
+const profileAddTaskButton = $("profileAddTaskButton");
 
 
 /* =========================================================
    ADMIN DOM
 ========================================================= */
 
-const adminButton =
-    $("adminButton");
+const adminButton = $("adminButton");
+const adminPage = $("adminPage");
+const backFromAdmin = $("backFromAdmin");
+const adminLogoutButton = $("adminLogoutButton");
 
-const adminPage =
-    $("adminPage");
+const adminTotalUsers = $("adminTotalUsers");
+const adminTotalAdmins = $("adminTotalAdmins");
+const adminTotalTasks = $("adminTotalTasks");
 
-const backFromAdmin =
-    $("backFromAdmin");
-
-const adminLogoutButton =
-    $("adminLogoutButton");
-
-const adminTotalUsers =
-    $("adminTotalUsers");
-
-const adminTotalAdmins =
-    $("adminTotalAdmins");
-
-const adminTotalTasks =
-    $("adminTotalTasks");
-
-const refreshAdminUsers =
-    $("refreshAdminUsers");
-
-const adminUserSearch =
-    $("adminUserSearch");
-
-const adminUsersList =
-    $("adminUsersList");
+const refreshAdminUsers = $("refreshAdminUsers");
+const adminUserSearch = $("adminUserSearch");
+const adminUsersList = $("adminUsersList");
 
 
 /* =========================================================
@@ -242,19 +207,11 @@ const adminUsersList =
 ========================================================= */
 
 function injectExtraStyles() {
+    if ($("pressureExtraStyles")) return;
 
-    if ($("pressureExtraStyles")) {
-        return;
-    }
-
-    const style =
-        document.createElement("style");
-
-    style.id =
-        "pressureExtraStyles";
-
+    const style = document.createElement("style");
+    style.id = "pressureExtraStyles";
     style.textContent = `
-
         .task-row {
             position: relative;
             display: flex;
@@ -264,18 +221,15 @@ function injectExtraStyles() {
             text-align: left;
             cursor: pointer;
         }
-
         .task-row .task-info {
             flex: 1;
             min-width: 0;
         }
-
         .task-actions {
             display: flex;
             gap: 6px;
             flex-shrink: 0;
         }
-
         .task-action {
             border: 1px solid rgba(255,255,255,.10);
             background: rgba(255,255,255,.05);
@@ -285,15 +239,12 @@ function injectExtraStyles() {
             font-size: 11px;
             cursor: pointer;
         }
-
         .task-action:hover {
             background: rgba(255,255,255,.10);
         }
-
         .task-action.delete {
             color: #ff6975;
         }
-
         .mini-task {
             cursor: pointer;
             width: 100%;
@@ -301,349 +252,22 @@ function injectExtraStyles() {
             text-align: left;
             color: inherit;
         }
-
         .suggestion p {
             margin: 4px 0 0;
         }
-
-        /* ================================================
-           PROFILE PAGE
-        ================================================ */
-
         .profile-page.hidden {
             display: none;
         }
-
         .profile-page {
             min-height: 100vh;
         }
-
-        .profile-container {
-            width: min(1180px, calc(100% - 40px));
-            margin: 0 auto;
-            padding: 38px 0 60px;
-        }
-
-        .profile-topbar {
-            width: 100%;
-        }
-
-        .profile-hero-card {
-            display: flex;
-            align-items: center;
-            gap: 28px;
-            padding: 34px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,.08);
-            border-radius: 24px;
-            background: rgba(255,255,255,.035);
-            box-shadow: 0 20px 60px rgba(0,0,0,.20);
-        }
-
-        .profile-avatar-large {
-            width: 110px;
-            height: 110px;
-            min-width: 110px;
-            display: grid;
-            place-items: center;
-            border-radius: 28px;
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(91,140,255,.30),
-                    rgba(91,140,255,.08)
-                );
-            border: 1px solid rgba(91,140,255,.25);
-            font-size: 46px;
-            font-weight: 800;
-        }
-
-        .profile-main-info {
-            min-width: 0;
-        }
-
-        .profile-main-info h1 {
-            margin: 4px 0 5px;
-            font-size: clamp(30px, 5vw, 48px);
-            line-height: 1;
-        }
-
-        .profile-username {
-            opacity: .55;
-            font-size: 14px;
-        }
-
-        .profile-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        .profile-tags span {
-            display: inline-flex;
-            align-items: center;
-            padding: 6px 10px;
-            border-radius: 999px;
-            background: rgba(255,255,255,.06);
-            border: 1px solid rgba(255,255,255,.08);
-            font-size: 10px;
-            letter-spacing: .08em;
-            font-weight: 700;
-        }
-
-        .profile-stats-grid {
-            display: grid;
-            grid-template-columns:
-                repeat(4, minmax(0, 1fr));
-            gap: 14px;
-            margin-bottom: 20px;
-        }
-
-        .profile-stat-card {
-            padding: 22px;
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,.07);
-            background: rgba(255,255,255,.03);
-        }
-
-        .profile-stat-card strong {
-            display: block;
-            margin: 5px 0;
-            font-size: 29px;
-        }
-
-        .profile-stat-card > span {
-            font-size: 12px;
-            opacity: .55;
-        }
-
-        .profile-content-grid {
-            display: grid;
-            grid-template-columns:
-                minmax(0, 1fr)
-                minmax(0, 1fr);
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .profile-about-card,
-        .profile-category-card,
-        .profile-recent-card {
-            padding: 24px;
-        }
-
-        .profile-detail-list {
-            display: flex;
-            flex-direction: column;
-            margin-top: 8px;
-        }
-
-        .profile-detail {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255,255,255,.06);
-        }
-
-        .profile-detail:last-child {
-            border-bottom: 0;
-        }
-
-        .profile-detail span {
-            font-size: 12px;
-            opacity: .5;
-        }
-
-        .profile-detail strong {
-            max-width: 65%;
-            text-align: right;
-            font-size: 13px;
-            word-break: break-word;
-        }
-
-        .profile-category-bars {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .profile-category-item {
-            width: 100%;
-        }
-
-        .profile-category-head {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 7px;
-            font-size: 12px;
-        }
-
-        .profile-category-head span:last-child {
-            opacity: .55;
-        }
-
-        .profile-category-track {
-            width: 100%;
-            height: 8px;
-            overflow: hidden;
-            border-radius: 999px;
-            background: rgba(255,255,255,.06);
-        }
-
-        .profile-category-fill {
-            height: 100%;
-            min-width: 3px;
-            border-radius: inherit;
-            background: var(--blue, #5b8cff);
-        }
-
-        .profile-recent-tasks {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 14px;
-        }
-
-        .profile-recent-task {
-            display: flex;
-            align-items: center;
-            gap: 13px;
-            padding: 13px 14px;
-            border-radius: 13px;
-            background: rgba(255,255,255,.035);
-            border: 1px solid rgba(255,255,255,.05);
-            cursor: pointer;
-            transition: .18s ease;
-        }
-
-        .profile-recent-task:hover {
-            background: rgba(255,255,255,.06);
-            transform: translateY(-1px);
-        }
-
-        .profile-recent-task-icon {
-            width: 34px;
-            height: 34px;
-            display: grid;
-            place-items: center;
-            flex-shrink: 0;
-            border-radius: 10px;
-            background: rgba(91,140,255,.10);
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .profile-recent-task-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .profile-recent-task-info strong {
-            display: block;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-size: 13px;
-        }
-
-        .profile-recent-task-info span {
-            display: block;
-            margin-top: 3px;
-            font-size: 11px;
-            opacity: .50;
-        }
-
-        .profile-recent-task-effort {
-            font-size: 12px;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
-        .profile-page footer {
-            margin-top: 35px;
-        }
-
-        .small-add {
-            border: 1px solid rgba(255,255,255,.10);
-            background: rgba(255,255,255,.05);
-            color: inherit;
-            border-radius: 9px;
-            padding: 8px 11px;
-            cursor: pointer;
-            font-size: 11px;
-        }
-
-        .small-add:hover {
-            background: rgba(255,255,255,.09);
-        }
-
-        @media (max-width: 800px) {
-
-            .profile-stats-grid {
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-            }
-
-            .profile-content-grid {
-                grid-template-columns: 1fr;
-            }
-
-        }
-
-        @media (max-width: 600px) {
-
-            .profile-container {
-                width: min(100% - 24px, 1180px);
-                padding-top: 20px;
-            }
-
-            .profile-hero-card {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 24px;
-            }
-
-            .profile-avatar-large {
-                width: 82px;
-                height: 82px;
-                min-width: 82px;
-                border-radius: 22px;
-                font-size: 34px;
-            }
-
-            .profile-stats-grid {
-                gap: 9px;
-            }
-
-            .profile-stat-card {
-                padding: 17px;
-            }
-
-            .profile-stat-card strong {
-                font-size: 23px;
-            }
-
-            .profile-about-card,
-            .profile-category-card,
-            .profile-recent-card {
-                padding: 18px;
-            }
-
-        }
-
     `;
-
     document.head.appendChild(style);
 }
 
 
 /* =========================================================
-   USERNAME Ã¢ÂÂ INTERNAL EMAIL
+   USERNAME TO INTERNAL EMAIL
 ========================================================= */
 
 function usernameToEmail(username) {
@@ -656,105 +280,41 @@ function usernameToEmail(username) {
 ========================================================= */
 
 function showAuthMessage(message) {
-
     if (authError) {
-        authError.textContent =
-            message || "";
+        authError.textContent = message || "";
     }
-
 }
-
 
 function setAuthMode(mode) {
-
     authMode = mode;
-
-    const signup =
-        mode === "signup";
-
+    const signup = mode === "signup";
 
     if (authTitle) {
-
-        authTitle.textContent =
-            signup
-                ? "Create your account"
-                : "Welcome back";
-
+        authTitle.textContent = signup ? "Create your account" : "Welcome back";
     }
-
-
     if (authSubtitle) {
-
-        authSubtitle.textContent =
-            signup
-                ? "Start understanding your workload."
-                : "See the pressure before it piles up.";
-
+        authSubtitle.textContent = signup ? "Start understanding your workload." : "See the pressure before it piles up.";
     }
-
-
     if (authButton) {
-
-        authButton.textContent =
-            signup
-                ? "Create account"
-                : "Log in";
-
+        authButton.textContent = signup ? "Create account" : "Log in";
     }
-
-
     if (nameField) {
-
-        nameField.classList.toggle(
-            "hidden",
-            !signup
-        );
-
+        nameField.classList.toggle("hidden", !signup);
     }
-
-
     if (loginTab) {
-
-        loginTab.classList.toggle(
-            "active",
-            !signup
-        );
-
+        loginTab.classList.toggle("active", !signup);
     }
-
-
     if (signupTab) {
-
-        signupTab.classList.toggle(
-            "active",
-            signup
-        );
-
+        signupTab.classList.toggle("active", signup);
     }
-
-
     showAuthMessage("");
-
 }
-
 
 if (loginTab) {
-
-    loginTab.addEventListener(
-        "click",
-        () => setAuthMode("login")
-    );
-
+    loginTab.addEventListener("click", () => setAuthMode("login"));
 }
-
-
 if (signupTab) {
-
-    signupTab.addEventListener(
-        "click",
-        () => setAuthMode("signup")
-    );
-
+    signupTab.addEventListener("click", () => setAuthMode("signup"));
 }
 
 
@@ -763,44 +323,17 @@ if (signupTab) {
 ========================================================= */
 
 function showApp() {
-
-    if (authScreen) {
-        authScreen.classList.add("hidden");
-    }
-
-    if (app) {
-        app.classList.remove("hidden");
-    }
-
-    if (profilePage) {
-        profilePage.classList.add("hidden");
-    }
-
-    if (adminPage) {
-        adminPage.classList.add("hidden");
-    }
-
+    if (authScreen) authScreen.classList.add("hidden");
+    if (app) app.classList.remove("hidden");
+    if (profilePage) profilePage.classList.add("hidden");
+    if (adminPage) adminPage.classList.add("hidden");
 }
 
-
 function showAuth() {
-
-    if (app) {
-        app.classList.add("hidden");
-    }
-
-    if (profilePage) {
-        profilePage.classList.add("hidden");
-    }
-
-    if (adminPage) {
-        adminPage.classList.add("hidden");
-    }
-
-    if (authScreen) {
-        authScreen.classList.remove("hidden");
-    }
-
+    if (app) app.classList.add("hidden");
+    if (profilePage) profilePage.classList.add("hidden");
+    if (adminPage) adminPage.classList.add("hidden");
+    if (authScreen) authScreen.classList.remove("hidden");
 }
 
 
@@ -809,342 +342,105 @@ function showAuth() {
 ========================================================= */
 
 if (authForm) {
-
-    authForm.addEventListener(
-        "submit",
-        async event => {
-
-            event.preventDefault();
-
-
-            const username =
-                authUsername
-                    ? authUsername.value
-                        .trim()
-                        .toLowerCase()
-                    : "";
-
-
-            const password =
-                authPassword
-                    ? authPassword.value
-                    : "";
-
-
-            const name =
-                authName
-                    ? authName.value.trim()
-                    : "";
-
-
-            if (!username || !password) {
-
-                showAuthMessage(
-                    "Please enter a username and password."
-                );
-
-                return;
-            }
-
-
-            if (
-                authMode === "signup" &&
-                !name
-            ) {
-
-                showAuthMessage(
-                    "Please enter your name."
-                );
-
-                return;
-            }
-
-
-            if (authButton) {
-                authButton.disabled = true;
-            }
-
-
-            showAuthMessage(
-                authMode === "login"
-                    ? "Logging in..."
-                    : "Creating your account..."
-            );
-
-
-            /* =================================================
-               SIGNUP
-            ================================================= */
-
-            if (authMode === "signup") {
-
-                try {
-
-                    const email =
-                        usernameToEmail(
-                            username
-                        );
-
-
-                    const {
-                        data: existingProfile,
-                        error:
-                            profileCheckError
-                    } =
-                        await supabaseClient
-                            .from("profiles")
-                            .select("id")
-                            .eq(
-                                "username",
-                                username
-                            )
-                            .maybeSingle();
-
-
-                    if (profileCheckError) {
-
-                        console.error(
-                            "PROFILE CHECK ERROR:",
-                            profileCheckError
-                        );
-
-                        showAuthMessage(
-                            "Could not check username: " +
-                            profileCheckError.message
-                        );
-
-                        return;
-                    }
-
-
-                    if (existingProfile) {
-
-                        showAuthMessage(
-                            "Username already exists."
-                        );
-
-                        return;
-                    }
-
-
-                    const {
-                        data,
-                        error
-                    } =
-                        await supabaseClient.auth
-                            .signUp({
-
-                                email,
-
-                                password,
-
-                                options: {
-                                    data: {
-                                        username,
-                                        name
-                                    }
-                                }
-
-                            });
-
-
-                    if (error) {
-
-                        console.error(
-                            "SIGNUP ERROR:",
-                            error
-                        );
-
-                        showAuthMessage(
-                            error.message
-                        );
-
-                        return;
-                    }
-
-
-                    if (
-                        !data ||
-                        !data.user
-                    ) {
-
-                        showAuthMessage(
-                            "Account could not be created."
-                        );
-
-                        return;
-                    }
-
-
-                    currentUser =
-                        data.user;
-
-
-                    if (data.session) {
-
-                        await finishAuthentication();
-
-                    } else {
-
-                        showAuthMessage(
-                            "Account created. Please log in."
-                        );
-
-                        setAuthMode("login");
-
-
-                        if (authUsername) {
-                            authUsername.value =
-                                username;
-                        }
-
-
-                        if (authPassword) {
-                            authPassword.value =
-                                "";
-                        }
-
-                    }
-
-                } catch (error) {
-
-                    console.error(
-                        "SIGNUP CRASH:",
-                        error
-                    );
-
-                    showAuthMessage(
-                        "Something went wrong while creating your account."
-                    );
-
-                } finally {
-
-                    if (authButton) {
-                        authButton.disabled = false;
-                    }
-
-                }
-
-                return;
-            }
-
-
-            /* =================================================
-               LOGIN
-            ================================================= */
-
+    authForm.addEventListener("submit", async event => {
+        event.preventDefault();
+        const username = authUsername ? authUsername.value.trim().toLowerCase() : "";
+        const password = authPassword ? authPassword.value : "";
+        const name = authName ? authName.value.trim() : "";
+
+        if (!username || !password) {
+            showAuthMessage("Please enter a username and password.");
+            return;
+        }
+
+        if (authMode === "signup" && !name) {
+            showAuthMessage("Please enter your name.");
+            return;
+        }
+
+        if (authButton) authButton.disabled = true;
+        showAuthMessage(authMode === "login" ? "Logging in..." : "Creating your account...");
+
+        if (authMode === "signup") {
             try {
+                const email = usernameToEmail(username);
+                const { data: existingProfile, error: profileCheckError } = await supabaseClient
+                    .from("profiles")
+                    .select("id")
+                    .eq("username", username)
+                    .maybeSingle();
 
-                const {
-                    data: loginEmail,
-                    error: rpcError
-                } =
-                    await supabaseClient.rpc(
-                        "get_login_email",
-                        {
-                            login_username:
-                                username
-                        }
-                    );
-
-
-                if (rpcError) {
-
-                    console.error(
-                        "LOGIN RPC ERROR:",
-                        rpcError
-                    );
-
-                    showAuthMessage(
-                        "Login failed: " +
-                        rpcError.message
-                    );
-
+                if (profileCheckError) {
+                    showAuthMessage("Could not check username: " + profileCheckError.message);
                     return;
                 }
 
-
-                if (!loginEmail) {
-
-                    showAuthMessage(
-                        "Username not found."
-                    );
-
+                if (existingProfile) {
+                    showAuthMessage("Username already exists.");
                     return;
                 }
 
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient.auth
-                        .signInWithPassword({
-
-                            email: loginEmail,
-
-                            password
-
-                        });
-
+                const { data, error } = await supabaseClient.auth.signUp({
+                    email,
+                    password,
+                    options: { data: { username, name } }
+                });
 
                 if (error) {
-
-                    console.error(
-                        "LOGIN ERROR:",
-                        error
-                    );
-
-                    showAuthMessage(
-                        error.message
-                    );
-
+                    showAuthMessage(error.message);
                     return;
                 }
 
-
-                if (
-                    !data ||
-                    !data.user
-                ) {
-
-                    showAuthMessage(
-                        "Login succeeded but no user was returned."
-                    );
-
+                if (!data || !data.user) {
+                    showAuthMessage("Account could not be created.");
                     return;
                 }
 
-
-                currentUser =
-                    data.user;
-
-
-                await finishAuthentication();
-
-
+                currentUser = data.user;
+                if (data.session) {
+                    await finishAuthentication();
+                } else {
+                    showAuthMessage("Account created. Please log in.");
+                    setAuthMode("login");
+                    if (authUsername) authUsername.value = username;
+                    if (authPassword) authPassword.value = "";
+                }
             } catch (error) {
-
-                console.error(
-                    "LOGIN CRASH:",
-                    error
-                );
-
-                showAuthMessage(
-                    "Something went wrong while logging in."
-                );
-
+                showAuthMessage("Something went wrong while creating your account.");
             } finally {
+                if (authButton) authButton.disabled = false;
+            }
+            return;
+        }
 
-                if (authButton) {
-                    authButton.disabled = false;
-                }
+        try {
+            const { data: loginEmail, error: rpcError } = await supabaseClient.rpc("get_login_email", {
+                login_username: username
+            });
 
+            if (rpcError || !loginEmail) {
+                showAuthMessage("Username not found or login failed.");
+                return;
             }
 
-        }
-    );
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: loginEmail,
+                password
+            });
 
+            if (error) {
+                showAuthMessage(error.message);
+                return;
+            }
+
+            currentUser = data.user;
+            await finishAuthentication();
+        } catch (error) {
+            showAuthMessage("Something went wrong while logging in.");
+        } finally {
+            if (authButton) authButton.disabled = false;
+        }
+    });
 }
 
 
@@ -1153,980 +449,229 @@ if (authForm) {
 ========================================================= */
 
 async function finishAuthentication() {
-
     await loadProfile();
-
     await loadTasks();
-
     showApp();
-
     renderDashboard();
-
     updateProfileUI();
-
     updateNotificationButtons();
-
     updateAdminVisibility();
     startAccountGuard();
 }
 
 
 /* =========================================================
-   LOAD TASKS
+   LOAD TASKS & PROFILE
 ========================================================= */
 
 async function loadTasks() {
-
     if (!currentUser) {
-
         currentTasks = [];
-
         return;
-
     }
-
-
     try {
+        const { data, error } = await supabaseClient
+            .from("tasks")
+            .select("*")
+            .eq("user_id", currentUser.id);
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("tasks")
-                .select("*")
-                .eq(
-                    "user_id",
-                    currentUser.id
-                );
-
-
-        if (error) {
-
-            console.error(
-                "TASK LOAD ERROR:",
-                error
-            );
-
-            currentTasks = [];
-
-            return;
-
-        }
-
-
-        currentTasks =
-            data || [];
-
+        currentTasks = error ? [] : (data || []);
     } catch (error) {
-
-        console.error(
-            "TASK LOAD CRASH:",
-            error
-        );
-
         currentTasks = [];
-
     }
-
 }
-
-
-/* =========================================================
-   PROFILE DATA
-========================================================= */
 
 async function loadProfile() {
-
-    if (!currentUser) {
-        return;
-    }
-
-
+    if (!currentUser) return;
     try {
+        const { data, error } = await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("id", currentUser.id)
+            .maybeSingle();
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("profiles")
-                .select("*")
-                .eq(
-                    "id",
-                    currentUser.id
-                )
-                .maybeSingle();
-
-
-        if (error) {
-
-            console.warn(
-                "PROFILE LOAD WARNING:",
-                error
-            );
-
-            currentProfile = null;
-
-        } else {
-
-            currentProfile =
-                data || null;
-
-        }
-
+        currentProfile = error ? null : (data || null);
     } catch (error) {
-
-        console.warn(
-            "PROFILE LOAD CRASH:",
-            error
-        );
-
         currentProfile = null;
-
     }
-
 
     if (!currentProfile) {
-
         try {
+            const metadata = currentUser.user_metadata || {};
+            const username = metadata.username || currentUser.email?.split("@")[0] || "student";
+            const name = metadata.name || username;
 
-            const metadata =
-                currentUser.user_metadata || {};
+            const { data, error } = await supabaseClient
+                .from("profiles")
+                .insert([{ id: currentUser.id, username, name, role: "student" }])
+                .select()
+                .single();
 
-
-            const username =
-                metadata.username ||
-                currentUser.email
-                    ?.split("@")[0] ||
-                "student";
-
-
-            const name =
-                metadata.name ||
-                username;
-
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .from("profiles")
-                    .insert([{
-
-                        id:
-                            currentUser.id,
-
-                        username,
-
-                        name,
-
-                        role:
-                            "student"
-
-                    }])
-                    .select()
-                    .single();
-
-
-            if (!error) {
-
-                currentProfile =
-                    data;
-
-            } else {
-
-                console.warn(
-                    "PROFILE CREATE WARNING:",
-                    error
-                );
-
-            }
-
-        } catch (error) {
-
-            console.warn(
-                "PROFILE CREATE CRASH:",
-                error
-            );
-
-        }
-
+            if (!error) currentProfile = data;
+        } catch (error) {}
     }
-
-
     updateProfileUI();
-
     updateAdminVisibility();
-
 }
-
 
 function getDisplayName() {
-
-    const metadata =
-        currentUser?.user_metadata || {};
-
-
-    return (
-        currentProfile?.name ||
-        metadata.name ||
-        currentProfile?.username ||
-        metadata.username ||
-        currentUser?.email
-            ?.split("@")[0] ||
-        "Student"
-    );
-
+    const metadata = currentUser?.user_metadata || {};
+    return currentProfile?.name || metadata.name || currentProfile?.username || metadata.username || currentUser?.email?.split("@")[0] || "Student";
 }
-
 
 function getUsername() {
-
-    const metadata =
-        currentUser?.user_metadata || {};
-
-
-    return (
-        currentProfile?.username ||
-        metadata.username ||
-        currentUser?.email
-            ?.split("@")[0] ||
-        "student"
-    );
-
+    const metadata = currentUser?.user_metadata || {};
+    return currentProfile?.username || metadata.username || currentUser?.email?.split("@")[0] || "student";
 }
-
 
 function getRole() {
-
-    return (
-        currentProfile?.role ||
-        "student"
-    );
-
+    return currentProfile?.role || "student";
 }
-
 
 function getMemberSince() {
-
-    return (
-        currentProfile?.created_at ||
-        currentUser?.created_at ||
-        ""
-    );
-
+    return currentProfile?.created_at || currentUser?.created_at || "";
 }
-
-
-/* =========================================================
-   UPDATE PROFILE UI
-========================================================= */
 
 function updateProfileUI() {
-
-    if (!currentUser) {
-        return;
-    }
-
-
-    const name =
-        getDisplayName();
-
-    const username =
-        getUsername();
-
-
-    if (usernameDisplay) {
-
-        usernameDisplay.textContent =
-            name;
-
-    }
-
-
-    if (avatar) {
-
-        avatar.textContent =
-            name
-                .charAt(0)
-                .toUpperCase();
-
-    }
-
-
-    document.title =
-        `PRESSURE // OFF - ${name}`;
-
-
+    if (!currentUser) return;
+    const name = getDisplayName();
+    if (usernameDisplay) usernameDisplay.textContent = name;
+    if (avatar) avatar.textContent = name.charAt(0).toUpperCase();
+    document.title = `PRESSURE // OFF - ${name}`;
     updateRealProfilePage();
-
     updateAdminVisibility();
-
 }
-
-
-/* =========================================================
-   REAL PROFILE PAGE
-========================================================= */
 
 function updateRealProfilePage() {
+    if (!currentUser) return;
+    const name = getDisplayName();
+    const username = getUsername();
+    const role = getRole();
+    const joined = getMemberSince();
 
-    if (!currentUser) {
-        return;
-    }
-
-
-    const name =
-        getDisplayName();
-
-    const username =
-        getUsername();
-
-    const role =
-        getRole();
-
-    const joined =
-        getMemberSince();
-
-
-    if (profileAvatarLetter) {
-
-        profileAvatarLetter.textContent =
-            name
-                .charAt(0)
-                .toUpperCase();
-
-    }
-
-
-    if (profileName) {
-
-        profileName.textContent =
-            name;
-
-    }
-
-
-    if (profileUsername) {
-
-        profileUsername.textContent =
-            `@${username}`;
-
-    }
-
-
-    if (profileRole) {
-
-        profileRole.textContent =
-            role.toUpperCase();
-
-    }
-
-
-    if (profileMemberSince) {
-
-        profileMemberSince.textContent =
-            joined
-                ? `SINCE ${formatMemberDate(joined)}`
-                : "MEMBER";
-
-    }
-
-
-    if (profileDetailUsername) {
-
-        profileDetailUsername.textContent =
-            `@${username}`;
-
-    }
-
-
-    if (profileDetailName) {
-
-        profileDetailName.textContent =
-            name;
-
-    }
-
-
-    if (profileDetailRole) {
-
-        profileDetailRole.textContent =
-            role.charAt(0).toUpperCase() +
-            role.slice(1);
-
-    }
-
-
-    if (profileDetailEmail) {
-
-        profileDetailEmail.textContent =
-            currentUser.email || "-";
-
-    }
-
-
-    if (profileDetailJoined) {
-
-        profileDetailJoined.textContent =
-            joined
-                ? readableDateFromTimestamp(
-                    joined
-                )
-                : "-";
-
-    }
-
+    if (profileAvatarLetter) profileAvatarLetter.textContent = name.charAt(0).toUpperCase();
+    if (profileName) profileName.textContent = name;
+    if (profileUsername) profileUsername.textContent = `@${username}`;
+    if (profileRole) profileRole.textContent = role.toUpperCase();
+    if (profileMemberSince) profileMemberSince.textContent = joined ? `SINCE ${formatMemberDate(joined)}` : "MEMBER";
+    if (profileDetailUsername) profileDetailUsername.textContent = `@${username}`;
+    if (profileDetailName) profileDetailName.textContent = name;
+    if (profileDetailRole) profileDetailRole.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+    if (profileDetailEmail) profileDetailEmail.textContent = currentUser.email || "-";
+    if (profileDetailJoined) profileDetailJoined.textContent = joined ? readableDateFromTimestamp(joined) : "-";
 
     renderProfileStats();
-
     renderProfileCategories();
-
     renderProfileRecentTasks();
-
 }
-
-
-/* =========================================================
-   PROFILE STATS
-========================================================= */
 
 function renderProfileStats() {
+    const totalHours = currentTasks.reduce((sum, task) => sum + (Number(task.effort) || 0), 0);
+    const upcoming = [...currentTasks]
+        .filter(task => daysUntil(getTaskDate(task)) >= 0)
+        .sort((a, b) => daysUntil(getTaskDate(a)) - daysUntil(getTaskDate(b)));
+    const nextTask = upcoming[0];
+    const score = calculateWeeklyScore();
 
-    const totalHours =
-        currentTasks.reduce(
-            (sum, task) =>
-                sum +
-                (Number(task.effort) || 0),
-            0
-        );
+    let status = "CALM";
+    if (score >= 8) status = "HIGH";
+    else if (score >= 6) status = "WATCH";
+    else if (score >= 4) status = "BUSY";
 
-
-    const upcoming =
-        [...currentTasks]
-            .filter(
-                task =>
-                    daysUntil(
-                        getTaskDate(task)
-                    ) >= 0
-            )
-            .sort(
-                (a, b) =>
-                    daysUntil(
-                        getTaskDate(a)
-                    ) -
-                    daysUntil(
-                        getTaskDate(b)
-                    )
-            );
-
-
-    const nextTask =
-        upcoming[0];
-
-
-    const score =
-        calculateWeeklyScore();
-
-
-    let status =
-        "CALM";
-
-
-    if (score >= 8) {
-
-        status =
-            "HIGH";
-
-    } else if (score >= 6) {
-
-        status =
-            "WATCH";
-
-    } else if (score >= 4) {
-
-        status =
-            "BUSY";
-
-    }
-
-
-    if (profileTaskCount) {
-
-        profileTaskCount.textContent =
-            currentTasks.length;
-
-    }
-
-
-    if (profileHours) {
-
-        profileHours.textContent =
-            formatHours(totalHours);
-
-    }
-
-
-    if (profileNextDeadline) {
-
-        if (nextTask) {
-
-            profileNextDeadline.textContent =
-                readableShortDate(
-                    getTaskDate(nextTask)
-                );
-
-        } else {
-
-            profileNextDeadline.textContent =
-                "-";
-
-        }
-
-    }
-
-
-    if (profilePressureStatus) {
-
-        profilePressureStatus.textContent =
-            status;
-
-    }
-
+    if (profileTaskCount) profileTaskCount.textContent = currentTasks.length;
+    if (profileHours) profileHours.textContent = formatHours(totalHours);
+    if (profileNextDeadline) profileNextDeadline.textContent = nextTask ? readableShortDate(getTaskDate(nextTask)) : "-";
+    if (profilePressureStatus) profilePressureStatus.textContent = status;
 }
-
-
-/* =========================================================
-   PROFILE CATEGORY BREAKDOWN
-========================================================= */
 
 function renderProfileCategories() {
-
-    if (!profileCategoryBars) {
-        return;
-    }
-
-
+    if (!profileCategoryBars) return;
     profileCategoryBars.innerHTML = "";
 
-
     if (!currentTasks.length) {
-
-        if (profileCategoryEmpty) {
-
-            profileCategoryEmpty.style.display =
-                "block";
-
-        }
-
+        if (profileCategoryEmpty) profileCategoryEmpty.style.display = "block";
         return;
-
     }
-
-
-    if (profileCategoryEmpty) {
-
-        profileCategoryEmpty.style.display =
-            "none";
-
-    }
-
+    if (profileCategoryEmpty) profileCategoryEmpty.style.display = "none";
 
     const categories = {};
+    currentTasks.forEach(task => {
+        const cat = task.category || "Other";
+        categories[cat] = (categories[cat] || 0) + (Number(task.effort) || 0);
+    });
 
+    const sorted = Object.entries(categories).sort((a, b) => b[1] - a[1]);
+    const max = Math.max(...sorted.map(item => item[1]), 1);
 
-    currentTasks.forEach(
-        task => {
-
-            const category =
-                task.category ||
-                "Other";
-
-
-            categories[category] =
-                (
-                    categories[category] ||
-                    0
-                ) +
-                (
-                    Number(task.effort) || 0
-                );
-
-        }
-    );
-
-
-    const sorted =
-        Object.entries(categories)
-            .sort(
-                (a, b) =>
-                    b[1] - a[1]
-            );
-
-
-    const max =
-        Math.max(
-            ...sorted.map(
-                item => item[1]
-            ),
-            1
-        );
-
-
-    sorted.forEach(
-        ([category, hours]) => {
-
-            const item =
-                document.createElement("div");
-
-
-            item.className =
-                "profile-category-item";
-
-
-            const percentage =
-                (
-                    hours /
-                    max
-                ) * 100;
-
-
-            item.innerHTML = `
-
-                <div class="profile-category-head">
-
-                    <span>
-                        ${escapeHtml(category)}
-                    </span>
-
-                    <span>
-                        ${formatHours(hours)}
-                    </span>
-
-                </div>
-
-                <div class="profile-category-track">
-
-                    <div
-                        class="profile-category-fill"
-                        style="width:${percentage}%"
-                    ></div>
-
-                </div>
-
-            `;
-
-
-            profileCategoryBars.appendChild(
-                item
-            );
-
-        }
-    );
-
+    sorted.forEach(([category, hours]) => {
+        const item = document.createElement("div");
+        item.className = "profile-category-item";
+        const percentage = (hours / max) * 100;
+        item.innerHTML = `
+            <div class="profile-category-head">
+                <span>${escapeHtml(category)}</span>
+                <span>${formatHours(hours)}</span>
+            </div>
+            <div class="profile-category-track">
+                <div class="profile-category-fill" style="width:${percentage}%"></div>
+            </div>
+        `;
+        profileCategoryBars.appendChild(item);
+    });
 }
-
-
-/* =========================================================
-   PROFILE RECENT / UPCOMING TASKS
-========================================================= */
 
 function renderProfileRecentTasks() {
-
-    if (!profileRecentTasks) {
-        return;
-    }
-
-
+    if (!profileRecentTasks) return;
     profileRecentTasks.innerHTML = "";
 
-
     if (!currentTasks.length) {
-
-        if (profileTasksEmpty) {
-
-            profileTasksEmpty.style.display =
-                "block";
-
-        }
-
+        if (profileTasksEmpty) profileTasksEmpty.style.display = "block";
         return;
-
     }
+    if (profileTasksEmpty) profileTasksEmpty.style.display = "none";
 
+    const sorted = [...currentTasks]
+        .sort((a, b) => new Date(getTaskDate(a)) - new Date(getTaskDate(b)))
+        .slice(0, 6);
 
-    if (profileTasksEmpty) {
+    sorted.forEach(task => {
+        const element = document.createElement("div");
+        element.className = "profile-recent-task";
+        const date = getTaskDate(task);
+        const days = daysUntil(date);
+        let deadline = days < 0 ? "Overdue" : days === 0 ? "Due today" : days === 1 ? "Due tomorrow" : `Due ${readableShortDate(date)}`;
 
-        profileTasksEmpty.style.display =
-            "none";
-
-    }
-
-
-    const sorted =
-        [...currentTasks]
-            .sort(
-                (a, b) => {
-
-                    const dateA =
-                        getTaskDate(a);
-
-                    const dateB =
-                        getTaskDate(b);
-
-
-                    return (
-                        new Date(dateA) -
-                        new Date(dateB)
-                    );
-
-                }
-            )
-            .slice(0, 6);
-
-
-    sorted.forEach(
-        task => {
-
-            const element =
-                document.createElement("div");
-
-
-            element.className =
-                "profile-recent-task";
-
-
-            const date =
-                getTaskDate(task);
-
-
-            const days =
-                daysUntil(date);
-
-
-            let deadline;
-
-
-            if (days < 0) {
-
-                deadline =
-                    "Overdue";
-
-            } else if (days === 0) {
-
-                deadline =
-                    "Due today";
-
-            } else if (days === 1) {
-
-                deadline =
-                    "Due tomorrow";
-
-            } else {
-
-                deadline =
-                    `Due ${readableShortDate(
-                        date
-                    )}`;
-
-            }
-
-
-            element.innerHTML = `
-
-                <span class="profile-recent-task-icon">
-
-                    ${getCategoryIcon(
-                        task.category
-                    )}
-
-                </span>
-
-                <span class="profile-recent-task-info">
-
-                    <strong>
-                        ${escapeHtml(
-                            task.name
-                        )}
-                    </strong>
-
-                    <span>
-                        ${escapeHtml(
-                            task.category ||
-                            "Other"
-                        )}
-                        -
-                        ${escapeHtml(
-                            deadline
-                        )}
-                    </span>
-
-                </span>
-
-                <span class="profile-recent-task-effort">
-
-                    ${formatHours(
-                        task.effort
-                    )}
-
-                </span>
-
-            `;
-
-
-            element.addEventListener(
-                "click",
-                () => {
-
-                    openEditTask(
-                        task.id
-                    );
-
-                }
-            );
-
-
-            profileRecentTasks.appendChild(
-                element
-            );
-
-        }
-    );
-
+        element.innerHTML = `
+            <span class="profile-recent-task-icon">${getCategoryIcon(task.category)}</span>
+            <span class="profile-recent-task-info">
+                <strong>${escapeHtml(task.name)}</strong>
+                <span>${escapeHtml(task.category || "Other")} - ${escapeHtml(deadline)}</span>
+            </span>
+            <span class="profile-recent-task-effort">${formatHours(task.effort)}</span>
+        `;
+        element.addEventListener("click", () => openEditTask(task.id));
+        profileRecentTasks.appendChild(element);
+    });
 }
-
-
-/* =========================================================
-   PROFILE PAGE NAVIGATION
-========================================================= */
 
 function openProfilePage() {
-
-    if (!currentUser) {
-        return;
-    }
-
-
-    if (app) {
-
-        app.classList.add(
-            "hidden"
-        );
-
-    }
-
-
-    if (adminPage) {
-
-        adminPage.classList.add(
-            "hidden"
-        );
-
-    }
-
-
-    if (profilePage) {
-
-        profilePage.classList.remove(
-            "hidden"
-        );
-
-    }
-
-
+    if (!currentUser) return;
+    if (app) app.classList.add("hidden");
+    if (adminPage) adminPage.classList.add("hidden");
+    if (profilePage) profilePage.classList.remove("hidden");
     updateRealProfilePage();
-
-
-    window.scrollTo(
-        0,
-        0
-    );
-
+    window.scrollTo(0, 0);
 }
-
 
 function closeProfilePage() {
-
-    if (profilePage) {
-
-        profilePage.classList.add(
-            "hidden"
-        );
-
-    }
-
-
-    if (app) {
-
-        app.classList.remove(
-            "hidden"
-        );
-
-    }
-
-
-    window.scrollTo(
-        0,
-        0
-    );
-
+    if (profilePage) profilePage.classList.add("hidden");
+    if (app) app.classList.remove("hidden");
+    window.scrollTo(0, 0);
 }
 
-
-if (profileButton) {
-
-    profileButton.addEventListener(
-        "click",
-        openProfilePage
-    );
-
-}
-
-
-if (backToDashboard) {
-
-    backToDashboard.addEventListener(
-        "click",
-        closeProfilePage
-    );
-
-}
-
-
-if (profileAddTaskButton) {
-
-    profileAddTaskButton.addEventListener(
-        "click",
-        () => {
-
-            closeProfilePage();
-
-            openAddTask();
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   PROFILE PAGE LOGOUT
-========================================================= */
-
-if (profilePageLogout) {
-
-    profilePageLogout.addEventListener(
-        "click",
-        async () => {
-
-            await performLogout();
-
-        }
-    );
-
-}
+if (profileButton) profileButton.addEventListener("click", openProfilePage);
+if (backToDashboard) backToDashboard.addEventListener("click", closeProfilePage);
+if (profileAddTaskButton) profileAddTaskButton.addEventListener("click", () => { closeProfilePage(); openAddTask(); });
 
 
 /* =========================================================
@@ -2134,4986 +679,705 @@ if (profilePageLogout) {
 ========================================================= */
 
 async function performLogout() {
-
     clearInterval(accountGuardTimer);
     accountGuardTimer = null;
 
-    const buttons = [
-        logoutButton,
-        profilePageLogout,
-        adminLogoutButton
-    ];
-
-
-    buttons.forEach(
-        button => {
-
-            if (button) {
-                button.disabled = true;
-            }
-
-        }
-    );
-
-
     try {
+        await supabaseClient.auth.signOut();
+    } catch (e) {}
 
-        const {
-            error
-        } =
-            await supabaseClient.auth.signOut();
+    currentUser = null;
+    currentProfile = null;
+    currentTasks = [];
+    adminUsers = [];
+    editingTaskId = null;
 
-
-        if (error) {
-
-            console.error(
-                "LOGOUT ERROR:",
-                error
-            );
-
-            alert(
-                "Could not log out: " +
-                error.message
-            );
-
-            return;
-
-        }
-
-
-        currentUser = null;
-
-        currentProfile = null;
-
-        currentTasks = [];
-
-        adminUsers = [];
-
-        editingTaskId = null;
-
-
-        closeTaskModal();
-
-        showAuth();
-
-
-        if (authForm) {
-            authForm.reset();
-        }
-
-
-        setAuthMode("login");
-
-
-    } catch (error) {
-
-        console.error(
-            "LOGOUT CRASH:",
-            error
-        );
-
-        alert(
-            "Something went wrong while logging out."
-        );
-
-    } finally {
-
-        buttons.forEach(
-            button => {
-
-                if (button) {
-                    button.disabled = false;
-                }
-
-            }
-        );
-
-    }
-
+    closeTaskModal();
+    showAuth();
+    if (authForm) authForm.reset();
+    setAuthMode("login");
 }
 
-
-if (logoutButton) {
-
-    logoutButton.addEventListener(
-        "click",
-        performLogout
-    );
-
-}
-
-
-if (adminLogoutButton) {
-
-    adminLogoutButton.addEventListener(
-        "click",
-        performLogout
-    );
-
-}
+if (logoutButton) logoutButton.addEventListener("click", performLogout);
+if (profilePageLogout) profilePageLogout.addEventListener("click", performLogout);
+if (adminLogoutButton) adminLogoutButton.addEventListener("click", performLogout);
 
 
 /* =========================================================
-   DATE HELPERS
+   DATE HELPERS & UTILITIES
 ========================================================= */
 
 function getLocalDate(offset = 0) {
-
-    const date =
-        new Date();
-
-
-    date.setHours(
-        12,
-        0,
-        0,
-        0
-    );
-
-
-    date.setDate(
-        date.getDate() +
-        offset
-    );
-
-
-    const year =
-        date.getFullYear();
-
-
-    const month =
-        String(
-            date.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const day =
-        String(
-            date.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
+    const date = new Date();
+    date.setHours(12, 0, 0, 0);
+    date.setDate(date.getDate() + offset);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
-
 }
-
 
 function getTaskDate(task) {
-
-    return (
-        task?.date ||
-        task?.due_date ||
-        ""
-    );
-
+    return task?.date || task?.due_date || "";
 }
-
 
 function readableDate(dateString) {
-
-    if (!dateString) {
-        return "";
-    }
-
-
-    const date =
-        new Date(
-            dateString +
-            "T00:00:00"
-        );
-
-
-    return date.toLocaleDateString(
-        undefined,
-        {
-            day: "numeric",
-            month: "short",
-            year: "numeric"
-        }
-    );
-
+    if (!dateString) return "";
+    return new Date(dateString + "T00:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
 }
-
 
 function readableShortDate(dateString) {
-
-    if (!dateString) {
-        return "";
-    }
-
-
-    const date =
-        new Date(
-            dateString +
-            "T00:00:00"
-        );
-
-
-    return date.toLocaleDateString(
-        undefined,
-        {
-            day: "numeric",
-            month: "short"
-        }
-    );
-
+    if (!dateString) return "";
+    return new Date(dateString + "T00:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short" });
 }
 
-
-function readableDateFromTimestamp(
-    timestamp
-) {
-
-    if (!timestamp) {
-        return "";
-    }
-
-
-    const date =
-        new Date(timestamp);
-
-
-    return date.toLocaleDateString(
-        undefined,
-        {
-            day: "numeric",
-            month: "short",
-            year: "numeric"
-        }
-    );
-
+function readableDateFromTimestamp(timestamp) {
+    if (!timestamp) return "";
+    return new Date(timestamp).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
 }
 
-
-function formatMemberDate(
-    timestamp
-) {
-
-    if (!timestamp) {
-        return "MEMBER";
-    }
-
-
-    const date =
-        new Date(timestamp);
-
-
-    return date.toLocaleDateString(
-        undefined,
-        {
-            month: "short",
-            year: "numeric"
-        }
-    ).toUpperCase();
-
+function formatMemberDate(timestamp) {
+    if (!timestamp) return "MEMBER";
+    return new Date(timestamp).toLocaleDateString(undefined, { month: "short", year: "numeric" }).toUpperCase();
 }
-
 
 function getDayName(dateString) {
-
-    if (!dateString) {
-        return "";
-    }
-
-
-    const date =
-        new Date(
-            dateString +
-            "T00:00:00"
-        );
-
-
-    return date.toLocaleDateString(
-        undefined,
-        {
-            weekday: "long"
-        }
-    );
-
+    if (!dateString) return "";
+    return new Date(dateString + "T00:00:00").toLocaleDateString(undefined, { weekday: "long" });
 }
-
 
 function daysUntil(dateString) {
-
-    if (!dateString) {
-        return 999;
-    }
-
-
-    const today =
-        new Date();
-
-
-    today.setHours(
-        0,
-        0,
-        0,
-        0
-    );
-
-
-    const target =
-        new Date(
-            dateString +
-            "T00:00:00"
-        );
-
-
-    target.setHours(
-        0,
-        0,
-        0,
-        0
-    );
-
-
-    return Math.round(
-        (
-            target.getTime() -
-            today.getTime()
-        ) /
-        86400000
-    );
-
+    if (!dateString) return 999;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const target = new Date(dateString + "T00:00:00");
+    target.setHours(0, 0, 0, 0);
+    return Math.round((target.getTime() - today.getTime()) / 86400000);
 }
-
 
 function formatHours(value) {
-
-    const number =
-        Number(value) || 0;
-
-
-    return `${number
-        .toFixed(1)
-        .replace(".0", "")}h`;
-
+    const number = Number(value) || 0;
+    return `${number.toFixed(1).replace(".0", "")}h`;
 }
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
 
 function escapeHtml(value) {
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-
-    div.textContent =
-        value ?? "";
-
-
+    const div = document.createElement("div");
+    div.textContent = value ?? "";
     return div.innerHTML;
-
 }
 
 
 /* =========================================================
-   WEEK DATA
+   DASHBOARD & WEEK DATA
 ========================================================= */
 
 function getWeekData() {
-
     const week = [];
-
-
-    for (
-        let i = 0;
-        i < 7;
-        i++
-    ) {
-
-        const date =
-            getLocalDate(i);
-
-
-        const tasks =
-            currentTasks.filter(
-                task =>
-                    getTaskDate(task) ===
-                    date
-            );
-
-
-        const hours =
-            tasks.reduce(
-                (sum, task) =>
-                    sum +
-                    (
-                        Number(task.effort) ||
-                        0
-                    ),
-                0
-            );
-
-
-        week.push({
-            date,
-            tasks,
-            hours
-        });
-
+    for (let i = 0; i < 7; i++) {
+        const date = getLocalDate(i);
+        const tasks = currentTasks.filter(task => getTaskDate(task) === date);
+        const hours = tasks.reduce((sum, task) => sum + (Number(task.effort) || 0), 0);
+        week.push({ date, tasks, hours });
     }
-
-
     return week;
-
 }
-
-
-/* =========================================================
-   TASK PRESSURE
-========================================================= */
-
-function getTaskPressure(task) {
-
-    const effort =
-        Number(task.effort) || 0;
-
-
-    const days =
-        daysUntil(
-            getTaskDate(task)
-        );
-
-
-    let score = 0;
-
-
-    score +=
-        Math.min(
-            effort * 8,
-            40
-        );
-
-
-    if (days < 0) {
-
-        score += 60;
-
-    } else if (days === 0) {
-
-        score += 50;
-
-    } else if (days === 1) {
-
-        score += 42;
-
-    } else if (days === 2) {
-
-        score += 32;
-
-    } else if (days <= 4) {
-
-        score += 20;
-
-    } else {
-
-        score += 5;
-
-    }
-
-
-    return score;
-
-}
-
-
-/* =========================================================
-   DAILY STATUS
-========================================================= */
 
 function getDayStatus(hours) {
-
-    if (hours >= 5) {
-
-        return {
-            className: "overloaded",
-            label: "Overloaded"
-        };
-
-    }
-
-
-    if (hours >= 3) {
-
-        return {
-            className: "busy",
-            label: "Busy"
-        };
-
-    }
-
-
-    return {
-        className: "manageable",
-        label: "Manageable"
-    };
-
+    if (hours >= 5) return { className: "overloaded", label: "Overloaded" };
+    if (hours >= 3) return { className: "busy", label: "Busy" };
+    return { className: "manageable", label: "Manageable" };
 }
-
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
 
 function renderDashboard() {
-
     renderScore();
-
     renderRadar();
-
     renderAlert();
-
     renderWeek();
-
     renderTasks();
-
     renderSuggestions();
-
     renderReminders();
-
     updateRealProfilePage();
-
 }
-
-
-/* =========================================================
-   PRESSURE SCORE
-========================================================= */
 
 function calculateWeeklyScore() {
+    if (!currentTasks.length) return 1;
+    const totalEffort = currentTasks.reduce((sum, task) => sum + (Number(task.effort) || 0), 0);
+    const urgentTasks = currentTasks.filter(task => {
+        const days = daysUntil(getTaskDate(task));
+        return days <= 2 && days >= 0;
+    }).length;
+    const overdueTasks = currentTasks.filter(task => daysUntil(getTaskDate(task)) < 0).length;
+    const overloadedDays = getWeekData().filter(day => day.hours >= 5).length;
 
-    if (!currentTasks.length) {
-        return 1;
-    }
-
-
-    const totalEffort =
-        currentTasks.reduce(
-            (sum, task) =>
-                sum +
-                (
-                    Number(task.effort) ||
-                    0
-                ),
-            0
-        );
-
-
-    const urgentTasks =
-        currentTasks.filter(
-            task => {
-
-                const days =
-                    daysUntil(
-                        getTaskDate(task)
-                    );
-
-
-                return (
-                    days <= 2 &&
-                    days >= 0
-                );
-
-            }
-        ).length;
-
-
-    const overdueTasks =
-        currentTasks.filter(
-            task =>
-                daysUntil(
-                    getTaskDate(task)
-                ) < 0
-        ).length;
-
-
-    const overloadedDays =
-        getWeekData().filter(
-            day =>
-                day.hours >= 5
-        ).length;
-
-
-    let score =
-        1 +
-        totalEffort * 0.55 +
-        urgentTasks * 0.9 +
-        overdueTasks * 1.5 +
-        overloadedDays * 1.2;
-
-
-    score =
-        Math.round(score);
-
-
-    return Math.max(
-        1,
-        Math.min(
-            10,
-            score
-        )
-    );
-
+    let score = 1 + totalEffort * 0.55 + urgentTasks * 0.9 + overdueTasks * 1.5 + overloadedDays * 1.2;
+    return Math.max(1, Math.min(10, Math.round(score)));
 }
-
 
 function renderScore() {
+    const scoreElement = $("score");
+    const scoreRing = $("scoreRing");
+    const scoreLabel = $("scoreLabel");
+    const totalHours = $("totalHours");
+    const score = calculateWeeklyScore();
+    const total = currentTasks.reduce((sum, task) => sum + (Number(task.effort) || 0), 0);
 
-    const scoreElement =
-        $("score");
-
-
-    const scoreRing =
-        $("scoreRing");
-
-
-    const scoreLabel =
-        $("scoreLabel");
-
-
-    const totalHours =
-        $("totalHours");
-
-
-    const score =
-        calculateWeeklyScore();
-
-
-    const total =
-        currentTasks.reduce(
-            (sum, task) =>
-                sum +
-                (
-                    Number(task.effort) ||
-                    0
-                ),
-            0
-        );
-
-
-    if (scoreElement) {
-
-        scoreElement.textContent =
-            score;
-
-    }
-
-
-    if (totalHours) {
-
-        totalHours.textContent =
-            `${formatHours(total)} planned`;
-
-    }
-
-
+    if (scoreElement) scoreElement.textContent = score;
+    if (totalHours) totalHours.textContent = `${formatHours(total)} planned`;
     if (scoreLabel) {
-
-        if (score <= 3) {
-
-            scoreLabel.textContent =
-                "Calm week";
-
-        } else if (score <= 5) {
-
-            scoreLabel.textContent =
-                "Manageable";
-
-        } else if (score <= 7) {
-
-            scoreLabel.textContent =
-                "Getting busy";
-
-        } else {
-
-            scoreLabel.textContent =
-                "High pressure";
-
-        }
-
+        if (score <= 3) scoreLabel.textContent = "Calm week";
+        else if (score <= 5) scoreLabel.textContent = "Manageable";
+        else if (score <= 7) scoreLabel.textContent = "Getting busy";
+        else scoreLabel.textContent = "High pressure";
     }
-
-
     if (scoreRing) {
-
-        const percentage =
-            score * 10;
-
-
-        scoreRing.style.background =
-            `conic-gradient(
-                var(--blue)
-                ${percentage}%,
-                rgba(91,140,255,.08)
-                ${percentage}%
-            )`;
-
+        const percentage = score * 10;
+        scoreRing.style.background = `conic-gradient(var(--blue) ${percentage}%, rgba(91,140,255,.08) ${percentage}%)`;
     }
-
 }
-
-
-/* =========================================================
-   RADAR
-========================================================= */
 
 function renderRadar() {
+    const container = $("radarBars");
+    const empty = $("radarEmpty");
+    if (!container) return;
 
-    const container =
-        $("radarBars");
+    const week = getWeekData();
+    container.innerHTML = "";
+    if (empty) empty.style.display = currentTasks.length ? "none" : "block";
+    if (!currentTasks.length) return;
 
+    const maxHours = Math.max(...week.map(day => day.hours), 1);
 
-    const empty =
-        $("radarEmpty");
+    week.forEach(day => {
+        const column = document.createElement("div");
+        column.className = "radar-column";
+        const status = getDayStatus(day.hours);
+        const bar = document.createElement("div");
+        bar.className = `radar-bar ${status.className}`;
+        const height = Math.max(5, (day.hours / maxHours) * 100);
+        bar.style.height = `${height}%`;
 
+        const value = document.createElement("span");
+        value.className = "radar-value";
+        value.textContent = formatHours(day.hours);
 
-    if (!container) {
-        return;
-    }
+        const dayLabel = document.createElement("span");
+        dayLabel.className = "radar-day";
+        dayLabel.textContent = new Date(day.date + "T00:00:00").toLocaleDateString(undefined, { weekday: "short" });
 
-
-    const week =
-        getWeekData();
-
-
-    container.innerHTML =
-        "";
-
-
-    if (empty) {
-
-        empty.style.display =
-            currentTasks.length
-                ? "none"
-                : "block";
-
-    }
-
-
-    if (!currentTasks.length) {
-        return;
-    }
-
-
-    const maxHours =
-        Math.max(
-            ...week.map(
-                day =>
-                    day.hours
-            ),
-            1
-        );
-
-
-    week.forEach(
-        day => {
-
-            const column =
-                document.createElement(
-                    "div"
-                );
-
-
-            column.className =
-                "radar-column";
-
-
-            const status =
-                getDayStatus(
-                    day.hours
-                );
-
-
-            const bar =
-                document.createElement(
-                    "div"
-                );
-
-
-            bar.className =
-                `radar-bar ${status.className}`;
-
-
-            const height =
-                Math.max(
-                    5,
-                    (
-                        day.hours /
-                        maxHours
-                    ) * 100
-                );
-
-
-            bar.style.height =
-                `${height}%`;
-
-
-            const value =
-                document.createElement(
-                    "span"
-                );
-
-
-            value.className =
-                "radar-value";
-
-
-            value.textContent =
-                formatHours(
-                    day.hours
-                );
-
-
-            const dayLabel =
-                document.createElement(
-                    "span"
-                );
-
-
-            dayLabel.className =
-                "radar-day";
-
-
-            dayLabel.textContent =
-                new Date(
-                    day.date +
-                    "T00:00:00"
-                )
-                    .toLocaleDateString(
-                        undefined,
-                        {
-                            weekday: "short"
-                        }
-                    );
-
-
-            column.appendChild(
-                value
-            );
-
-            column.appendChild(
-                bar
-            );
-
-            column.appendChild(
-                dayLabel
-            );
-
-
-            container.appendChild(
-                column
-            );
-
-        }
-    );
-
+        column.appendChild(value);
+        column.appendChild(bar);
+        column.appendChild(dayLabel);
+        container.appendChild(column);
+    });
 }
-
-
-/* =========================================================
-   ALERT
-========================================================= */
 
 function renderAlert() {
+    const alertCard = $("alert");
+    const alertTitle = $("alertTitle");
+    const alertText = $("alertText");
+    if (!alertCard) return;
 
-    const alertCard =
-        $("alert");
-
-
-    const alertTitle =
-        $("alertTitle");
-
-
-    const alertText =
-        $("alertText");
-
-
-    if (!alertCard) {
-        return;
-    }
-
-
-    const week =
-        getWeekData();
-
-
-    const overloaded =
-        week.filter(
-            day =>
-                day.hours >= 5
-        );
-
+    const week = getWeekData();
+    const overloaded = week.filter(day => day.hours >= 5);
 
     if (!overloaded.length) {
-
-        alertCard.classList.add(
-            "hidden"
-        );
-
+        alertCard.classList.add("hidden");
         return;
-
     }
 
-
-    const worstDay =
-        [...overloaded].sort(
-            (a, b) =>
-                b.hours -
-                a.hours
-        )[0];
-
-
-    const dayName =
-        getDayName(
-            worstDay.date
-        );
-
-
-    alertCard.classList.remove(
-        "hidden"
-    );
-
-
-    if (alertTitle) {
-
-        alertTitle.textContent =
-            `${dayName} looks overloaded.`;
-
-    }
-
-
-    if (alertText) {
-
-        alertText.textContent =
-            `${formatHours(
-                worstDay.hours
-            )} are planned. Consider starting one of these tasks earlier.`;
-
-    }
-
+    const worstDay = [...overloaded].sort((a, b) => b.hours - a.hours)[0];
+    alertCard.classList.remove("hidden");
+    if (alertTitle) alertTitle.textContent = `${getDayName(worstDay.date)} looks overloaded.`;
+    if (alertText) alertText.textContent = `${formatHours(worstDay.hours)} are planned. Consider starting one of these tasks earlier.`;
 }
-
-
-/* =========================================================
-   WEEK
-========================================================= */
 
 function renderWeek() {
+    const container = $("weekGrid");
+    if (!container) return;
+    const week = getWeekData();
+    container.innerHTML = "";
 
-    const container =
-        $("weekGrid");
+    week.forEach(day => {
+        const status = getDayStatus(day.hours);
+        const element = document.createElement("div");
+        element.className = `day ${status.className}`;
+        const date = new Date(day.date + "T00:00:00");
+        const dayName = date.toLocaleDateString(undefined, { weekday: "short" });
 
+        element.innerHTML = `
+            <div class="day-header">
+                <span class="day-name">${dayName}</span>
+                <span class="day-number">${date.getDate()}</span>
+            </div>
+            <div class="day-status"><span class="status-dot"></span>${status.label}</div>
+            <div class="day-tasks">
+                ${day.tasks.length ? day.tasks.map(task => `
+                    <button type="button" class="mini-task" data-task-id="${task.id}">
+                        <span class="mini-dot"></span>
+                        <span>
+                            <strong>${escapeHtml(task.name)}</strong>
+                            <small>${formatHours(task.effort)}</small>
+                        </span>
+                    </button>
+                `).join("") : `<span class="empty-day">No tasks</span>`}
+            </div>
+            <div class="day-hours">${day.hours > 0 ? `${formatHours(day.hours)} planned` : "Free"}</div>
+        `;
 
-    if (!container) {
-        return;
-    }
-
-
-    const week =
-        getWeekData();
-
-
-    container.innerHTML =
-        "";
-
-
-    week.forEach(
-        day => {
-
-            const status =
-                getDayStatus(
-                    day.hours
-                );
-
-
-            const element =
-                document.createElement(
-                    "div"
-                );
-
-
-            element.className =
-                `day ${status.className}`;
-
-
-            const date =
-                new Date(
-                    day.date +
-                    "T00:00:00"
-                );
-
-
-            const dayName =
-                date.toLocaleDateString(
-                    undefined,
-                    {
-                        weekday: "short"
-                    }
-                );
-
-
-            element.innerHTML = `
-
-                <div class="day-header">
-
-                    <span class="day-name">
-                        ${dayName}
-                    </span>
-
-                    <span class="day-number">
-                        ${date.getDate()}
-                    </span>
-
-                </div>
-
-                <div class="day-status">
-
-                    <span class="status-dot"></span>
-
-                    ${status.label}
-
-                </div>
-
-                <div class="day-tasks">
-
-                    ${
-                        day.tasks.length
-                            ? day.tasks.map(
-                                task => `
-
-                                    <button
-                                        type="button"
-                                        class="mini-task"
-                                        data-task-id="${task.id}"
-                                    >
-
-                                        <span class="mini-dot"></span>
-
-                                        <span>
-
-                                            <strong>
-                                                ${escapeHtml(
-                                                    task.name
-                                                )}
-                                            </strong>
-
-                                            <small>
-                                                ${formatHours(
-                                                    task.effort
-                                                )}
-                                            </small>
-
-                                        </span>
-
-                                    </button>
-
-                                `
-                            ).join("")
-                            : `
-                                <span class="empty-day">
-                                    No tasks
-                                </span>
-                            `
-                    }
-
-                </div>
-
-                <div class="day-hours">
-
-                    ${
-                        day.hours > 0
-                            ? `${formatHours(
-                                day.hours
-                            )} planned`
-                            : "Free"
-                    }
-
-                </div>
-
-            `;
-
-
-            element
-                .querySelectorAll(
-                    ".mini-task"
-                )
-                .forEach(
-                    button => {
-
-                        button.addEventListener(
-                            "click",
-                            event => {
-
-                                event.stopPropagation();
-
-                                openEditTask(
-                                    button.dataset.taskId
-                                );
-
-                            }
-                        );
-
-                    }
-                );
-
-
-            container.appendChild(
-                element
-            );
-
-        }
-    );
-
+        element.querySelectorAll(".mini-task").forEach(button => {
+            button.addEventListener("click", event => {
+                event.stopPropagation();
+                openEditTask(button.dataset.taskId);
+            });
+        });
+        container.appendChild(element);
+    });
 }
 
-
-/* =========================================================
-   TASK ICON
-========================================================= */
-
-function getCategoryIcon(
-    category
-) {
-
-    const icons = {
-
-        Test: "T",
-        Homework: "H",
-        Project: "P",
-        Assignment: "A",
-        Tuition: "U",
-        Other: "-"
-
-    };
-
-
-    return (
-        icons[category] ||
-        "-"
-    );
-
+function getCategoryIcon(category) {
+    const icons = { Test: "T", Homework: "H", Project: "P", Assignment: "A", Tuition: "U", Other: "-" };
+    return icons[category] || "-";
 }
-
-
-/* =========================================================
-   TASK LIST
-========================================================= */
 
 function renderTasks() {
-
-    const container =
-        $("taskList");
-
-
-    if (!container) {
-        return;
-    }
-
-
-    container.innerHTML =
-        "";
-
+    const container = $("taskList");
+    if (!container) return;
+    container.innerHTML = "";
 
     if (!currentTasks.length) {
-
-        container.innerHTML = `
-
-            <div class="empty-tasks">
-
-                No tasks yet.
-
-                <br>
-
-                Add your first task to start seeing your workload.
-
-            </div>
-
-        `;
-
+        container.innerHTML = `<div class="empty-tasks">No tasks yet.<br>Add your first task to start seeing your workload.</div>`;
         return;
-
     }
 
+    const sortedTasks = [...currentTasks].sort((a, b) => new Date(getTaskDate(a)) - new Date(getTaskDate(b)));
 
-    const sortedTasks =
-        [...currentTasks].sort(
-            (a, b) =>
-                new Date(
-                    getTaskDate(a)
-                ) -
-                new Date(
-                    getTaskDate(b)
-                )
-        );
+    sortedTasks.forEach(task => {
+        const row = document.createElement("div");
+        row.className = "task-row";
+        const date = getTaskDate(task);
+        const days = daysUntil(date);
+        let deadlineText = days < 0 ? "Overdue" : days === 0 ? "Due today" : days === 1 ? "Due tomorrow" : `Due ${readableShortDate(date)}`;
 
+        row.innerHTML = `
+            <label class="task-complete" title="Mark task complete">
+                <input type="checkbox" ${isTaskComplete(task) ? "checked" : ""} aria-label="Mark ${escapeHtml(task.name)} complete">
+                <span class="task-checkmark"></span>
+            </label>
+            <span class="task-icon">${getCategoryIcon(task.category)}</span>
+            <span class="task-info">
+                <strong>${escapeHtml(task.name)}</strong>
+                <small>${escapeHtml(task.category || "Other")} - ${deadlineText}</small>
+            </span>
+            <span class="effort">${formatHours(task.effort)}</span>
+            <span class="task-actions">
+                <button type="button" class="task-action edit">Edit</button>
+                <button type="button" class="task-action delete">Delete</button>
+            </span>
+        `;
 
-    sortedTasks.forEach(
-        task => {
+        const completionInput = row.querySelector(".task-complete input");
+        completionInput.addEventListener("click", event => event.stopPropagation());
+        completionInput.addEventListener("change", event => {
+            setTaskCompleted(task.id, event.target.checked);
+        });
 
-            const row =
-                document.createElement(
-                    "div"
-                );
+        row.querySelector(".edit").addEventListener("click", event => {
+            event.stopPropagation();
+            openEditTask(task.id);
+        });
+        row.querySelector(".delete").addEventListener("click", async event => {
+            event.stopPropagation();
+            await deleteTask(task.id);
+        });
+        row.addEventListener("click", () => openEditTask(task.id));
 
-
-            row.className =
-                "task-row";
-
-
-            const date =
-                getTaskDate(task);
-
-
-            const days =
-                daysUntil(date);
-
-
-            let deadlineText;
-
-
-            if (days < 0) {
-
-                deadlineText =
-                    "Overdue";
-
-            } else if (days === 0) {
-
-                deadlineText =
-                    "Due today";
-
-            } else if (days === 1) {
-
-                deadlineText =
-                    "Due tomorrow";
-
-            } else {
-
-                deadlineText =
-                    `Due ${readableShortDate(
-                        date
-                    )}`;
-
-            }
-
-
-            row.innerHTML = `
-
-                <label class="task-complete" title="Mark task complete">
-                    <input
-                        type="checkbox"
-                        ${isTaskComplete(task) ? "checked" : ""}
-                        aria-label="Mark ${escapeHtml(task.name)} complete"
-                    >
-                    <span class="task-checkmark"></span>
-                </label>
-
-                <span class="task-icon">
-                    ${
-                        getCategoryIcon(
-                            task.category
-                        )
-                    }
-                </span>
-
-                <span class="task-info">
-
-                    <strong>
-                        ${escapeHtml(
-                            task.name
-                        )}
-                    </strong>
-
-                    <small>
-                        ${escapeHtml(
-                            task.category ||
-                            "Other"
-                        )}
-                        -
-                        ${deadlineText}
-                    </small>
-
-                </span>
-
-                <span class="effort">
-                    ${formatHours(
-                        task.effort
-                    )}
-                </span>
-
-                <span class="task-actions">
-
-                    <button
-                        type="button"
-                        class="task-action edit"
-                    >
-                        Edit
-                    </button>
-
-                    <button
-                        type="button"
-                        class="task-action delete"
-                    >
-                        Delete
-                    </button>
-
-                </span>
-
-            `;
-
-
-            const completionInput = row.querySelector(".task-complete input");
-            completionInput.addEventListener("click", event => event.stopPropagation());
-            completionInput.addEventListener("change", event => {
-                setTaskCompleted(task.id, event.target.checked);
-            });
-
-            const editButton =
-                row.querySelector(
-                    ".edit"
-                );
-
-
-            const deleteButton =
-                row.querySelector(
-                    ".delete"
-                );
-
-
-            editButton.addEventListener(
-                "click",
-                event => {
-
-                    event.stopPropagation();
-
-                    openEditTask(
-                        task.id
-                    );
-
-                }
-            );
-
-
-            deleteButton.addEventListener(
-                "click",
-                async event => {
-
-                    event.stopPropagation();
-
-                    await deleteTask(
-                        task.id
-                    );
-
-                }
-            );
-
-
-            row.addEventListener(
-                "click",
-                () => {
-
-                    openEditTask(
-                        task.id
-                    );
-
-                }
-            );
-
-
-            container.appendChild(
-                row
-            );
-
-        }
-    );
-
+        container.appendChild(row);
+    });
 }
-
-
-/* =========================================================
-   SUGGESTIONS
-========================================================= */
 
 function renderSuggestions() {
-
-    const container =
-        $("suggestions");
-
-
-    if (!container) {
-        return;
-    }
-
-
-    container.innerHTML =
-        "";
-
-
+    const container = $("suggestions");
+    if (!container) return;
+    container.innerHTML = "";
     const suggestions = [];
 
-
     if (!currentTasks.length) {
-
         suggestions.push({
-
-            title:
-                "Add your first task",
-
-            text:
-                "Add homework, tests, projects or assignments and I'll start analysing your workload."
-
+            title: "Add your first task",
+            text: "Add homework, tests, projects or assignments and I'll start analysing your workload."
         });
-
     } else {
-
-        const overdue =
-            currentTasks.filter(
-                task =>
-                    daysUntil(
-                        getTaskDate(task)
-                    ) < 0
-            );
-
-
-        const urgent =
-            [...currentTasks]
-                .filter(
-                    task => {
-
-                        const days =
-                            daysUntil(
-                                getTaskDate(task)
-                            );
-
-
-                        return (
-                            days >= 0 &&
-                            days <= 2
-                        );
-
-                    }
-                )
-                .sort(
-                    (a, b) =>
-                        getTaskPressure(b) -
-                        getTaskPressure(a)
-                );
-
-
-        const week =
-            getWeekData();
-
-
-        const busiestDay =
-            [...week].sort(
-                (a, b) =>
-                    b.hours -
-                    a.hours
-            )[0];
-
-
-        const largestTask =
-            [...currentTasks].sort(
-                (a, b) =>
-                    (
-                        Number(b.effort) ||
-                        0
-                    ) -
-                    (
-                        Number(a.effort) ||
-                        0
-                    )
-            )[0];
-
-
-        if (overdue.length) {
-
-            suggestions.push({
-
-                title:
-                    "Clear overdue work",
-
-                text:
-                    `"${overdue[0].name}" is overdue. Put it ahead of non-urgent work.`
-
-            });
-
-        }
-
-
-        if (urgent.length) {
-
-            suggestions.push({
-
-                title:
-                    "Protect your deadline",
-
-                text:
-                    `Start "${urgent[0].name}" soon because its deadline is close.`
-
-            });
-
-        }
-
-
-        if (
-            busiestDay &&
-            busiestDay.hours >= 3
-        ) {
-
-            suggestions.push({
-
-                title:
-                    "Watch your busiest day",
-
-                text:
-                    `${getDayName(
-                        busiestDay.date
-                    )} has ${formatHours(
-                        busiestDay.hours
-                    )} planned. Move preparation earlier if possible.`
-
-            });
-
-        }
-
-
-        if (
-            largestTask &&
-            Number(
-                largestTask.effort
-            ) >= 2
-        ) {
-
-            suggestions.push({
-
-                title:
-                    "Split the big task",
-
-                text:
-                    `"${largestTask.name}" is ${formatHours(
-                        largestTask.effort
-                    )}. Break it into smaller sessions.`
-
-            });
-
-        }
-
-
         suggestions.push({
-
-            title:
-                "Use focused sessions",
-
-            text:
-                "Finish one high-priority task before jumping between several smaller ones."
-
+            title: "Use focused sessions",
+            text: "Finish one high-priority task before jumping between several smaller ones."
         });
-
     }
 
-
-    suggestions
-        .slice(0, 4)
-        .forEach(
-            (suggestion, index) => {
-
-                const element =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                element.className =
-                    "suggestion";
-
-
-                element.innerHTML = `
-
-                    <span class="suggestion-number">
-                        ${index + 1}
-                    </span>
-
-                    <div>
-
-                        <strong>
-                            ${escapeHtml(
-                                suggestion.title
-                            )}
-                        </strong>
-
-                        <p>
-                            ${escapeHtml(
-                                suggestion.text
-                            )}
-                        </p>
-
-                    </div>
-
-                `;
-
-
-                container.appendChild(
-                    element
-                );
-
-            }
-        );
-
+    suggestions.slice(0, 4).forEach((suggestion, index) => {
+        const element = document.createElement("div");
+        element.className = "suggestion";
+        element.innerHTML = `
+            <span class="suggestion-number">${index + 1}</span>
+            <div>
+                <strong>${escapeHtml(suggestion.title)}</strong>
+                <p>${escapeHtml(suggestion.text)}</p>
+            </div>
+        `;
+        container.appendChild(element);
+    });
 }
-
-
-/* =========================================================
-   SMART REMINDERS
-========================================================= */
 
 function renderReminders() {
+    const container = $("reminderList");
+    if (!container) return;
+    container.innerHTML = "";
 
-    const container =
-        $("reminderList");
-
-
-    if (!container) {
-        return;
-    }
-
-
-    container.innerHTML =
-        "";
-
-
-    if (!currentTasks.length) {
-
-        container.innerHTML = `
-
-            <div class="no-reminders">
-
-                No reminders yet.
-
-                <br>
-
-                Add tasks with upcoming deadlines.
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    const reminders =
-        [...currentTasks]
-            .filter(
-                task =>
-                    daysUntil(
-                        getTaskDate(task)
-                    ) <= 3
-            )
-            .sort(
-                (a, b) =>
-                    daysUntil(
-                        getTaskDate(a)
-                    ) -
-                    daysUntil(
-                        getTaskDate(b)
-                    )
-            );
-
+    const reminders = [...currentTasks]
+        .filter(task => daysUntil(getTaskDate(task)) <= 3)
+        .sort((a, b) => daysUntil(getTaskDate(a)) - daysUntil(getTaskDate(b)));
 
     if (!reminders.length) {
-
-        container.innerHTML = `
-
-            <div class="no-reminders">
-
-                You're clear for the next few days.
-
-                <br>
-
-                No urgent deadlines detected.
-
-            </div>
-
-        `;
-
+        container.innerHTML = `<div class="no-reminders">You're clear for the next few days.<br>No urgent deadlines detected.</div>`;
         return;
-
     }
 
-
-    reminders
-        .slice(0, 5)
-        .forEach(
-            task => {
-
-                const element =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                element.className =
-                    "reminder";
-
-
-                const days =
-                    daysUntil(
-                        getTaskDate(task)
-                    );
-
-
-                let description;
-
-
-                if (days < 0) {
-
-                    description =
-                        "This task is overdue. Move it to the top of your list.";
-
-                } else if (days === 0) {
-
-                    description =
-                        "Due today - consider working on it now.";
-
-                } else if (days === 1) {
-
-                    description =
-                        "Due tomorrow - don't leave it until the last minute.";
-
-                } else {
-
-                    description =
-                        `Due in ${days} days. A small session today could reduce pressure later.`;
-
-                }
-
-
-                element.innerHTML = `
-
-                    <span class="reminder-icon">
-                        !
-                    </span>
-
-                    <div>
-
-                        <strong>
-                            ${escapeHtml(
-                                task.name
-                            )}
-                        </strong>
-
-                        <p>
-                            ${escapeHtml(
-                                description
-                            )}
-                        </p>
-
-                    </div>
-
-                `;
-
-
-                container.appendChild(
-                    element
-                );
-
-            }
-        );
-
+    reminders.slice(0, 5).forEach(task => {
+        const element = document.createElement("div");
+        element.className = "reminder";
+        element.innerHTML = `
+            <span class="reminder-icon">!</span>
+            <div>
+                <strong>${escapeHtml(task.name)}</strong>
+                <p>Upcoming deadline in ${daysUntil(getTaskDate(task))} days.</p>
+            </div>
+        `;
+        container.appendChild(element);
+    });
 }
 
 
 /* =========================================================
-   ADD TASK
+   TASK MODAL & ACTIONS
 ========================================================= */
 
 function openAddTask() {
-
-    editingTaskId =
-        null;
-
-
-    if (taskForm) {
-        taskForm.reset();
-    }
-
-
-    if (taskCategory) {
-
-        taskCategory.value =
-            "Homework";
-
-    }
-
-
-    if (taskEffort) {
-
-        taskEffort.value =
-            "1";
-
-    }
-
-
-    if (taskDate) {
-
-        taskDate.value =
-            getLocalDate(0);
-
-    }
-
-
-    if (modalTitle) {
-
-        modalTitle.textContent =
-            "Add a task";
-
-    }
-
-
-    if (saveTaskButton) {
-
-        saveTaskButton.textContent =
-            "Add Task";
-
-    }
-
-
-    if (deleteTaskButton) {
-
-        deleteTaskButton.classList.add(
-            "hidden"
-        );
-
-    }
-
-
-    if (taskModal) {
-
-        taskModal.classList.remove(
-            "hidden"
-        );
-
-    }
-
+    editingTaskId = null;
+    if (taskForm) taskForm.reset();
+    if (taskCategory) taskCategory.value = "Homework";
+    if (taskEffort) taskEffort.value = "1";
+    if (taskDate) taskDate.value = getLocalDate(0);
+    if (modalTitle) modalTitle.textContent = "Add a task";
+    if (saveTaskButton) saveTaskButton.textContent = "Add Task";
+    if (deleteTaskButton) deleteTaskButton.classList.add("hidden");
+    if (taskModal) taskModal.classList.remove("hidden");
 }
-
 
 function openEditTask(id) {
-
-    const task =
-        currentTasks.find(
-            item =>
-                String(item.id) ===
-                String(id)
-        );
-
-
-    if (!task) {
-        return;
-    }
-
-
-    editingTaskId =
-        task.id;
-
-
-    if (taskName) {
-
-        taskName.value =
-            task.name || "";
-
-    }
-
-
-    if (taskCategory) {
-
-        taskCategory.value =
-            task.category ||
-            "Homework";
-
-    }
-
-
-    if (taskEffort) {
-
-        taskEffort.value =
-            task.effort || 1;
-
-    }
-
-
-    if (taskDate) {
-
-        taskDate.value =
-            getTaskDate(task);
-
-    }
-
-
-    if (modalTitle) {
-
-        modalTitle.textContent =
-            "Edit task";
-
-    }
-
-
-    if (saveTaskButton) {
-
-        saveTaskButton.textContent =
-            "Save changes";
-
-    }
-
-
-    if (deleteTaskButton) {
-
-        deleteTaskButton.classList.remove(
-            "hidden"
-        );
-
-    }
-
-
-    if (taskModal) {
-
-        taskModal.classList.remove(
-            "hidden"
-        );
-
-    }
-
+    const task = currentTasks.find(item => String(item.id) === String(id));
+    if (!task) return;
+    editingTaskId = task.id;
+    if (taskName) taskName.value = task.name || "";
+    if (taskCategory) taskCategory.value = task.category || "Homework";
+    if (taskEffort) taskEffort.value = task.effort || 1;
+    if (taskDate) taskDate.value = getTaskDate(task);
+    if (modalTitle) modalTitle.textContent = "Edit task";
+    if (saveTaskButton) saveTaskButton.textContent = "Save changes";
+    if (deleteTaskButton) deleteTaskButton.classList.remove("hidden");
+    if (taskModal) taskModal.classList.remove("hidden");
 }
 
-
-window.openAddTask =
-    openAddTask;
-
-window.openEditTask =
-    openEditTask;
-
-
-/* =========================================================
-   CLOSE MODAL
-========================================================= */
+window.openAddTask = openAddTask;
+window.openEditTask = openEditTask;
 
 function closeTaskModal() {
-
-    if (taskModal) {
-
-        taskModal.classList.add(
-            "hidden"
-        );
-
-    }
-
-
-    editingTaskId =
-        null;
-
+    if (taskModal) taskModal.classList.add("hidden");
+    editingTaskId = null;
 }
+window.closeTaskModal = closeTaskModal;
 
-
-window.closeTaskModal =
-    closeTaskModal;
-
-
-if (addTaskTop) {
-
-    addTaskTop.addEventListener(
-        "click",
-        openAddTask
-    );
-
-}
-
-
-if (addTaskButton) {
-
-    addTaskButton.addEventListener(
-        "click",
-        openAddTask
-    );
-
-}
-
-
-if (closeModalButton) {
-
-    closeModalButton.addEventListener(
-        "click",
-        closeTaskModal
-    );
-
-}
-
-
-if (cancelModalButton) {
-
-    cancelModalButton.addEventListener(
-        "click",
-        closeTaskModal
-    );
-
-}
-
-
-if (taskModal) {
-
-    taskModal.addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target ===
-                taskModal
-            ) {
-
-                closeTaskModal();
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SAVE TASK
-========================================================= */
+if (addTaskTop) addTaskTop.addEventListener("click", openAddTask);
+if (addTaskButton) addTaskButton.addEventListener("click", openAddTask);
+if (closeModalButton) closeModalButton.addEventListener("click", closeTaskModal);
+if (cancelModalButton) cancelModalButton.addEventListener("click", closeTaskModal);
 
 if (taskForm) {
-
-    taskForm.addEventListener(
-        "submit",
-        async event => {
-
-            event.preventDefault();
-
-
-            const name =
-                taskName
-                    ? taskName.value.trim()
-                    : "";
-
-
-            const category =
-                taskCategory
-                    ? taskCategory.value
-                    : "Other";
-
-
-            const effort =
-                taskEffort
-                    ? Number(
-                        taskEffort.value
-                    )
-                    : 0;
-
-
-            const date =
-                taskDate
-                    ? taskDate.value
-                    : "";
-
-
-            if (!name) {
-
-                alert(
-                    "Please enter a task name."
-                );
-
-                return;
-
-            }
-
-
-            if (!date) {
-
-                alert(
-                    "Please select a due date."
-                );
-
-                return;
-
-            }
-
-
-            if (
-                !effort ||
-                effort <= 0
-            ) {
-
-                alert(
-                    "Please enter a valid effort."
-                );
-
-                return;
-
-            }
-
-
-            if (!currentUser) {
-
-                alert(
-                    "Please log in again."
-                );
-
-                return;
-
-            }
-
-
-            if (saveTaskButton) {
-
-                saveTaskButton.disabled =
-                    true;
-
-            }
-
-
-            try {
-
-                if (
-                    editingTaskId !== null
-                ) {
-
-                    const {
-                        data,
-                        error
-                    } =
-                        await supabaseClient
-                            .from("tasks")
-                            .update({
-
-                                name,
-
-                                category,
-
-                                effort,
-
-                                date,
-
-                                due_date:
-                                    date
-
-                            })
-                            .eq(
-                                "id",
-                                editingTaskId
-                            )
-                            .eq(
-                                "user_id",
-                                currentUser.id
-                            )
-                            .select()
-                            .single();
-
-
-                    if (error) {
-
-                        console.error(
-                            "TASK UPDATE ERROR:",
-                            error
-                        );
-
-                        alert(
-                            "Could not update task: " +
-                            error.message
-                        );
-
-                        return;
-
-                    }
-
-
-                    const index =
-                        currentTasks.findIndex(
-                            task =>
-                                String(
-                                    task.id
-                                ) ===
-                                String(
-                                    editingTaskId
-                                )
-                        );
-
-
-                    if (index !== -1) {
-
-                        currentTasks[index] =
-                            data;
-
-                    }
-
-                }
-
-                else {
-
-                    const {
-                        data,
-                        error
-                    } =
-                        await supabaseClient
-                            .from("tasks")
-                            .insert([{
-
-                                user_id:
-                                    currentUser.id,
-
-                                name,
-
-                                category,
-
-                                effort,
-
-                                date,
-
-                                due_date:
-                                    date
-
-                            }])
-                            .select()
-                            .single();
-
-
-                    if (error) {
-
-                        console.error(
-                            "TASK INSERT ERROR:",
-                            error
-                        );
-
-                        alert(
-                            "Could not create task: " +
-                            error.message
-                        );
-
-                        return;
-
-                    }
-
-
-                    currentTasks.push(
-                        data
-                    );
-
-                }
-
-
-                closeTaskModal();
-
-                renderDashboard();
-
-
-            } catch (error) {
-
-                console.error(
-                    "SAVE TASK CRASH:",
-                    error
-                );
-
-                alert(
-                    "Something went wrong while saving the task."
-                );
-
-            } finally {
-
-                if (saveTaskButton) {
-
-                    saveTaskButton.disabled =
-                        false;
-
-                }
-
-            }
-
+    taskForm.addEventListener("submit", async event => {
+        event.preventDefault();
+        const name = taskName ? taskName.value.trim() : "";
+        const category = taskCategory ? taskCategory.value : "Other";
+        const effort = taskEffort ? Number(taskEffort.value) : 0;
+        const date = taskDate ? taskDate.value : "";
+
+        if (!name || !date || !effort || effort <= 0) {
+            alert("Please fill in all required task fields correctly.");
+            return;
         }
-    );
+        if (!currentUser) return;
 
+        if (saveTaskButton) saveTaskButton.disabled = true;
+
+        try {
+            if (editingTaskId !== null) {
+                const { data, error } = await supabaseClient
+                    .from("tasks")
+                    .update({ name, category, effort, date, due_date: date })
+                    .eq("id", editingTaskId)
+                    .eq("user_id", currentUser.id)
+                    .select()
+                    .single();
+
+                if (error) {
+                    alert("Could not update task: " + error.message);
+                    return;
+                }
+                const index = currentTasks.findIndex(task => String(task.id) === String(editingTaskId));
+                if (index !== -1) currentTasks[index] = data;
+            } else {
+                const { data, error } = await supabaseClient
+                    .from("tasks")
+                    .insert([{ user_id: currentUser.id, name, category, effort, date, due_date: date }])
+                    .select()
+                    .single();
+
+                if (error) {
+                    alert("Could not create task: " + error.message);
+                    return;
+                }
+                currentTasks.push(data);
+            }
+            closeTaskModal();
+            renderDashboard();
+        } catch (error) {
+            alert("Something went wrong while saving the task.");
+        } finally {
+            if (saveTaskButton) saveTaskButton.disabled = false;
+        }
+    });
 }
-
-
-/* =========================================================
-   DELETE TASK
-========================================================= */
 
 async function deleteTask(id) {
-
-    if (!currentUser) {
-        return;
-    }
-
-
-    const task =
-        currentTasks.find(
-            item =>
-                String(item.id) ===
-                String(id)
-        );
-
-
-    if (!task) {
-        return;
-    }
-
-
-    const confirmed =
-        confirm(
-            `Delete "${task.name}"?`
-        );
-
-
-    if (!confirmed) {
-        return;
-    }
-
+    if (!currentUser) return;
+    const task = currentTasks.find(item => String(item.id) === String(id));
+    if (!task || !confirm(`Delete "${task.name}"?`)) return;
 
     try {
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("tasks")
-                .delete()
-                .eq(
-                    "id",
-                    id
-                )
-                .eq(
-                    "user_id",
-                    currentUser.id
-                );
-
+        const { error } = await supabaseClient
+            .from("tasks")
+            .delete()
+            .eq("id", id)
+            .eq("user_id", currentUser.id);
 
         if (error) {
-
-            console.error(
-                "DELETE ERROR:",
-                error
-            );
-
-            alert(
-                "Could not delete task: " +
-                error.message
-            );
-
+            alert("Could not delete task: " + error.message);
             return;
-
         }
-
-
-        currentTasks =
-            currentTasks.filter(
-                item =>
-                    String(item.id) !==
-                    String(id)
-            );
-
-
+        currentTasks = currentTasks.filter(item => String(item.id) !== String(id));
         closeTaskModal();
-
         renderDashboard();
-
-
     } catch (error) {
-
-        console.error(
-            "DELETE CRASH:",
-            error
-        );
-
-        alert(
-            "Something went wrong while deleting the task."
-        );
-
+        alert("Something went wrong while deleting the task.");
     }
-
 }
-
-
-window.deleteTask =
-    deleteTask;
-
-
-if (deleteTaskButton) {
-
-    deleteTaskButton.addEventListener(
-        "click",
-        async () => {
-
-            if (
-                editingTaskId !==
-                null
-            ) {
-
-                await deleteTask(
-                    editingTaskId
-                );
-
-            }
-
-        }
-    );
-
-}
+window.deleteTask = deleteTask;
 
 
 /* =========================================================
-   NOTIFICATIONS
-========================================================= */
-
-async function enableNotifications() {
-
-    if (
-        !("Notification" in window)
-    ) {
-
-        alert(
-            "Your browser does not support notifications."
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        const permission =
-            await Notification
-                .requestPermission();
-
-
-        if (
-            permission ===
-            "granted"
-        ) {
-
-            localStorage.setItem(
-                "pressureNotifications",
-                "enabled"
-            );
-
-
-            updateNotificationButtons();
-
-            sendReminderNotification();
-
-
-        } else {
-
-            alert(
-                "Notifications were not enabled. Check your browser permissions."
-            );
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "NOTIFICATION ERROR:",
-            error
-        );
-
-    }
-
-}
-
-
-function updateNotificationButtons() {
-
-    const enabled =
-        localStorage.getItem(
-            "pressureNotifications"
-        ) === "enabled";
-
-
-    if (notificationButton) {
-
-        notificationButton.title =
-            enabled
-                ? "Reminders enabled"
-                : "Enable reminders";
-
-    }
-
-
-    if (notificationButton2) {
-
-        notificationButton2.textContent =
-            enabled
-                ? "Enabled"
-                : "Enable";
-
-    }
-
-}
-
-
-function sendReminderNotification() {
-
-    if (
-        !("Notification" in window)
-    ) {
-        return;
-    }
-
-
-    if (
-        Notification.permission !==
-        "granted"
-    ) {
-        return;
-    }
-
-
-    const urgent =
-        [...currentTasks]
-            .filter(
-                task => {
-
-                    const days =
-                        daysUntil(
-                            getTaskDate(task)
-                        );
-
-
-                    return (
-                        days >= 0 &&
-                        days <= 1
-                    );
-
-                }
-            )
-            .sort(
-                (a, b) =>
-                    getTaskPressure(b) -
-                    getTaskPressure(a)
-            );
-
-
-    if (!urgent.length) {
-        return;
-    }
-
-
-    const task =
-        urgent[0];
-
-
-    const days =
-        daysUntil(
-            getTaskDate(task)
-        );
-
-
-    const body =
-        days === 0
-            ? `"${task.name}" is due today.`
-            : `"${task.name}" is due tomorrow.`;
-
-
-    new Notification(
-        "PRESSURE // OFF",
-        {
-            body
-        }
-    );
-
-}
-
-
-if (notificationButton) {
-
-    notificationButton.addEventListener(
-        "click",
-        enableNotifications
-    );
-
-}
-
-
-if (notificationButton2) {
-
-    notificationButton2.addEventListener(
-        "click",
-        enableNotifications
-    );
-
-}
-
-
-/* =========================================================
-   AI ASSISTANT
-========================================================= */
-
-function addAIMessage(
-    message,
-    type = "assistant"
-) {
-
-    if (!aiMessages) {
-        return;
-    }
-
-
-    const element =
-        document.createElement(
-            "div"
-        );
-
-
-    element.className =
-        `ai-message ${type}`;
-
-
-    if (type === "assistant") {
-
-        element.innerHTML = `
-
-            <span class="message-icon">
-                *
-            </span>
-
-            <p>
-                ${escapeHtml(
-                    message
-                )}
-            </p>
-
-        `;
-
-    } else {
-
-        element.innerHTML = `
-
-            <p>
-                ${escapeHtml(
-                    message
-                )}
-            </p>
-
-        `;
-
-    }
-
-
-    aiMessages.appendChild(
-        element
-    );
-
-
-    aiMessages.scrollTop =
-        aiMessages.scrollHeight;
-
-}
-
-
-/* =========================================================
-   AI ANALYSIS
-========================================================= */
-
-function analyseWorkload() {
-
-    const totalHours =
-        currentTasks.reduce(
-            (sum, task) =>
-                sum +
-                (
-                    Number(task.effort) ||
-                    0
-                ),
-            0
-        );
-
-
-    const week =
-        getWeekData();
-
-
-    const busiestDay =
-        [...week].sort(
-            (a, b) =>
-                b.hours -
-                a.hours
-        )[0];
-
-
-    const overdue =
-        currentTasks.filter(
-            task =>
-                daysUntil(
-                    getTaskDate(task)
-                ) < 0
-        );
-
-
-    const urgent =
-        currentTasks.filter(
-            task => {
-
-                const days =
-                    daysUntil(
-                        getTaskDate(task)
-                    );
-
-
-                return (
-                    days >= 0 &&
-                    days <= 2
-                );
-
-            }
-        );
-
-
-    const nextTask =
-        [...currentTasks]
-            .filter(
-                task =>
-                    daysUntil(
-                        getTaskDate(task)
-                    ) >= 0
-            )
-            .sort(
-                (a, b) =>
-                    getTaskPressure(b) -
-                    getTaskPressure(a)
-            )[0];
-
-
-    return {
-
-        totalHours,
-
-        busiestDay,
-
-        overdue,
-
-        urgent,
-
-        nextTask,
-
-        week
-
-    };
-
-}
-
-
-/* =========================================================
-   AI RESPONSE
-========================================================= */
-
-function generateAIResponse(
-    question
-) {
-
-    const q =
-        question
-            .toLowerCase()
-            .trim();
-
-
-    const analysis =
-        analyseWorkload();
-
-
-    if (q.includes("quiz") || q.includes("test me")) {
-        return "Study coach mode: choose one topic, answer one question without notes, then check your work. Tell me the subject and topic and I'll make a short practice quiz.";
-    }
-    if (q.includes("explain") || q.includes("teach") || q.includes("understand")) {
-        return "Study coach mode: tell me the exact subject and topic. I'll break it into a simple explanation, a worked example, and one practice question.";
-    }
-    if (q.includes("how do i study") || q.includes("study plan")) {
-        return "Use a 25-minute focus block: review the idea, practise from memory, check mistakes, then write one sentence about what you still need to revisit.";
-    }
-if (!currentTasks.length) {
-
-        return (
-            "You don't have any tasks yet. " +
-            "Add your homework, tests, projects or assignments and I'll analyse your deadlines, effort and busy days."
-        );
-
-    }
-
-
-    if (
-        q.includes("today") ||
-        q.includes("now") ||
-        q.includes("start")
-    ) {
-
-        const todayTasks =
-            currentTasks
-                .filter(
-                    task =>
-                        daysUntil(
-                            getTaskDate(task)
-                        ) === 0
-                )
-                .sort(
-                    (a, b) =>
-                        getTaskPressure(b) -
-                        getTaskPressure(a)
-                );
-
-
-        if (todayTasks.length) {
-
-            const top =
-                todayTasks[0];
-
-
-            return (
-                `Start with "${top.name}". ` +
-                `It is due today and needs about ${formatHours(
-                    top.effort
-                )}. ` +
-                `Finish this before moving to lower-pressure work.`
-            );
-
-        }
-
-
-        if (analysis.nextTask) {
-
-            const task =
-                analysis.nextTask;
-
-
-            return (
-                `I'd start with "${task.name}". ` +
-                `It is due ${readableDate(
-                    getTaskDate(task)
-                )} and needs about ${formatHours(
-                    task.effort
-                )}. ` +
-                `Starting it now should reduce future pressure.`
-            );
-
-        }
-
-    }
-
-
-    if (
-        q.includes("priority") ||
-        q.includes("priorit") ||
-        q.includes("important") ||
-        q.includes("first")
-    ) {
-
-        const task =
-            analysis.nextTask;
-
-
-        if (task) {
-
-            const days =
-                daysUntil(
-                    getTaskDate(task)
-                );
-
-
-            const remaining =
-                days < 0
-                    ? "overdue"
-                    : days === 0
-                        ? "today"
-                        : `${days} day(s)`;
-
-
-            return (
-                `Your highest-priority task is "${task.name}". ` +
-                `It is due ${readableDate(
-                    getTaskDate(task)
-                )}, needs about ${formatHours(
-                    task.effort
-                )}, ` +
-                `and has ${remaining} remaining. ` +
-                `I'd tackle this before lower-pressure tasks.`
-            );
-
-        }
-
-    }
-
-
-    if (
-        q.includes("hardest") ||
-        q.includes("busiest") ||
-        q.includes("worst day") ||
-        q.includes("difficult day")
-    ) {
-
-        const day =
-            analysis.busiestDay;
-
-
-        if (day) {
-
-            const taskNames =
-                day.tasks.length
-                    ? day.tasks
-                        .map(
-                            task =>
-                                task.name
-                        )
-                        .join(", ")
-                    : "No tasks";
-
-
-            return (
-                `Your busiest day is ${getDayName(
-                    day.date
-                )}. ` +
-                `You have ${formatHours(
-                    day.hours
-                )} planned. ` +
-                `The tasks are: ${taskNames}. ` +
-                `I'd prepare for at least one of them earlier.`
-            );
-
-        }
-
-    }
-
-
-    if (
-        q.includes("pressure") ||
-        q.includes("stress") ||
-        q.includes("overwhelm") ||
-        q.includes("overloaded") ||
-        q.includes("reduce")
-    ) {
-
-        const overloaded =
-            analysis.week.filter(
-                day =>
-                    day.hours >= 5
-            );
-
-
-        if (overloaded.length) {
-
-            const worst =
-                [...overloaded].sort(
-                    (a, b) =>
-                        b.hours -
-                        a.hours
-                )[0];
-
-
-            const moveTask =
-                [...worst.tasks].sort(
-                    (a, b) =>
-                        (
-                            Number(b.effort) ||
-                            0
-                        ) -
-                        (
-                            Number(a.effort) ||
-                            0
-                        )
-                )[0];
-
-
-            return (
-                `${getDayName(
-                    worst.date
-                )} is your main pressure point with ${formatHours(
-                    worst.hours
-                )} planned. ` +
-                `I'd start "${moveTask.name}" before that day so you don't have to do everything at once.`
-            );
-
-        }
-
-
-        return (
-            "Your workload doesn't currently show a major overload. " +
-            "Keep it that way by starting high-effort tasks early and avoiding several deadlines on the same day."
-        );
-
-    }
-
-
-    if (
-        q.includes("deadline") ||
-        q.includes("due") ||
-        q.includes("coming up")
-    ) {
-
-        if (analysis.urgent.length) {
-
-            const urgent =
-                [...analysis.urgent].sort(
-                    (a, b) =>
-                        getTaskPressure(b) -
-                        getTaskPressure(a)
-                )[0];
-
-
-            return (
-                `The most urgent deadline is "${urgent.name}". ` +
-                `It is due ${readableDate(
-                    getTaskDate(urgent)
-                )} and needs about ${formatHours(
-                    urgent.effort
-                )}.`
-            );
-
-        }
-
-
-        if (analysis.nextTask) {
-
-            return (
-                `Your next major deadline is "${analysis.nextTask.name}" ` +
-                `on ${readableDate(
-                    getTaskDate(
-                        analysis.nextTask
-                    )
-                )}.`
-            );
-
-        }
-
-    }
-
-
-    if (
-        q.includes("how many hours") ||
-        q.includes("hours") ||
-        q.includes("workload")
-    ) {
-
-        return (
-            `You currently have ${formatHours(
-                analysis.totalHours
-            )} planned across ${currentTasks.length} task(s). ` +
-            `Your busiest day is ${
-                analysis.busiestDay
-                    ? getDayName(
-                        analysis.busiestDay.date
-                    )
-                    : "not clear yet"
-            }, and you have ${analysis.urgent.length} urgent task(s).`
-        );
-
-    }
-
-
-    if (
-        q.includes("plan") ||
-        q.includes("schedule") ||
-        q.includes("organize") ||
-        q.includes("organise")
-    ) {
-
-        const ordered =
-            [...currentTasks]
-                .sort(
-                    (a, b) =>
-                        getTaskPressure(b) -
-                        getTaskPressure(a)
-                )
-                .slice(0, 4);
-
-
-        const names =
-            ordered
-                .map(
-                    (task, index) =>
-                        `${index + 1}. ${task.name}`
-                )
-                .join("\n");
-
-
-        return (
-            `Here's the order I'd use:\n\n` +
-            `${names}\n\n` +
-            `Do the highest-pressure task first, then use lighter tasks to fill gaps. ` +
-            `Your total planned workload is ${formatHours(
-                analysis.totalHours
-            )}.`
-        );
-
-    }
-
-
-    if (
-        q.includes("overdue") ||
-        q.includes("late")
-    ) {
-
-        if (analysis.overdue.length) {
-
-            return (
-                `You have ${analysis.overdue.length} overdue task(s). ` +
-                `The first one I'd clear is "${analysis.overdue[0].name}". ` +
-                `Don't let overdue work compete with too many new tasks.`
-            );
-
-        }
-
-
-        return (
-            "Good news - you don't currently have any overdue tasks."
-        );
-
-    }
-
-
-    return (
-        `I've analysed your workload:\n\n` +
-        `- ${currentTasks.length} task(s)\n` +
-        `- ${formatHours(
-            analysis.totalHours
-        )} planned\n` +
-        `- ${analysis.urgent.length} urgent task(s)\n` +
-        `- ${analysis.overdue.length} overdue task(s)\n` +
-        `- Busiest day: ${
-            analysis.busiestDay
-                ? getDayName(
-                    analysis.busiestDay.date
-                )
-                : "none"
-        }\n\n` +
-        `Try asking me "What should I work on today?", ` +
-        `"Which day is hardest?", ` +
-        `"How can I reduce my pressure?", ` +
-        `or "Plan my week".`
-    );
-
-}
-
-
-/* =========================================================
-   AI FORM
-========================================================= */
-
-if (aiForm) {
-
-    aiForm.addEventListener(
-        "submit",
-        event => {
-
-            event.preventDefault();
-
-
-            const question =
-                aiInput
-                    ? aiInput.value.trim()
-                    : "";
-
-
-            if (!question) {
-                return;
-            }
-
-
-            addAIMessage(
-                question,
-                "user"
-            );
-
-
-            if (aiInput) {
-                aiInput.value = "";
-            }
-
-
-            setTimeout(
-                () => {
-
-                    const response =
-                        generateAIResponse(
-                            question
-                        );
-
-
-                    addAIMessage(
-                        response,
-                        "assistant"
-                    );
-
-                },
-                250
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   QUICK PROMPTS
-========================================================= */
-
-document
-    .querySelectorAll(
-        ".quick-prompts button"
-    )
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const question =
-                        button.dataset.prompt;
-
-
-                    if (!question) {
-                        return;
-                    }
-
-
-                    addAIMessage(
-                        question,
-                        "user"
-                    );
-
-
-                    setTimeout(
-                        () => {
-
-                            addAIMessage(
-                                generateAIResponse(
-                                    question
-                                ),
-                                "assistant"
-                            );
-
-                        },
-                        250
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   ADMIN - VISIBILITY
+   ADMIN PANEL FUNCTIONS
 ========================================================= */
 
 function isCurrentUserAdmin() {
-
-    return (
-        !!currentUser &&
-        currentProfile?.is_admin === true
-    );
-
+    return !!currentUser && currentProfile?.is_admin === true;
 }
-
 
 function updateAdminVisibility() {
-
-    const admin =
-        isCurrentUserAdmin();
-
-
-    if (adminButton) {
-
-        adminButton.style.display =
-            admin
-                ? "inline-flex"
-                : "none";
-
-    }
-
-
-    if (!admin && adminPage) {
-
-        adminPage.classList.add(
-            "hidden"
-        );
-
-    }
-
+    const admin = isCurrentUserAdmin();
+    if (adminButton) adminButton.style.display = admin ? "inline-flex" : "none";
+    if (!admin && adminPage) adminPage.classList.add("hidden");
 }
-
-
-/* =========================================================
-   ADMIN - OPEN PAGE
-========================================================= */
 
 async function openAdminPage() {
-
-    if (!currentUser) {
-
-        alert(
-            "You must be logged in."
-        );
-
+    if (!currentUser || !isCurrentUserAdmin()) {
+        alert("Admin access required.");
         return;
-
     }
-
-
-    if (!isCurrentUserAdmin()) {
-
-        alert(
-            "Admin access required."
-        );
-
-        return;
-
-    }
-
-
-    if (app) {
-
-        app.classList.add(
-            "hidden"
-        );
-
-    }
-
-
-    if (profilePage) {
-
-        profilePage.classList.add(
-            "hidden"
-        );
-
-    }
-
-
-    if (adminPage) {
-
-        adminPage.classList.remove(
-            "hidden"
-        );
-
-    }
-
-
-    window.scrollTo(
-        0,
-        0
-    );
-
-
+    if (app) app.classList.add("hidden");
+    if (profilePage) profilePage.classList.add("hidden");
+    if (adminPage) adminPage.classList.remove("hidden");
+    window.scrollTo(0, 0);
     await loadAdminUsers();
-
 }
-
-
-/* =========================================================
-   ADMIN - CLOSE PAGE
-========================================================= */
 
 function closeAdminPage() {
-
-    if (adminPage) {
-
-        adminPage.classList.add(
-            "hidden"
-        );
-
-    }
-
-
-    if (app) {
-
-        app.classList.remove(
-            "hidden"
-        );
-
-    }
-
-
-    window.scrollTo(
-        0,
-        0
-    );
-
+    if (adminPage) adminPage.classList.add("hidden");
+    if (app) app.classList.remove("hidden");
+    window.scrollTo(0, 0);
 }
 
-
-if (adminButton) {
-
-    adminButton.addEventListener(
-        "click",
-        openAdminPage
-    );
-
-}
-
-
-if (backFromAdmin) {
-
-    backFromAdmin.addEventListener(
-        "click",
-        closeAdminPage
-    );
-
-}
-
-if (adminLogoutButton) {
-
-    adminLogoutButton.addEventListener(
-        "click",
-        performLogout
-    );
-
-}
-
-
-if (refreshAdminUsers) {
-
-    refreshAdminUsers.addEventListener(
-        "click",
-        loadAdminUsers
-    );
-
-}
-/* =========================================================
-   ADMIN - GET SESSION
-========================================================= */
+if (adminButton) adminButton.addEventListener("click", openAdminPage);
+if (backFromAdmin) backFromAdmin.addEventListener("click", closeAdminPage);
+if (refreshAdminUsers) refreshAdminUsers.addEventListener("click", loadAdminUsers);
 
 async function getAdminSession() {
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient.auth.getSession();
-
-
-    if (error) {
-
-        console.error(
-            "ADMIN SESSION ERROR:",
-            error
-        );
-
-        return null;
-
-    }
-
-
-    return data?.session || null;
-
-}
-
-
-/* =========================================================
-   ADMIN - LOAD USERS
-========================================================= */
-
-async function loadAdminUsers() {
-
-    if (!adminUsersList) {
-        return;
-    }
-
-
-    if (!isCurrentUserAdmin()) {
-
-        adminUsersList.innerHTML = `
-
-            <div class="admin-empty-state">
-
-                <strong>
-                    Access denied
-                </strong>
-
-                <p>
-                    Administrator access is required.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    adminUsersList.innerHTML = `
-
-        <div class="admin-empty-state">
-
-            <strong>
-                Loading users...
-            </strong>
-
-            <p>
-                Please wait while the user list loads.
-            </p>
-
-        </div>
-
-    `;
-
-
-    try {
-
-        const session =
-            await getAdminSession();
-
-
-        if (!session) {
-
-            throw new Error(
-                "Your login session has expired."
-            );
-
-        }
-
-
-        const response =
-            await fetch(
-                `${SUPABASE_URL}/functions/v1/admin-list-users`,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json",
-
-                        "Authorization":
-                            `Bearer ${session.access_token}`
-                    },
-
-                    body: JSON.stringify({})
-                }
-            );
-
-
-        let result;
-
-
-        try {
-
-            result =
-                await response.json();
-
-        } catch {
-
-            result = {};
-
-        }
-
-
-        if (!response.ok) {
-
-            console.error(
-                "ADMIN LIST ERROR:",
-                result
-            );
-
-            throw new Error(
-                result.error ||
-                "Could not load users."
-            );
-
-        }
-
-
-        adminUsers =
-            Array.isArray(
-                result.users
-            )
-                ? result.users
-                : [];
-
-
-        updateAdminStats();
-
-        renderAdminUsers();
-
-
-    } catch (error) {
-
-        console.error(
-            "ADMIN USERS CRASH:",
-            error
-        );
-
-
-        adminUsers = [];
-
-
-        if (adminTotalUsers) {
-            adminTotalUsers.textContent =
-                "-";
-        }
-
-
-        if (adminTotalAdmins) {
-            adminTotalAdmins.textContent =
-                "-";
-        }
-
-
-        if (adminTotalTasks) {
-            adminTotalTasks.textContent =
-                "-";
-        }
-
-
-        adminUsersList.innerHTML = `
-
-            <div class="admin-empty-state">
-
-                <strong>
-                    Could not load users
-                </strong>
-
-                <p>
-                    ${escapeHtml(
-                        error.message ||
-                        "Something went wrong."
-                    )}
-                </p>
-
-            </div>
-
-        `;
-
-    }
-
-}
-
-
-window.loadAdminUsers =
-    loadAdminUsers;
-
-
-/* =========================================================
-   ADMIN - STATS
-========================================================= */
-
-function updateAdminStats() {
-
-    const totalUsers =
-        adminUsers.length;
-
-
-    const totalAdmins =
-        adminUsers.filter(
-            user =>
-                user.is_admin === true
-        ).length;
-
-
-    const totalTasks =
-        adminUsers.reduce(
-            (sum, user) =>
-                sum +
-                (
-                    Number(
-                        user.task_count
-                    ) || 0
-                ),
-            0
-        );
-
-
-    if (adminTotalUsers) {
-
-        adminTotalUsers.textContent =
-            totalUsers;
-
-    }
-
-
-    if (adminTotalAdmins) {
-
-        adminTotalAdmins.textContent =
-            totalAdmins;
-
-    }
-
-
-    if (adminTotalTasks) {
-
-        adminTotalTasks.textContent =
-            totalTasks;
-
-    }
-
-}
-
-
-/* =========================================================
-   ADMIN - SEARCH
-========================================================= */
-
-function getFilteredAdminUsers() {
-
-    const search =
-        adminUserSearch
-            ? adminUserSearch.value
-                .trim()
-                .toLowerCase()
-            : "";
-
-
-    if (!search) {
-
-        return [
-            ...adminUsers
-        ];
-
-    }
-
-
-    return adminUsers.filter(
-        user => {
-
-            const username =
-                String(
-                    user.username ||
-                    ""
-                ).toLowerCase();
-
-
-            const name =
-                String(
-                    user.name ||
-                    ""
-                ).toLowerCase();
-
-
-            const email =
-                String(
-                    user.email ||
-                    ""
-                ).toLowerCase();
-
-
-            const role =
-                String(
-                    user.role ||
-                    ""
-                ).toLowerCase();
-
-
-            return (
-                username.includes(search) ||
-                name.includes(search) ||
-                email.includes(search) ||
-                role.includes(search)
-            );
-
-        }
-    );
-
-}
-
-
-if (adminUserSearch) {
-
-    adminUserSearch.addEventListener(
-        "input",
-        renderAdminUsers
-    );
-
-}
-
-
-/* =========================================================
-   ADMIN - RENDER USERS
-========================================================= */
-
-function renderAdminUsers() {
-
-    if (!adminUsersList) {
-        return;
-    }
-
-
-    const users =
-        getFilteredAdminUsers();
-
-
-    if (!users.length) {
-
-        adminUsersList.innerHTML = `
-
-            <div class="admin-empty-state">
-
-                <strong>
-                    ${
-                        adminUsers.length
-                            ? "No users found"
-                            : "No users yet"
-                    }
-                </strong>
-
-                <p>
-                    ${
-                        adminUsers.length
-                            ? "Try a different search."
-                            : "There are no registered accounts to display."
-                    }
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    adminUsersList.innerHTML =
-        "";
-
-
-    users.forEach(
-        user => {
-
-            const row =
-                document.createElement(
-                    "div"
-                );
-
-
-            row.className =
-                "admin-user-row";
-
-
-            const isSelf =
-                String(user.id) ===
-                String(currentUser?.id);
-
-
-            const isAdmin =
-                user.is_admin === true;
-
-
-            const name =
-                user.name ||
-                user.username ||
-                "Unknown";
-
-
-            const username =
-                user.username ||
-                "unknown";
-
-
-            const initial =
-                name
-                    .charAt(0)
-                    .toUpperCase() ||
-                "?";
-
-
-            const taskCount =
-                Number(
-                    user.task_count
-                ) || 0;
-
-
-            let actionHTML;
-
-
-            if (isSelf) {
-
-                actionHTML = `
-
-                    <span class="admin-current-user">
-                        YOU
-                    </span>
-
-                `;
-
-            } else if (isAdmin) {
-
-                actionHTML = `
-
-                    <span class="admin-current-user">
-                        PROTECTED
-                    </span>
-
-                `;
-
-            } else {
-
-                actionHTML = `
-
-                    <button
-                        type="button"
-                        class="admin-delete-button"
-                        data-admin-user-id="${escapeHtml(
-                            user.id
-                        )}"
-                    >
-                        Delete
-                    </button>
-
-                `;
-
-            }
-
-
-            row.innerHTML = `
-
-                <div class="admin-user-avatar">
-                    ${escapeHtml(initial)}
-                </div>
-
-                <div class="admin-user-info">
-
-                    <strong>
-                        ${escapeHtml(name)}
-                    </strong>
-
-                    <span>
-                        @${escapeHtml(username)}
-                        ${
-                            user.email
-                                ? ` - ${escapeHtml(user.email)}`
-                                : ""
-                        }
-                    </span>
-
-                </div>
-
-                <div class="admin-user-meta">
-
-                    <span class="admin-user-tasks">
-                        ${taskCount}
-                        ${taskCount === 1 ? "task" : "tasks"}
-                    </span>
-
-                    <span
-                        class="
-                            admin-role-badge
-                            ${isAdmin ? "admin" : ""}
-                        "
-                    >
-                        ${
-                            isAdmin
-                                ? "ADMIN"
-                                : String(
-                                    user.role ||
-                                    "STUDENT"
-                                ).toUpperCase()
-                        }
-                    </span>
-
-                    ${actionHTML}
-
-                </div>
-
-            `;
-
-
-            const deleteButton =
-                row.querySelector(
-                    ".admin-delete-button"
-                );
-
-
-            if (deleteButton) {
-
-                deleteButton.addEventListener(
-                    "click",
-                    async event => {
-
-                        event.stopPropagation();
-
-
-                        const userId =
-                            deleteButton.dataset
-                                .adminUserId;
-
-
-                        await adminDeleteUser(
-                            userId
-                        );
-
-                    }
-                );
-
-            }
-
-
-            adminUsersList.appendChild(
-                row
-            );
-
-        }
-    );
-
+    const { data, error } = await supabaseClient.auth.getSession();
+    return error ? null : (data?.session || null);
 }
 
 async function loadAdminUsers() {
     const list = $("adminUsersList");
-
     if (!list) return;
 
-    list.innerHTML = `
-        <div class="admin-empty-state">
-            <strong>Loading users...</strong>
-            <p>Please wait.</p>
-        </div>
-    `;
+    list.innerHTML = `<div class="admin-empty-state"><strong>Loading users...</strong><p>Please wait.</p></div>`;
 
     try {
         if (!currentUser || !currentProfile?.is_admin) {
-            list.innerHTML = `
-                <div class="admin-empty-state">
-                    <strong>Access denied</strong>
-                    <p>Administrator access is required.</p>
-                </div>
-            `;
+            list.innerHTML = `<div class="admin-empty-state"><strong>Access denied</strong><p>Administrator access is required.</p></div>`;
             return;
         }
 
-        const {
-            data: { session },
-            error: sessionError
-        } = await supabaseClient.auth.getSession();
+        const session = await getAdminSession();
+        if (!session) throw new Error("Your session has expired.");
 
-        if (sessionError || !session) {
-            throw new Error("Your session has expired.");
-        }
-
-        const response = await fetch(
-            `${SUPABASE_URL}/functions/v1/admin-list-users`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization":
-                        `Bearer ${session.access_token}`
-                }
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/admin-list-users`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${session.access_token}`
             }
-        );
+        });
 
         const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Could not load users.");
 
-        if (!response.ok) {
-            throw new Error(
-                result.error || "Could not load users."
-            );
-        }
+        adminUsers = result.users || [];
+        renderAdminUsers(adminUsers);
 
-        renderAdminUsers(result.users || []);
-
-        if ($("adminTotalUsers")) {
-            $("adminTotalUsers").textContent =
-                result.total || 0;
-        }
-
-        if ($("adminTotalAdmins")) {
-            $("adminTotalAdmins").textContent =
-                (result.users || []).filter(
-                    user => user.is_admin
-                ).length;
-        }
-
+        if ($("adminTotalUsers")) $("adminTotalUsers").textContent = result.total || adminUsers.length;
+        if ($("adminTotalAdmins")) $("adminTotalAdmins").textContent = adminUsers.filter(u => u.is_admin).length;
+        if ($("adminTotalTasks")) $("adminTotalTasks").textContent = adminUsers.reduce((sum, u) => sum + (Number(u.task_count) || 0), 0);
     } catch (error) {
-        console.error("ADMIN USERS ERROR:", error);
-
-        list.innerHTML = `
-            <div class="admin-empty-state">
-                <strong>Could not load users</strong>
-                <p>${escapeHtml(error.message)}</p>
-            </div>
-        `;
+        list.innerHTML = `<div class="admin-empty-state"><strong>Could not load users</strong><p>${escapeHtml(error.message)}</p></div>`;
     }
 }
+window.loadAdminUsers = loadAdminUsers;
+
 function renderAdminUsers(users) {
-
     const list = $("adminUsersList");
-
     if (!list) return;
 
     if (!users.length) {
-        list.innerHTML = `
-            <div class="admin-empty-state">
-                <strong>No users found</strong>
-                <p>There are currently no registered users.</p>
-            </div>
-        `;
+        list.innerHTML = `<div class="admin-empty-state"><strong>No users found</strong><p>There are currently no registered users.</p></div>`;
         return;
     }
 
     list.innerHTML = users.map(user => {
-
-        const initials =
-            (user.name || user.username || "?")
-                .trim()
-                .charAt(0)
-                .toUpperCase();
-
-        const created =
-            user.created_at
-                ? new Date(user.created_at)
-                    .toLocaleDateString()
-                : "Unknown";
-
-        const adminBadge = user.is_admin
-            ? `<span class="admin-badge">ADMIN</span>`
-            : "";
-
-        const deleteButton =
-            user.id === currentUser.id || user.is_admin
-                ? ""
-                : `
-                    <button
-                        class="admin-delete-button"
-                        type="button"
-                        onclick="adminDeleteUser('${user.id}')"
-                    >
-                        Delete
-                    </button>
-                `;
+        const initials = (user.name || user.username || "?").trim().charAt(0).toUpperCase();
+        const created = user.created_at ? new Date(user.created_at).toLocaleDateString() : "Unknown";
+        const adminBadge = user.is_admin ? `<span class="admin-badge">ADMIN</span>` : "";
+        const deleteButton = user.id === currentUser.id || user.is_admin ? "" : `
+            <button class="admin-delete-button" type="button" onclick="adminDeleteUser('${user.id}')">Delete</button>
+        `;
 
         return `
-            <article
-                class="admin-user-row"
-                data-username="${escapeHtml(
-                    (user.username || "").toLowerCase()
-                )}"
-                data-name="${escapeHtml(
-                    (user.name || "").toLowerCase()
-                )}"
-            >
-
-                <div class="admin-user-avatar">
-                    ${escapeHtml(initials)}
-                </div>
-
+            <article class="admin-user-row">
+                <div class="admin-user-avatar">${escapeHtml(initials)}</div>
                 <div class="admin-user-info">
-                    <strong>
-                        ${escapeHtml(user.name || "Unnamed")}
-                        ${adminBadge}
-                    </strong>
-
-                    <span>
-                        @${escapeHtml(user.username || "unknown")}
-                    </span>
-
-                    <small>
-                        Joined ${escapeHtml(created)}
-                    </small>
+                    <strong>${escapeHtml(user.name || "Unnamed")} ${adminBadge}</strong>
+                    <span>@${escapeHtml(user.username || "unknown")}</span>
+                    <small>Joined ${escapeHtml(created)}</small>
                 </div>
-
                 <div class="admin-user-meta">
-                    <span>
-                        ${escapeHtml(user.role || "student")}
-                    </span>
-
+                    <span>${escapeHtml(user.role || "student")}</span>
                     ${deleteButton}
                 </div>
-
             </article>
         `;
     }).join("");
 }
-/* =========================================================
-   ADMIN - DELETE USER
-========================================================= */
 
 async function adminDeleteUser(userId) {
-
-    if (!currentUser) {
-
-        alert(
-            "You must be logged in."
-        );
-
+    if (!currentUser || !isCurrentUserAdmin()) {
+        alert("Admin access required.");
         return;
-
     }
-
-
-    if (!isCurrentUserAdmin()) {
-
-        alert(
-            "Admin access required."
-        );
-
-        return;
-
-    }
-
-
-    if (!userId) {
-
-        alert(
-            "No user selected."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        String(userId) ===
-        String(currentUser.id)
-    ) {
-
-        alert(
-            "You cannot delete your own admin account."
-        );
-
-        return;
-
-    }
-
-
-    const targetUser =
-        adminUsers.find(
-            user =>
-                String(user.id) ===
-                String(userId)
-        );
-
-
-    if (
-        targetUser &&
-        targetUser.is_admin === true
-    ) {
-
-        alert(
-            "Admin accounts are protected and cannot be deleted."
-        );
-
-        return;
-
-    }
-
-
-    const targetName =
-        targetUser?.name ||
-        targetUser?.username ||
-        "this user";
-
-
-    const confirmed =
-        confirm(
-            `Permanently delete "${targetName}"?\n\nThis will remove their account and associated data.`
-        );
-
-
-    if (!confirmed) {
+    if (!userId || String(userId) === String(currentUser.id)) {
+        alert("Invalid user selection or you cannot delete your own admin account.");
         return;
     }
 
+    if (!confirm("Permanently delete this user account?")) return;
 
     try {
-
-        console.log(
-            "ADMIN DELETE:",
-            userId
-        );
-
-
-        const session =
-            await getAdminSession();
-
-
+        const session = await getAdminSession();
         if (!session) {
-
-            alert(
-                "Your login session has expired."
-            );
-
+            alert("Your session has expired.");
             return;
-
         }
 
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/admin-delete-user`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${session.access_token}`
+            },
+            body: JSON.stringify({ user_id: userId })
+        });
 
-        const response =
-            await fetch(
-                `${SUPABASE_URL}/functions/v1/admin-delete-user`,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json",
-
-                        "Authorization":
-                            `Bearer ${session.access_token}`
-                    },
-
-                    body: JSON.stringify({
-
-                        user_id:
-                            userId
-
-                    })
-
-                }
-            );
-
-
-        let result;
-
-
-        try {
-
-            result =
-                await response.json();
-
-        } catch {
-
-            result = {};
-
-        }
-
-
+        const result = await response.json();
         if (!response.ok) {
-
-            console.error(
-                "ADMIN DELETE ERROR:",
-                result
-            );
-
-
-            alert(
-                result.error ||
-                "Could not delete user."
-            );
-
-
+            alert(result.error || "Could not delete user.");
             return;
-
         }
 
-
-        console.log(
-            "USER DELETED:",
-            result
-        );
-
-
-        alert(
-            "User deleted successfully."
-        );
-
-
+        alert("User deleted successfully.");
         await loadAdminUsers();
-
-
     } catch (error) {
-
-        console.error(
-            "ADMIN DELETE CRASH:",
-            error
-        );
-
-
-        alert(
-            "Something went wrong while deleting the user."
-        );
-
+        alert("Something went wrong while deleting the user.");
     }
-
 }
-
-
-window.adminDeleteUser =
-    adminDeleteUser;
+window.adminDeleteUser = adminDeleteUser;
 
 
 /* =========================================================
-   SESSION
+   SESSION & INITIALIZATION
 ========================================================= */
 
 async function checkSession() {
-
     try {
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.auth
-                .getSession();
-
-
-        if (error) {
-
-            console.error(
-                "SESSION ERROR:",
-                error
-            );
-
+        const { data, error } = await supabaseClient.auth.getSession();
+        if (error || !data?.session) {
             showAuth();
-
             return;
-
         }
-
-
-        if (
-            data &&
-            data.session
-        ) {
-
-            currentUser =
-                data.session.user;
-
-
-            await finishAuthentication();
-
-        } else {
-
-            showAuth();
-
-        }
-
+        currentUser = data.session.user;
+        await finishAuthentication();
     } catch (error) {
-
-        console.error(
-            "SESSION CRASH:",
-            error
-        );
-
         showAuth();
-
     }
-
 }
 
-
-/* =========================================================
-   AUTH STATE
-========================================================= */
-
-supabaseClient.auth.onAuthStateChange(
-    (
-        event,
-        session
-    ) => {
-
-        if (
-            event ===
-            "SIGNED_OUT"
-        ) {
-
-            currentUser = null;
-
-            currentProfile = null;
-
-            currentTasks = [];
-
-            adminUsers = [];
-
-            updateAdminVisibility();
-
-            showAuth();
-
-        }
-
-
-        if (
-            event ===
-                "SIGNED_IN" &&
-            session
-        ) {
-
-            currentUser =
-                session.user;
-
-        }
-
+supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_OUT") {
+        currentUser = null;
+        currentProfile = null;
+        currentTasks = [];
+        adminUsers = [];
+        updateAdminVisibility();
+        showAuth();
+    } else if (event === "SIGNED_IN" && session) {
+        currentUser = session.user;
     }
-);
+});
 
-
-/* =========================================================
-   KEYBOARD
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            event.key ===
-            "Escape"
-        ) {
-
-            closeTaskModal();
-
-
-            if (
-                profilePage &&
-                !profilePage.classList.contains(
-                    "hidden"
-                )
-            ) {
-
-                closeProfilePage();
-
-            }
-
-
-            if (
-                adminPage &&
-                !adminPage.classList.contains(
-                    "hidden"
-                )
-            ) {
-
-                closeAdminPage();
-
-            }
-
-        }
-
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        closeTaskModal();
+        if (profilePage && !profilePage.classList.contains("hidden")) closeProfilePage();
+        if (adminPage && !adminPage.classList.contains("hidden")) closeAdminPage();
     }
-);
-
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
+});
 
 injectExtraStyles();
-
 setAuthMode("login");
-
-updateNotificationButtons();
-
+updateNotificationButtons?.();
 updateAdminVisibility();
-
 checkSession();
-
-
-/* PRESSURE SOCIAL SETTINGS UPGRADE v1 */
-(() => {
-    const P = {
-        friends: [],
-        requests: [],
-        selectedFriend: null,
-        messages: [],
-        realtime: null,
-        presence: null,
-        preferences: {
-            theme: "midnight",
-            accent: "#5B8CFF",
-            density: "comfortable",
-            reducedMotion: false,
-            pressureAnimations: true,
-            notifications: true
-        }
-    };
-
-    const esc = (v) => String(v ?? "").replace(/[&<>\"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-    const q = (s) => document.querySelector(s);
-    const me = () => window.currentUser || currentUser;
-    const profile = () => window.currentProfile || currentProfile;
-
-    function ensureUI() {
-        if (document.getElementById("pressureSocialModal")) return;
-        const modal = document.createElement("div");
-        modal.id = "pressureSocialModal";
-        modal.className = "pressure-social-modal hidden";
-        modal.innerHTML = `
-          <div class="pressure-social-backdrop" data-close-pressure></div>
-          <section class="pressure-social-panel" role="dialog" aria-modal="true">
-            <header class="pressure-social-head">
-              <div><span class="pressure-kicker">YOUR SPACE</span><h2>Profile & Social</h2><p>Personalize Pressure // Off, connect with friends, and chat live.</p></div>
-              <button class="pressure-icon-btn" data-close-pressure aria-label="Close">x</button>
-            </header>
-            <nav class="pressure-social-tabs">
-              <button class="pressure-social-tab active" data-tab="appearance">Appearance</button>
-              <button class="pressure-social-tab" data-tab="friends">Friends</button>
-              <button class="pressure-social-tab" data-tab="chat">Chat</button>
-              <button class="pressure-social-tab" data-tab="account">Account</button>
-            </nav>
-            <div class="pressure-social-body">
-              <div class="pressure-social-view active" data-view="appearance">
-                <div class="pressure-setting-grid">
-                  <label><span>Theme</span><select id="pressureTheme"><option value="midnight">Midnight</option><option value="light">Light</option></select></label>
-                  <label><span>Accent</span><input id="pressureAccent" type="color"></label>
-                  <label><span>Dashboard density</span><select id="pressureDensity"><option value="compact">Compact</option><option value="comfortable">Comfortable</option><option value="cozy">Cozy</option></select></label>
-                  <label class="pressure-switch"><span>Reduced motion</span><input id="pressureReducedMotion" type="checkbox"><i></i></label>
-                  <label class="pressure-switch"><span>Pressure animations</span><input id="pressurePressureAnimations" type="checkbox"><i></i></label>
-                  <label class="pressure-switch"><span>Notifications</span><input id="pressureNotifications" type="checkbox"><i></i></label>
-                </div>
-                <div class="pressure-save-row"><span id="pressurePrefStatus">Changes save to your profile.</span><button class="pressure-primary" id="pressureSavePrefs">Save preferences</button></div>
-              </div>
-              <div class="pressure-social-view" data-view="friends">
-                <div class="pressure-search-row"><input id="pressurePeopleSearch" placeholder="Search username..." autocomplete="off"><button class="pressure-primary" id="pressurePeopleSearchBtn">Search</button></div>
-                <div id="pressurePeopleResults" class="pressure-list"></div>
-                <div class="pressure-section-title">Friend requests</div><div id="pressureRequests" class="pressure-list"></div>
-                <div class="pressure-section-title">Your friends</div><div id="pressureFriends" class="pressure-list"></div>
-              </div>
-              <div class="pressure-social-view" data-view="chat">
-                <div class="pressure-chat-layout"><aside id="pressureChatFriends" class="pressure-chat-friends"></aside><div class="pressure-chat-main"><div id="pressureChatTitle" class="pressure-chat-title">Select a friend</div><div id="pressureMessages" class="pressure-messages"><div class="pressure-empty">Choose a friend to start chatting.</div></div><form id="pressureMessageForm" class="pressure-message-form"><input id="pressureMessageInput" maxlength="2000" placeholder="Write a message..." autocomplete="off"><button class="pressure-primary">Send</button></form></div></div>
-              </div>
-              <div class="pressure-social-view" data-view="account">
-                <div class="pressure-account-card"><div><span>Display name</span><input id="pressureDisplayName" maxlength="80"></div><button class="pressure-primary" id="pressureSaveName">Save name</button></div>
-                <div class="pressure-danger-card"><div><strong>Delete my account</strong><p>This permanently deletes your profile, tasks, friendships and messages.</p></div><button class="pressure-danger" id="pressureDeleteAccount">Delete account</button></div>
-              </div>
-            </div>
-          </section>`;
-        document.body.appendChild(modal);
-
-        modal.querySelectorAll("[data-close-pressure]").forEach(x => x.addEventListener("click", closePressurePanel));
-        modal.querySelectorAll(".pressure-social-tab").forEach(x => x.addEventListener("click", () => openPressurePanel(x.dataset.tab)));
-        document.getElementById("pressureSavePrefs").addEventListener("click", savePreferences);
-        document.getElementById("pressurePeopleSearchBtn").addEventListener("click", searchPeople);
-        document.getElementById("pressurePeopleSearch").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); searchPeople(); } });
-        document.getElementById("pressureMessageForm").addEventListener("submit", sendMessage);
-        document.getElementById("pressureSaveName").addEventListener("click", saveDisplayName);
-        document.getElementById("pressureDeleteAccount").addEventListener("click", deleteOwnAccount);
-    }
-
-    function applyPreferences() {
-        const p = P.preferences;
-        document.documentElement.style.setProperty("--blue", p.accent || "#5B8CFF");
-        document.body.dataset.pressureTheme = p.theme || "midnight";
-        document.body.dataset.pressureDensity = p.density || "comfortable";
-        document.body.classList.toggle("pressure-reduced-motion", !!p.reducedMotion);
-        document.body.classList.toggle("pressure-no-animations", !p.pressureAnimations);
-    }
-
-    async function loadPreferences() {
-        const p = profile();
-        P.preferences = { ...P.preferences, ...(p?.preferences || {}) };
-        const t = document.getElementById("pressureTheme"); if (t) t.value = P.preferences.theme;
-        const a = document.getElementById("pressureAccent"); if (a) a.value = P.preferences.accent;
-        const d = document.getElementById("pressureDensity"); if (d) d.value = P.preferences.density;
-        const r = document.getElementById("pressureReducedMotion"); if (r) r.checked = !!P.preferences.reducedMotion;
-        const pa = document.getElementById("pressurePressureAnimations"); if (pa) pa.checked = P.preferences.pressureAnimations !== false;
-        const n = document.getElementById("pressureNotifications"); if (n) n.checked = P.preferences.notifications !== false;
-        const dn = document.getElementById("pressureDisplayName"); if (dn) dn.value = p?.name || "";
-        applyPreferences();
-    }
-
-    async function savePreferences() {
-        const next = {
-            theme: document.getElementById("pressureTheme").value,
-            accent: document.getElementById("pressureAccent").value,
-            density: document.getElementById("pressureDensity").value,
-            reducedMotion: document.getElementById("pressureReducedMotion").checked,
-            pressureAnimations: document.getElementById("pressurePressureAnimations").checked,
-            notifications: document.getElementById("pressureNotifications").checked
-        };
-        const { error } = await supabaseClient.from("profiles").update({ preferences: next }).eq("id", me().id);
-        if (error) return alert(error.message);
-        P.preferences = next; if (currentProfile) currentProfile.preferences = next; applyPreferences();
-        document.getElementById("pressurePrefStatus").textContent = "Saved Ã¢ÂÂ";
-        setTimeout(() => document.getElementById("pressurePrefStatus").textContent = "Changes save to your profile.", 1800);
-    }
-
-    function applyChatAccess() {
-        const access = getChatAccess();
-        const input = document.getElementById("pressureMessageInput");
-        const form = document.getElementById("pressureMessageForm");
-        const send = form?.querySelector("button");
-        if (input) {
-            input.disabled = !access.allowed;
-            input.placeholder = access.allowed ? "Write a message..." : access.message;
-        }
-        if (send) send.disabled = !access.allowed;
-        const title = document.getElementById("pressureChatTitle");
-        if (title && !access.allowed) title.textContent = "Chat locked Â· " + access.message;
-    }
-    function openPressurePanel(tab = "appearance") {
-        ensureUI();
-        const modal = document.getElementById("pressureSocialModal");
-        modal.classList.remove("hidden");
-        modal.querySelectorAll(".pressure-social-tab").forEach(x => x.classList.toggle("active", x.dataset.tab === tab));
-        modal.querySelectorAll(".pressure-social-view").forEach(x => x.classList.toggle("active", x.dataset.view === tab));
-        if (tab === "friends") loadSocial();
-        if (tab === "chat") { loadSocial(); renderChatFriends(); }
-        loadPreferences();
-        applyChatAccess();
-    }
-    function closePressurePanel() { document.getElementById("pressureSocialModal")?.classList.add("hidden"); }
-
-    async function loadSocial() {
-        if (!me()) return;
-        const [f, r] = await Promise.all([
-            supabaseClient.from("friendships").select("id,requester_id,addressee_id,status,created_at,updated_at").or(`requester_id.eq.${me().id},addressee_id.eq.${me().id}`).order("updated_at", { ascending: false }),
-            supabaseClient.from("friendships").select("id,requester_id,addressee_id,status,created_at").eq("addressee_id", me().id).eq("status", "pending")
-        ]);
-        if (!f.error) {
-            const ids = [...new Set(f.data.flatMap(x => [x.requester_id, x.addressee_id]).filter(x => x !== me().id))];
-            let people = [];
-            if (ids.length) { const res = await supabaseClient.from("profiles").select("id,username,name,role").in("id", ids); people = res.data || []; }
-            const map = new Map(people.map(x => [x.id, x]));
-            P.friends = f.data.filter(x => x.status === "accepted").map(x => ({ ...x, person: map.get(x.requester_id === me().id ? x.addressee_id : x.requester_id) })).filter(x => x.person);
-            P.requests = r.data.map(x => ({ ...x, person: map.get(x.requester_id) })).filter(x => x.person);
-        }
-        renderFriends(); renderRequests(); updateBadges(); renderChatFriends();
-    }
-
-    async function searchPeople() {
-        const term = document.getElementById("pressurePeopleSearch").value.trim().toLowerCase();
-        const box = document.getElementById("pressurePeopleResults");
-        if (term.length < 2) { box.innerHTML = '<div class="pressure-empty">Type at least 2 characters.</div>'; return; }
-        const { data, error } = await supabaseClient.from("profiles").select("id,username,name,role").ilike("username", `%${term}%`).neq("id", me().id).limit(12);
-        if (error) { box.innerHTML = `<div class="pressure-empty">${esc(error.message)}</div>`; return; }
-        const existing = new Set(P.friends.map(x => x.person.id));
-        box.innerHTML = data?.length ? data.map(person => {
-            const pending = P.requests.some(x => x.person.id === person.id) || P.pendingSent?.some(x => x.person.id === person.id);
-            return `<div class="pressure-person"><div class="pressure-person-avatar">${esc((person.name || person.username || "?")[0].toUpperCase())}</div><div><strong>${esc(person.name || person.username)}</strong><span>@${esc(person.username)}${person.role === "admin" ? " - admin" : ""}</span></div>${existing.has(person.id) ? '<span class="pressure-pill">Friends</span>' : pending ? '<span class="pressure-pill">Pending</span>' : `<button class="pressure-primary pressure-small" data-add-friend="${person.id}">Add</button>`}</div>`;
-        }).join("") : '<div class="pressure-empty">No users found.</div>';
-        box.querySelectorAll("[data-add-friend]").forEach(b => b.addEventListener("click", () => sendFriendRequest(b.dataset.addFriend)));
-    }
-
-    async function sendFriendRequest(id) {
-        const { error } = await supabaseClient.from("friendships").insert({ requester_id: me().id, addressee_id: id, status: "pending" });
-        if (error) return alert(error.code === "23505" ? "A request already exists." : error.message);
-        await loadSocial(); searchPeople();
-    }
-
-    function renderRequests() {
-        const box = document.getElementById("pressureRequests");
-        box.innerHTML = P.requests.length ? P.requests.map(x => `<div class="pressure-person"><div class="pressure-person-avatar">${esc((x.person.name || x.person.username || "?")[0].toUpperCase())}</div><div><strong>${esc(x.person.name || x.person.username)}</strong><span>@${esc(x.person.username)}</span></div><div class="pressure-actions"><button class="pressure-primary pressure-small" data-accept="${x.id}">Accept</button><button class="pressure-secondary pressure-small" data-decline="${x.id}">Decline</button></div></div>`).join("") : '<div class="pressure-empty">No pending requests.</div>';
-        box.querySelectorAll("[data-accept]").forEach(b => b.addEventListener("click", () => updateFriendRequest(b.dataset.accept, "accepted")));
-        box.querySelectorAll("[data-decline]").forEach(b => b.addEventListener("click", () => updateFriendRequest(b.dataset.decline, "declined")));
-    }
-
-    async function updateFriendRequest(id, status) { const { error } = await supabaseClient.from("friendships").update({ status, updated_at: new Date().toISOString() }).eq("id", id); if (error) return alert(error.message); loadSocial(); }
-
-    function renderFriends() {
-        const box = document.getElementById("pressureFriends");
-        box.innerHTML = P.friends.length ? P.friends.map(x => `<div class="pressure-person pressure-clickable" data-chat-friend="${x.person.id}"><div class="pressure-person-avatar">${esc((x.person.name || x.person.username || "?")[0].toUpperCase())}</div><div><strong>${esc(x.person.name || x.person.username)}</strong><span>@${esc(x.person.username)}</span></div><span class="pressure-online-dot"></span></div>`).join("") : '<div class="pressure-empty">No friends yet. Search a username above.</div>';
-        box.querySelectorAll("[data-chat-friend]").forEach(b => b.addEventListener("click", () => { openPressurePanel("chat"); selectFriend(b.dataset.chatFriend); }));
-    }
-
-    function renderChatFriends() {
-        const box = document.getElementById("pressureChatFriends"); if (!box) return;
-        box.innerHTML = P.friends.length ? P.friends.map(x => `<button class="pressure-chat-friend ${P.selectedFriend?.id === x.person.id ? "active" : ""}" data-chat-friend="${x.person.id}"><span class="pressure-person-avatar">${esc((x.person.name || x.person.username || "?")[0].toUpperCase())}</span><span><strong>${esc(x.person.name || x.person.username)}</strong><small>@${esc(x.person.username)}</small></span></button>`).join("") : '<div class="pressure-empty">Add a friend first.</div>';
-        box.querySelectorAll("[data-chat-friend]").forEach(b => b.addEventListener("click", () => selectFriend(b.dataset.chatFriend)));
-    }
-
-    async function selectFriend(id) {
-        const found = P.friends.find(x => x.person.id === id)?.person;
-        if (!found) return;
-        P.selectedFriend = found; renderChatFriends();
-        document.getElementById("pressureChatTitle").textContent = `${found.name || found.username}  -  @${found.username}`;
-        const { data, error } = await supabaseClient.from("messages").select("id,sender_id,receiver_id,body,created_at,read_at").or(`and(sender_id.eq.${me().id},receiver_id.eq.${id}),and(sender_id.eq.${id},receiver_id.eq.${me().id})`).order("created_at", { ascending: true }).limit(200);
-        if (error) return alert(error.message);
-        P.messages = data || []; renderMessages();
-        await supabaseClient.from("messages").update({ read_at: new Date().toISOString() }).eq("receiver_id", me().id).eq("sender_id", id).is("read_at", null);
-    }
-
-    function renderMessages() {
-        const box = document.getElementById("pressureMessages");
-        if (!P.messages.length) { box.innerHTML = '<div class="pressure-empty">No messages yet. Say hi Ã°ÂÂÂ</div>'; return; }
-        box.innerHTML = P.messages.map(m => `<div class="pressure-message ${m.sender_id === me().id ? "mine" : "theirs"}"><div>${esc(m.body)}</div><small>${new Date(m.created_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</small></div>`).join("");
-        box.scrollTop = box.scrollHeight;
-    }
-
-    async function sendMessage(e) {
-        e.preventDefault();
-        const access = getChatAccess();
-        if (!access.allowed) {
-            alert(access.message);
-            applyChatAccess();
-            return;
-        }
-        const input = document.getElementById("pressureMessageInput"); const body = input.value.trim();
-        if (!body || !P.selectedFriend) return;
-        const { error } = await supabaseClient.from("messages").insert({ sender_id: me().id, receiver_id: P.selectedFriend.id, body });
-        if (error) return alert(error.message); input.value = "";
-    }
-
-    async function saveDisplayName() {
-        const name = document.getElementById("pressureDisplayName").value.trim();
-        const { error } = await supabaseClient.from("profiles").update({ name }).eq("id", me().id);
-        if (error) return alert(error.message); if (currentProfile) currentProfile.name = name; if (typeof updateProfileUI === "function") updateProfileUI(); alert("Name saved.");
-    }
-
-    async function deleteOwnAccount() {
-        if (!confirm("Permanently delete your account and all associated data? This cannot be undone.")) return;
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) return alert("Your session has expired.");
-        const res = await fetch(`${SUPABASE_URL}/functions/v1/delete-my-account`, { method: "POST", headers: { "Authorization": `Bearer ${session.access_token}`, "Content-Type": "application/json" } });
-        const result = await res.json().catch(() => ({}));
-        if (!res.ok) return alert(result.error || "Could not delete your account.");
-        await supabaseClient.auth.signOut(); location.reload();
-    }
-
-    function updateBadges() {
-        const f = document.getElementById("pressureFriendBadge"), c = document.getElementById("pressureChatBadge");
-        if (f) f.textContent = P.requests.length ? P.requests.length : "";
-        if (c) c.textContent = "";
-    }
-
-    function subscribeRealtime() {
-        if (!me() || P.realtime) return;
-        P.realtime = supabaseClient.channel("pressure-social-" + me().id)
-          .on("postgres_changes", { event: "*", schema: "public", table: "friendships" }, () => loadSocial())
-          .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, payload => {
-              const m = payload.new;
-              if (m.sender_id === me().id || m.receiver_id === me().id) {
-                  if (P.selectedFriend && (m.sender_id === P.selectedFriend.id || m.receiver_id === P.selectedFriend.id)) { P.messages.push(m); renderMessages(); }
-                  updateBadges();
-              }
-          }).subscribe();
-    }
-
-    window.openPressurePanel = openPressurePanel;
-    window.pressureSocialInit = () => { ensureUI(); subscribeRealtime(); loadPreferences(); };
-    document.addEventListener("DOMContentLoaded", () => setTimeout(() => window.pressureSocialInit(), 350));
-    const originalFinish = window.finishAuthentication;
-    if (typeof originalFinish === "function") {
-        window.finishAuthentication = async function(...args) { const r = await originalFinish.apply(this, args); setTimeout(() => window.pressureSocialInit(), 150); return r; };
-    }
-})();
-
-/* PRESSURE_OFF_GUIDED_SOCIAL_V3 */
-(()=>{const X={tab:"discover",friend:null,fs:[],friends:[],channel:null,onboard:null};
-const E=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-const P=()=>currentProfile?.preferences&&typeof currentProfile.preferences==="object"?currentProfile.preferences:{};
-async function saveP(patch){const preferences={...P(),...patch};const{error}=await supabaseClient.from("profiles").update({preferences}).eq("id",currentUser.id);if(!error)currentProfile={...currentProfile,preferences};return !error}
-function page(id,title,kicker,desc){let e=$(id);if(e)return e;e=document.createElement("section");e.id=id;e.className="po-page hidden";e.innerHTML=`<div class="po-shell"><header class="po-head"><div><p class="eyebrow">${kicker}</p><h1>${title}</h1><p>${desc}</p></div><button class="ghost-button" data-po-close><- Dashboard</button></header><div id="${id}Content"></div></div>`;document.body.appendChild(e);e.querySelector("[data-po-close]").onclick=()=>{e.classList.add("hidden");app?.classList.remove("hidden")};return e}
-function nav(){const a=document.querySelector(".top-actions");if(!a)return;const oldS=$("poSocialNav");const oldG=$("poSettingsNav");oldS?.remove();oldG?.remove();const n=$("notificationButton");if(n){n.title="Notifications";n.onclick=()=>notifications()}}
-async function search(q){const out=$("poResults");if(!q){out.innerHTML='<div class="po-empty">Enter a username.</div>';return}out.innerHTML='<div class="po-empty">Searching...</div>';const{data,error}=await supabaseClient.from("profiles").select("id,username,name,role,is_admin").ilike("username",`%${q.replace(/[%_]/g,"")}%`).neq("id",currentUser.id).limit(20);if(error){out.innerHTML='<div class="po-empty">Search failed.</div>';return}out.innerHTML=data?.length?data.map(p=>{const st=status(p.id);const a=st==="accepted"?'<span class="po-status">Friends</span>':st==="sent"?'<span class="po-status">Request sent</span>':st==="incoming"?'<span class="po-status">Incoming request</span>':`<button class="pressure-primary pressure-small" data-add="${p.id}">Add friend</button>`;return person(p,a)}).join(""):'<div class="po-empty">No users found.</div>';out.querySelectorAll("[data-add]").forEach(x=>x.onclick=async()=>{const{error}=await supabaseClient.from("friendships").insert({requester_id:currentUser.id,addressee_id:x.dataset.add,status:"pending"});if(error)alert(error.message);else{await data();search(q)}})}
-async function requests(id,rows,incoming){const box=$(id);if(!rows.length){box.innerHTML='<div class="po-empty">Nothing here.</div>';return}const ids=rows.map(f=>incoming?f.requester_id:f.addressee_id);const{data}=await supabaseClient.from("profiles").select("id,username,name").in("id",ids);const m=new Map((data||[]).map(p=>[p.id,p]));box.innerHTML=rows.map(f=>{const p=m.get(incoming?f.requester_id:f.addressee_id)||{};const a=incoming?`<button class="pressure-primary pressure-small" data-ok="${f.id}">Accept</button><button class="pressure-secondary pressure-small" data-no="${f.id}">Decline</button>`:`<button class="pressure-secondary pressure-small" data-no="${f.id}">Cancel</button>`;return person(p,a)}).join("");box.querySelectorAll("[data-ok]").forEach(x=>x.onclick=()=>respond(x.dataset.ok,"accepted"));box.querySelectorAll("[data-no]").forEach(x=>x.onclick=()=>respond(x.dataset.no,incoming?"declined":"delete"))}
-async function respond(id,st){if(st==="delete"){await supabaseClient.from("friendships").delete().eq("id",id)}else await supabaseClient.from("friendships").update({status:st,updated_at:new Date().toISOString()}).eq("id",id);await data();renderSocial()}
-async function chat(id){const p=X.friends.find(x=>x.id===id);if(!p)return;$("poChatTitle").textContent=`${p.name||p.username} - @${p.username}`;const input=$("poMsg"),form=$("poMsgForm");input.disabled=false;form.querySelector("button").disabled=false;const{data,error}=await supabaseClient.from("messages").select("*").or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${id}),and(sender_id.eq.${id},receiver_id.eq.${currentUser.id})`).order("created_at",{ascending:true}).limit(200);if(error)return;X.messages=data||[];renderMsgs();await supabaseClient.from("messages").update({read_at:new Date().toISOString()}).eq("receiver_id",currentUser.id).eq("sender_id",id).is("read_at",null);form.onsubmit=async e=>{e.preventDefault();const body=input.value.trim();if(!body)return;const r=await supabaseClient.from("messages").insert({sender_id:currentUser.id,receiver_id:id,body});if(r.error)alert(r.error.message);else{input.value="";await chat(id)}}}
-function renderMsgs(){const b=$("poMsgs");b.innerHTML=X.messages?.length?X.messages.map(m=>`<div class="po-msg ${m.sender_id===currentUser.id?"mine":"theirs"}">${E(m.body)}<small>${new Date(m.created_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</small></div>`).join(""):'<div class="po-empty">No messages yet. Say hello Ã°ÂÂÂ</div>';b.scrollTop=b.scrollHeight}
-function realtime(){if(X.channel||!currentUser)return;X.channel=supabaseClient.channel("po-social-"+currentUser.id).on("postgres_changes",{event:"*",schema:"public",table:"friendships"},async()=>{if(!$("poSocialPage")?.classList.contains("hidden")){await data();renderSocial()}}).on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},async p=>{const m=p.new;if(m.sender_id!==currentUser.id&&m.receiver_id!==currentUser.id)return;if(X.friend&&(m.sender_id===X.friend||m.receiver_id===X.friend)){X.messages=X.messages||[];if(!X.messages.some(x=>x.id===m.id)){X.messages.push(m);renderMsgs()}}}).subscribe()}
-async function settings(){if(!currentUser)return;pages();hide();$("poSettingsPage").classList.remove("hidden");renderSettings();scrollTo(0,0)}
-function renderSettings(){const p=P();$("poSettingsPageContent").innerHTML=`<div class="po-two"><div class="po-card"><p class="eyebrow">APPEARANCE</p><h2>Customize homepage</h2><div class="po-grid"><label>Theme<select id="poTheme"><option value="midnight">Midnight</option><option value="dusk">Dusk</option><option value="light">Light</option></select></label><label>Accent<input id="poAccent" type="color"></label><label>Density<select id="poDensity"><option>comfortable</option><option>compact</option><option>spacious</option></select></label></div><label class="po-switch"><span><strong>Reduced motion</strong><small>Less animation.</small></span><input id="poMotion" type="checkbox"></label><label class="po-switch"><span><strong>Pressure animations</strong><small>Keep visual pressure feedback.</small></span><input id="poAnim" type="checkbox"></label><label class="po-switch"><span><strong>Notifications</strong><small>Allow reminder notifications.</small></span><input id="poNoti" type="checkbox"></label><button id="poSaveSet" class="pressure-primary">Save appearance</button></div><div class="po-card"><p class="eyebrow">ACCOUNT</p><h2>Profile & setup</h2><label>Display name<input id="poName" maxlength="60"></label><button id="poSaveName" class="pressure-primary">Save name</button><button id="poTour" class="pressure-secondary">Take the guided tour again</button><div class="po-danger"><div><strong>Delete my account</strong><p>This permanently deletes your account and data.</p></div><button id="poDelete" class="pressure-danger">Delete account</button></div></div></div>`;$("poTheme").value=p.theme||"midnight";$("poAccent").value=/^#[0-9a-f]{6}$/i.test(p.accent||"")?p.accent:"#5B8CFF";$("poDensity").value=p.density||"comfortable";$("poMotion").checked=!!p.reducedMotion;$("poAnim").checked=p.pressureAnimations!==false;$("poNoti").checked=p.notifications!==false;$("poName").value=currentProfile.name||"";$("poSaveSet").onclick=async()=>{await saveP({theme:$("poTheme").value,accent:$("poAccent").value,density:$("poDensity").value,reducedMotion:$("poMotion").checked,pressureAnimations:$("poAnim").checked,notifications:$("poNoti").checked});appearance();alert("Appearance saved.")};$("poSaveName").onclick=async()=>{const name=$("poName").value.trim();const{error}=await supabaseClient.from("profiles").update({name}).eq("id",currentUser.id);if(!error){currentProfile.name=name;updateProfileUI();alert("Name saved.")}};$("poTour").onclick=()=>onboard(true);$("poDelete").onclick=deleteAccount}
-function appearance(){const p=P();document.documentElement.style.setProperty("--po-accent",p.accent||"#5B8CFF");document.body.dataset.poTheme=p.theme||"midnight";document.body.dataset.poDensity=p.density||"comfortable";document.body.classList.toggle("po-reduced",!!p.reducedMotion)}
-async function notifications(){if(!currentUser)return;pages();hide();$("poNotificationsPage").classList.remove("hidden");const[f,m]=await Promise.all([supabaseClient.from("friendships").select("id,requester_id").eq("addressee_id",currentUser.id).eq("status","pending"),supabaseClient.from("messages").select("id,sender_id,body,created_at").eq("receiver_id",currentUser.id).is("read_at",null).order("created_at",{ascending:false}).limit(20)]);const ids=[...(f.data||[]).map(x=>x.requester_id),...(m.data||[]).map(x=>x.sender_id)];let ps=[];if(ids.length){const r=await supabaseClient.from("profiles").select("id,username,name").in("id",[...new Set(ids)]);ps=r.data||[]}const map=new Map(ps.map(p=>[p.id,p]));$("poNotificationsPageContent").innerHTML=`<div class="po-two"><div class="po-card"><p class="eyebrow">FRIENDS</p><h2>${f.data?.length||0} requests</h2><p class="po-muted">${f.data?.length?"Open Social Ã¢ÂÂ Requests to respond.":"No pending friend requests."}</p></div><div class="po-card"><p class="eyebrow">MESSAGES</p><h2>${m.data?.length||0} unread</h2><div class="po-list">${(m.data||[]).map(x=>person(map.get(x.sender_id)||{},`<button class="pressure-primary pressure-small" data-nc="${x.sender_id}">Open chat</button>`)).join("")||'<div class="po-empty">No unread messages.</div>'}</div></div></div><div class="po-card"><p class="eyebrow">WORKLOAD</p><h2>Dashboard reminders</h2><p class="po-muted">Your existing Smart Reminders and workload alerts remain on the dashboard.</p></div>`;$("poNotificationsPageContent").querySelectorAll("[data-nc]").forEach(b=>b.onclick=()=>{X.friend=b.dataset.nc;window.poSocial?.();X.tab="chat";renderSocial()})}
-async function deleteAccount(){if(!confirm("Permanently delete your account? This cannot be undone."))return;const{data:{session}}=await supabaseClient.auth.getSession();if(!session)return alert("Your session expired.");const r=await fetch(`${SUPABASE_URL}/functions/v1/delete-my-account`,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${session.access_token}`}}),j=await r.json().catch(()=>({}));if(!r.ok)return alert(j.error||"Could not delete account.");await supabaseClient.auth.signOut();location.reload()}
-function onboard(force=false){if(!currentUser||!currentProfile)return;const p=P(),created=new Date(currentProfile.created_at||0).getTime(),fresh=created&&Date.now()-created<86400000;if(!force&&p.onboarding?.completed)return;if(!force&&!p.onboarding&&!fresh)return;X.onboard={step:Number(p.onboarding?.step||0)};drawOnboard()}
-function drawOnboard(){let m=$("poOnboard");if(!m){m=document.createElement("div");m.id="poOnboard";m.className="po-onboard";document.body.appendChild(m)}
-const steps=[
-["Welcome to PRESSURE // OFF","A quick guided tour will show you what every important part of the app does."],
-["Your Profile","Your Profile is your personal control center: stats, personal information, appearance, social tools and account controls."],
-["Add Tasks","Use + Add Task to enter school work, choose a category, effort and due date. Your tasks power the rest of the dashboard."],
-["Weekly Pressure","Your 1Ã¢ÂÂ10 score summarizes workload using effort, task density and deadline proximity. It is a planning signal, not a judgment."],
-["Pressure Radar & Weekly View","Radar shows workload distribution. Weekly View lets you see where tasks are building up across the week."],
-["Workload Assistant","Ask what to work on today, which day is hardest, or how to reduce pressure. It uses your current tasks."],
-["Smart Reminders","Reminders help you notice deadlines and overloaded days. You can enable browser notifications when you want them."],
-["Suggestions","Suggestions turn your workload into practical planning ideas so you can act before things pile up."],
-["Friends & Chat","Social now has its own top-navigation tab next to Admin. Chat access follows your pressure score and completed tasks."],
-["Settings & Appearance","Profile keeps your personal details and Settings for theme, accent, density, motion, notifications and your display name."],
-["You're Ready","That's the tour. You can replay it any time from Profile Ã¢ÂÂ Settings Ã¢ÂÂ Guided tour."]
-];
-const i=Math.min(steps.length-1,Math.max(0,X.onboard.step));
-m.innerHTML=`<div class="po-ob-back"></div><div class="po-ob-card po-tour-card"><div class="po-ob-bar"><i style="width:${((i+1)/steps.length)*100}%"></i></div><p class="eyebrow">PRESSURE // OFF TOUR - ${i+1}/${steps.length}</p><h2>${steps[i][0]}</h2><p>${steps[i][1]}</p><div class="po-tour-icon">${["O","Ã°ÂÂÂ¤","Ã¯Â¼Â","O","Ã¢ÂÂ¦","*","!","Ã¢ÂÂ","Ã°ÂÂÂ¥","Ã¢ÂÂ","Ã¢ÂÂ"][i]}</div><div class="po-ob-note">You can skip the tour, and replay it later from your Profile settings.</div><footer><button id="poObSkip" class="pressure-secondary">${i===steps.length-1?"Close tour":"Skip tour"}</button><div><button id="poObBack" class="pressure-secondary" ${i===0?"disabled":""}>Back</button><button id="poObNext" class="pressure-primary">${i===steps.length-1?"Finish":"Next"}</button></div></footer></div>`;
-$("poObBack").onclick=()=>{X.onboard.step=Math.max(0,i-1);saveP({onboarding:{completed:false,step:X.onboard.step}});drawOnboard()};
-$("poObNext").onclick=()=>i===steps.length-1?finishOnboard():(X.onboard.step=i+1,saveP({onboarding:{completed:false,step:X.onboard.step}}),drawOnboard());
-$("poObSkip").onclick=finishOnboard
-}
-async function finishOnboard(){await saveP({onboarding:{completed:true,step:11,skipped:false}});$("poOnboard")?.remove()}
-function init(){nav();pages();appearance();if(currentUser&&currentProfile){onboard();data();realtime()}}
-document.addEventListener("DOMContentLoaded",()=>setTimeout(init,500));setTimeout(init,900);
-window.PRESSURE_OFF_GUIDED_SOCIAL_V3=X; window.poOpenSettings=settings; window.poSocial=()=>{pages();hide();$("poSocialPage").classList.remove("hidden");X.tab="discover";data().then(()=>renderSocial());scrollTo(0,0)}; window.poRenderSocial=renderSocial; window.poData=data;})();
-
-
-/* PO_PROFILE_HUB_V2 */
-(()=>{
-function poProfileHub(){
-    const socialButton = $("socialButton");
-    if (socialButton) {
-        socialButton.onclick = () => {
-            if (typeof window.openPressurePanel === "function") window.openPressurePanel("friends");
-        };
-    }
-    const page=$("profilePage");
-    if(!page||!currentUser)return;
-
-    const container=page.querySelector(".profile-container")||page;
-
-    let tools=$("poProfileTools");
-    if(!tools){
-        tools=document.createElement("div");
-        tools.id="poProfileTools";
-        tools.className="po-profile-tools";
-        tools.innerHTML = '<button type="button" class="ghost-button" id="poProfileSettings">Settings</button>'; container.appendChild(tools);
-
-
-        $("poProfileSettings").onclick=()=>{
-            if(typeof window.poOpenSettings==="function")window.poOpenSettings();
-            else alert("Settings are still loading. Please try again.");
-        };
-    }
-
-    const logout=$("profilePageLogout");
-    if(logout){
-        logout.classList.add("po-profile-bottom-logout");
-        if(logout.parentElement!==container||container.lastElementChild!==logout){
-            container.appendChild(logout);
-        }
-    }
-}
-const oldUpdate=window.updateProfileUI;
-if(typeof oldUpdate==="function"){
-    window.updateProfileUI=async function(...args){
-        const result=await oldUpdate.apply(this,args);
-        poProfileHub();
-        return result;
-    };
-}
-document.addEventListener("DOMContentLoaded",()=>setTimeout(poProfileHub,700));
-setTimeout(poProfileHub,1200);
-window.poProfileHub=poProfileHub;
-})();
-
-/* PRESSURE_OFF_PROFILE_SOCIAL_ROUTE_FIX */
-(function bindProfileAndSocialRoutes() {
-    function route(event) {
-        const target = event.target instanceof Element ? event.target : null;
-        if (!target) return;
-
-        const appearanceButton = target.closest("#profileAppearanceButton");
-        const socialButton = target.closest("#socialButton");
-        if (!appearanceButton && !socialButton) return;
-
-        event.preventDefault();
-        event.stopImmediatePropagation();
-
-        if (appearanceButton) {
-            if (typeof window.poOpenSettings === "function") {
-                window.poOpenSettings();
-            } else {
-                console.error("PRESSURE // OFF settings page is not ready.");
-                alert("Settings are still loading. Please try again in a moment.");
-            }
-            return;
-        }
-
-        if (typeof window.poSocial === "function") {
-            window.poSocial();
-        } else {
-            console.error("PRESSURE // OFF social page is not ready.");
-            alert("Social is still loading. Please try again in a moment.");
-        }
-    }
-
-    document.addEventListener("click", route, true);
-})();

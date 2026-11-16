@@ -1,229 +1,102 @@
-* {
-    box-sizing: border-box;
+body {
+    background: #0b0f19;
+    color: #f8fafc;
+    font-family: 'Inter', sans-serif;
     margin: 0;
     padding: 0;
-}
-
-:root {
-    --bg: #0b0f19;
-    --card: #131b2e;
-    --card-2: #182238;
-    --blue: #3b82f6;
-    --blue-light: #60a5fa;
-    --white: #f8fafc;
-    --muted: #94a3b8;
-    --border: rgba(255, 255, 255, 0.08);
-    --green: #10b981;
-    --yellow: #f59e0b;
-    --red: #ef4444;
-}
-
-body {
-    min-height: 100vh;
-    background: var(--bg);
-    color: var(--white);
-    font-family: "Inter", sans-serif;
-    -webkit-font-smoothing: antialiased;
-}
-
-button, input, select {
-    font: inherit;
-}
-
-button {
-    cursor: pointer;
 }
 
 .hidden {
     display: none !important;
 }
 
-h1, h2, h3, .brand {
-    font-family: "League Spartan", sans-serif;
-}
-
-h1 {
-    font-size: clamp(38px, 5vw, 64px);
-    line-height: 1;
-    letter-spacing: -1.5px;
-}
-
-h1 span {
-    color: var(--blue);
-}
-
-h2 {
-    font-size: 22px;
-}
-
-h3 {
-    font-size: 18px;
-}
-
-p {
-    line-height: 1.5;
-}
-
-.eyebrow {
-    color: var(--blue-light);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    margin-bottom: 5px;
-    text-transform: uppercase;
-}
-
-.muted {
-    color: var(--muted);
-    font-size: 13px;
-}
-
-/* AUTH */
 .auth-screen {
-    min-height: 100vh;
     display: grid;
     place-items: center;
-    padding: 20px;
-    position: relative;
-}
-
-.auth-glow {
-    position: absolute;
-    width: 400px;
-    height: 400px;
-    background: rgba(59, 130, 246, 0.08);
-    filter: blur(80px);
-    border-radius: 50%;
-    pointer-events: none;
+    height: 100vh;
 }
 
 .auth-card {
-    width: min(420px, 100%);
-    padding: 32px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    background: #131b2e;
+    padding: 30px;
+    border-radius: 12px;
+    width: 350px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .brand {
+    font-family: 'League Spartan', sans-serif;
     font-size: 20px;
     font-weight: 700;
-    letter-spacing: 0.5px;
 }
 
 .brand span {
-    color: var(--blue);
+    color: #3b82f6;
 }
 
 .auth-tabs {
     display: flex;
-    gap: 4px;
-    margin: 24px 0;
-    padding: 4px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 10px;
+    gap: 10px;
+    margin: 15px 0;
 }
 
 .auth-tab {
     flex: 1;
-    padding: 10px;
-    color: var(--muted);
-    border: 0;
-    border-radius: 8px;
     background: transparent;
-    font-weight: 600;
+    border: none;
+    color: #94a3b8;
+    padding: 8px;
+    cursor: pointer;
 }
 
 .auth-tab.active {
-    color: white;
-    background: var(--blue);
-}
-
-.auth-heading {
-    margin-bottom: 20px;
-}
-
-.auth-heading h1 {
-    font-size: 32px;
-    margin-bottom: 8px;
+    color: #fff;
+    border-bottom: 2px solid #3b82f6;
 }
 
 .field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 16px;
+    margin-bottom: 15px;
 }
 
 .field label {
-    color: var(--muted);
+    display: block;
     font-size: 12px;
-    font-weight: 600;
+    color: #94a3b8;
+    margin-bottom: 5px;
 }
 
-.field input, .field select, .ai-form input {
+.field input, .field select {
     width: 100%;
-    color: white;
+    padding: 10px;
     background: #090d16;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    outline: none;
-    padding: 12px 14px;
-}
-
-.field input:focus, .field select:focus, .ai-form input:focus {
-    border-color: var(--blue);
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 6px;
+    box-sizing: border-box;
 }
 
 .primary-button {
-    border: 0;
-    color: white;
-    background: var(--blue);
-    padding: 12px 18px;
-    border-radius: 10px;
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
     font-weight: 600;
-    transition: background 0.15s ease;
-}
-
-.primary-button:hover {
-    background: #2563eb;
-}
-
-.auth-card .primary-button {
     width: 100%;
-    margin-top: 4px;
 }
 
-.local-note {
-    text-align: center;
-    color: var(--muted);
-    font-size: 11px;
-    margin-top: 16px;
-}
-
-.error-message {
-    color: var(--red);
-    font-size: 12px;
-    min-height: 16px;
-    margin-bottom: 8px;
-}
-
-/* APP CONTAINER */
 .app {
-    width: min(1300px, 100%);
-    margin: auto;
-    padding: 24px 32px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 .topbar {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    margin-bottom: 48px;
+    align-items: center;
+    margin-bottom: 30px;
 }
 
 .top-actions {
@@ -232,643 +105,246 @@ p {
     gap: 10px;
 }
 
-.icon-button, .close-button {
-    width: 38px;
-    height: 38px;
-    border: 1px solid var(--border);
-    color: white;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 10px;
+.ghost-button {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
 .user-pill {
     display: flex;
     align-items: center;
     gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 4px 12px 4px 4px;
-    border: 1px solid var(--border);
-    border-radius: 30px;
-    font-size: 13px;
-}
-
-.profile-button {
-    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    color: #fff;
+    cursor: pointer;
 }
 
 .avatar {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
+    background: #3b82f6;
+    border-radius: 50%;
     display: grid;
     place-items: center;
-    background: var(--blue);
-    border-radius: 50%;
-    font-weight: 700;
     font-size: 12px;
-}
-
-.ghost-button {
-    border: 1px solid var(--border);
-    color: var(--muted);
-    background: transparent;
-    padding: 9px 14px;
-    border-radius: 10px;
-    font-weight: 500;
-}
-
-.ghost-button:hover {
-    color: white;
-    background: rgba(255, 255, 255, 0.04);
+    font-weight: bold;
 }
 
 .hero {
     display: flex;
-    align-items: flex-end;
     justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 36px;
+    align-items: flex-end;
+    margin-bottom: 30px;
 }
 
-.hero-description {
-    max-width: 500px;
-    color: var(--muted);
-    margin-top: 14px;
-    font-size: 14px;
+.hero h1 {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 40px;
+    margin: 10px 0 0 0;
 }
 
-/* GRID & CARDS */
+.hero h1 span {
+    color: #3b82f6;
+}
+
+.eyebrow {
+    color: #60a5fa;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    gap: 20px;
 }
 
-.card, .alert-card {
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    background: var(--card);
-    padding: 24px;
+.card {
+    background: #131b2e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 20px;
 }
 
-.card-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 20px;
-}
-
-/* SCORE CARD */
-.score-layout {
-    display: flex;
-    align-items: center;
-    gap: 24px;
+.score-card {
+    text-align: center;
 }
 
 .score-ring {
-    width: 150px;
-    height: 150px;
-    flex-shrink: 0;
+    width: 120px;
+    height: 120px;
+    margin: 20px auto;
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: conic-gradient(var(--blue) 10%, rgba(59, 130, 246, 0.08) 10%);
+    background: conic-gradient(#3b82f6 30%, rgba(59, 130, 246, 0.1) 0%);
 }
 
 .score-inner {
-    width: 124px;
-    height: 124px;
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    background: var(--card);
+    width: 100px;
+    height: 100px;
+    background: #131b2e;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .score-inner strong {
-    font-family: "League Spartan";
-    font-size: 48px;
-    margin-top: 26px;
+    font-size: 32px;
+    font-family: 'League Spartan', sans-serif;
 }
 
-.score-inner span {
-    color: var(--muted);
-    margin-left: 2px;
-    font-size: 14px;
-}
-
-/* RADAR */
 .radar-bars {
-    height: 170px;
     display: flex;
-    align-items: flex-end;
     justify-content: space-around;
-    gap: 10px;
-    padding-top: 15px;
+    align-items: flex-end;
+    height: 150px;
+    margin-top: 20px;
 }
 
 .radar-column {
-    height: 100%;
-    flex: 1;
-    max-width: 45px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
-    gap: 6px;
+    gap: 5px;
+    flex: 1;
 }
 
 .radar-bar {
-    width: 100%;
-    min-height: 4px;
-    border-radius: 6px 6px 2px 2px;
-    background: var(--blue);
-}
-
-.radar-bar.busy { background: var(--yellow); }
-.radar-bar.overloaded { background: var(--red); }
-
-.radar-value, .radar-day {
-    color: var(--muted);
-    font-size: 10px;
-}
-
-.radar-empty {
-    color: var(--muted);
-    text-align: center;
-    padding: 50px 0;
-    font-size: 13px;
-}
-
-/* ALERTS & WEEKS */
-.alert-card {
-    grid-column: 1 / -1;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    border-color: rgba(239, 68, 68, 0.2);
-    background: rgba(239, 68, 68, 0.05);
-}
-
-.alert-symbol {
-    width: 40px;
-    height: 40px;
-    display: grid;
-    place-items: center;
-    color: var(--red);
-    background: rgba(239, 68, 68, 0.1);
-    border-radius: 10px;
-    font-weight: 700;
+    width: 20px;
+    background: #3b82f6;
+    border-radius: 4px 4px 0 0;
 }
 
 .week-card {
-    grid-column: 1 / -1;
+    grid-column: span 2;
 }
 
 .week-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
+    gap: 10px;
+    margin-top: 15px;
 }
 
 .day {
-    min-height: 190px;
-    padding: 12px;
-    background: #0c1220;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
+    background: #090d16;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    min-height: 100px;
 }
 
-.day.manageable { border-top: 3px solid var(--green); }
-.day.busy { border-top: 3px solid var(--yellow); }
-.day.overloaded { border-top: 3px solid var(--red); }
-
-.day-header {
+.card-heading {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.day-name {
-    font-size: 10px;
-    color: var(--muted);
-    font-weight: 700;
-}
-
-.day-number {
-    font-family: "League Spartan";
-    font-size: 18px;
-}
-
-.day-tasks {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin-top: 10px;
-}
-
-.mini-task {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    width: 100%;
-    text-align: left;
-    border: 0;
-    color: white;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 6px 8px;
-    border-radius: 6px;
-}
-
-.mini-task strong {
-    font-size: 9px;
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.mini-task small {
-    color: var(--muted);
-    font-size: 8px;
-}
-
-.day-hours {
-    color: var(--muted);
-    font-size: 9px;
-    margin-top: auto;
-    padding-top: 10px;
-}
-
-/* AI ASSISTANT */
-.ai-card {
-    border-color: rgba(59, 130, 246, 0.2);
-}
-
-.ai-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.ai-orb {
-    width: 38px;
-    height: 38px;
-    display: grid;
-    place-items: center;
-    color: white;
-    background: var(--blue);
-    border-radius: 10px;
-    font-weight: 700;
-}
-
-.ai-status {
-    margin-left: auto;
-    color: var(--green);
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
-
-.ai-intro {
-    color: var(--muted);
+.small-add, .reminder-enable {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #3b82f6;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
     font-size: 12px;
-    margin: 14px 0;
+}
+
+.ai-card {
+    grid-column: span 2;
 }
 
 .ai-messages {
-    min-height: 90px;
-    max-height: 220px;
+    background: #090d16;
+    padding: 10px;
+    border-radius: 8px;
+    height: 100px;
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 12px;
-}
-
-.ai-message {
-    display: flex;
-    gap: 8px;
-    padding: 10px 12px;
-    border-radius: 10px;
-    font-size: 12px;
-}
-
-.ai-message.assistant { background: rgba(59, 130, 246, 0.06); }
-.ai-message.user { background: rgba(255, 255, 255, 0.04); justify-content: flex-end; }
-
-.quick-prompts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
     margin-bottom: 10px;
-}
-
-.quick-prompts button {
-    color: var(--muted);
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 6px 10px;
-    font-size: 10px;
-}
-
-.quick-prompts button:hover {
-    color: white;
-    border-color: rgba(255, 255, 255, 0.2);
+    font-size: 14px;
 }
 
 .ai-form {
     display: flex;
-    gap: 8px;
+    gap: 10px;
 }
 
-.ai-form input { flex: 1; }
-.ai-form .primary-button { width: auto; }
-
-.ai-disclaimer {
-    color: var(--muted);
-    font-size: 10px;
-    margin-top: 10px;
-    opacity: 0.7;
+.ai-form input {
+    flex: 1;
+    background: #090d16;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    color: #fff;
+    border-radius: 6px;
 }
 
-/* TASKS & LISTS */
-.task-list {
+.quick-prompts {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.quick-prompts button {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
 }
 
 .task-row {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    text-align: left;
-    color: white;
-    border: 1px solid transparent;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 10px;
-    padding: 10px 12px;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 14px;
 }
 
-.task-row:hover {
-    border-color: var(--border);
-    background: rgba(255, 255, 255, 0.04);
-}
-
-.task-icon {
-    width: 32px;
-    height: 32px;
-    display: grid;
-    place-items: center;
-    color: white;
-    background: rgba(59, 130, 246, 0.12);
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 11px;
-}
-
-.task-info { flex: 1; }
-.task-info strong { display: block; font-size: 13px; }
-.task-info small { color: var(--muted); font-size: 10px; margin-top: 2px; display: block; }
-
-.effort {
-    color: var(--blue-light);
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.task-actions {
-    display: flex;
-    gap: 6px;
-}
-
-.task-action {
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    border-radius: 6px;
-    padding: 4px 8px;
-    font-size: 10px;
-}
-
-.task-action:hover { color: white; background: rgba(255,255,255,0.05); }
-.task-action.delete:hover { color: var(--red); border-color: rgba(239,68,68,0.3); }
-
-/* REMINDERS & SUGGESTIONS */
-.reminder-list, .suggestions {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.reminder, .suggestion {
-    display: flex;
-    gap: 10px;
-    padding: 10px 12px;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 10px;
-    font-size: 12px;
-}
-
-.suggestion-number {
-    color: var(--blue);
-    font-family: "League Spartan";
-    font-weight: 700;
-}
-
-/* MODALS */
 .modal {
     position: fixed;
     inset: 0;
-    z-index: 100;
+    background: rgba(0, 0, 0, 0.7);
     display: grid;
     place-items: center;
-    padding: 20px;
-    background: rgba(3, 6, 15, 0.8);
-    backdrop-filter: blur(4px);
 }
 
 .modal-card {
-    width: min(480px, 100%);
-    padding: 24px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
+    background: #131b2e;
+    padding: 25px;
+    border-radius: 12px;
+    width: 350px;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-
-.modal-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.modal-right-actions {
-    display: flex;
-    gap: 8px;
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 18px;
+    cursor: pointer;
 }
 
 .danger-button {
-    color: var(--red);
-    background: rgba(239, 68, 68, 0.08);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    padding: 9px 12px;
-    border-radius: 8px;
-    font-size: 12px;
-}
-
-/* PROFILE PAGE */
-.profile-page {
-    min-height: 100vh;
-    background: var(--bg);
-}
-
-.profile-topbar, .admin-container, .profile-container {
-    width: min(1100px, calc(100% - 32px));
-    margin: 0 auto;
-    padding: 24px 0;
-}
-
-.profile-hero-card {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    padding: 32px;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    background: var(--card);
-    margin-bottom: 16px;
-}
-
-.profile-avatar-large {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    background: var(--blue);
-    display: grid;
-    place-items: center;
-    font-family: "League Spartan";
-    font-size: 40px;
-    font-weight: 700;
-}
-
-.profile-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.profile-stat-card {
-    padding: 18px;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    background: var(--card);
-}
-
-.profile-stat-card strong {
-    font-family: "League Spartan";
-    font-size: 28px;
-    display: block;
-    margin: 6px 0 2px;
-}
-
-.profile-content-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 16px;
-    margin-bottom: 16px;
-}
-
-.profile-detail-list {
-    display: flex;
-    flex-direction: column;
-}
-
-.profile-detail {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 12px;
-}
-
-.profile-detail:last-child { border-bottom: 0; }
-.profile-detail span { color: var(--muted); }
-
-/* ADMIN PANEL */
-.admin-stat-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.admin-stat-card {
-    padding: 20px;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    background: var(--card);
-}
-
-.admin-stat-card strong {
-    font-size: 30px;
-    display: block;
-    margin: 6px 0;
-    font-family: "League Spartan";
-}
-
-.admin-user-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.01);
-    margin-bottom: 8px;
-}
-
-.admin-user-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background: rgba(59, 130, 246, 0.15);
-    display: grid;
-    place-items: center;
-    font-weight: 700;
-}
-
-.admin-user-info { flex: 1; }
-.admin-user-info strong { display: block; font-size: 13px; }
-.admin-user-info span { color: var(--muted); font-size: 11px; }
-
-footer {
-    color: var(--muted);
-    text-align: center;
-    font-size: 11px;
-    padding: 32px 0 12px;
-    opacity: 0.6;
-}
-
-@media (max-width: 800px) {
-    .dashboard-grid, .profile-stats-grid, .profile-content-grid, .admin-stat-grid, .week-grid {
-        grid-template-columns: 1fr;
-    }
-    .week-grid { overflow-x: auto; }
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
 }

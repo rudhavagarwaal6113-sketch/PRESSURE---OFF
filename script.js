@@ -1382,8 +1382,8 @@ updateNotificationButtons?.();
 updateAdminVisibility();
 checkSession();
 
+
 /* =========================================================
-   PRESSURE // OFF
    STUDY COACH AI ASSISTANT
 ========================================================= */
 
@@ -1484,7 +1484,7 @@ document.querySelectorAll(".quick-prompts button").forEach(button => {
 
 
 /* =========================================================
-   PRESSURE SOCIAL & SETTINGS UPGRADE MODULE
+   PRESSURE SOCIAL & SETTINGS UPGRADE MODULE (FIXED ROUTING)
 ========================================================= */
 
 (() => {
@@ -1714,7 +1714,44 @@ document.querySelectorAll(".quick-prompts button").forEach(button => {
     }
 
     window.openPressurePanel = openPressurePanel;
-    document.addEventListener("DOMContentLoaded", () => {
-        document.getElementById("socialButton")?.addEventListener("click", () => openPressurePanel("friends"));
-    });
+    window.poOpenSettings = () => openPressurePanel("appearance");
+    window.poSocial = () => openPressurePanel("friends");
+})();
+
+
+/* =========================================================
+   ROUTING FIX FOR APPEARANCE & SOCIAL BUTTONS
+========================================================= */
+
+(function bindProfileAndSocialRoutes() {
+    function route(event) {
+        const target = event.target instanceof Element ? event.target : null;
+        if (!target) return;
+
+        const appearanceButton = target.closest("#profileAppearanceButton");
+        const socialButton = target.closest("#socialButton");
+        if (!appearanceButton && !socialButton) return;
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        if (appearanceButton) {
+            if (typeof window.poOpenSettings === "function") {
+                window.poOpenSettings();
+            } else {
+                alert("Settings are still loading. Please try again in a moment.");
+            }
+            return;
+        }
+
+        if (socialButton) {
+            if (typeof window.openPressurePanel === "function") {
+                window.openPressurePanel("friends");
+            } else {
+                alert("Social features are still loading. Please try again in a moment.");
+            }
+        }
+    }
+
+    document.addEventListener("click", route, true);
 })();
